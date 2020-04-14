@@ -1,3 +1,5 @@
+package spaceMarineProperties;
+
 import java.time.LocalDate;
 
 public class SpaceMarine implements Comparable {

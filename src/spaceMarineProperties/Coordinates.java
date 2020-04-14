@@ -1,3 +1,5 @@
+package spaceMarineProperties;
+
 public class Coordinates {
     private Double x = null; //Поле не может быть null
     private Float y = null; //Поле не может быть null

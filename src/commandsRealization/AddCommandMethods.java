@@ -1,3 +1,7 @@
+package commandsRealization;
+
+import spaceMarineProperties.*;
+
 import java.util.Scanner;
 
 public class AddCommandMethods {
@@ -95,7 +99,7 @@ public class AddCommandMethods {
     }
 
     public Weapon readWeaponType() {
-        System.out.println("Введите номер нужного вам названия 'Weapon':");
+        System.out.println("Введите номер нужного вам названия 'com.itmo.r3135.spacemarineproperties.Weapon':");
         for (Weapon weapon : Weapon.values()) {
             counter++;
             if (counter == 1) {
@@ -149,7 +153,7 @@ public class AddCommandMethods {
     }
 
     public MeleeWeapon readMeleeWeaponCategory() {
-        System.out.println("Введите номер нужного вам названия 'MeleeWeapon':");
+        System.out.println("Введите номер нужного вам названия 'com.itmo.r3135.spacemarineproperties.MeleeWeapon':");
         for (MeleeWeapon meleeWeapon : MeleeWeapon.values()) {
             counter++;
             if (counter == 1) {

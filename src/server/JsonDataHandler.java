@@ -1,22 +1,37 @@
+package server;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import spaceMarineProperties.*;
 
 import java.math.BigDecimal;
 import java.io.*;
 
 public class JsonDataHandler {
-    //private String pathToJsonFile = "/Users/nickyking/IdeaProjects/laba6/src/test.json";
-    //private String pathToJsonFile = "C:\\Users\\Nikitka\\IdeaProjects\\laba5\\src\\test.json";
-    private String pathToJsonFile = System.getenv("JSON");
+
+    private String jsonFileName;
+    private File jsonFile;
+
+    public JsonDataHandler(String fileName){
+        jsonFileName = fileName;
+        jsonFile = new File(jsonFileName);
+        if(!jsonFile.exists()){
+            try {
+                jsonFile.createNewFile();
+            }catch (IOException e){}
+        }
+    }
+    public JsonDataHandler(){}
+
     private JSONParser jsonParser = new JSONParser();
 
     public Integer getJsonCollectionSize() {
         int counter = 0;
         try {
-            System.out.println(pathToJsonFile);
-            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(pathToJsonFile));
+            //System.out.println(jsonFileName);
+            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(jsonFileName));
             for (Object obj : json_array) {
                 counter++;
             }
@@ -33,7 +48,7 @@ public class JsonDataHandler {
     public String getName(int index) {
         String fromJsonName = null;
         try {
-            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(pathToJsonFile));
+            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(jsonFileName));
             JSONObject json_data = (JSONObject) json_array.get(index);
             fromJsonName = (String) json_data.get("name");
         } catch (IOException e) {
@@ -47,7 +62,7 @@ public class JsonDataHandler {
     public int getId(int index) {
         int tempId = 0;
         try {
-            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(pathToJsonFile));
+            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(jsonFileName));
             JSONObject json_data = (JSONObject) json_array.get(index);
             tempId = BigDecimal.valueOf((Long) json_data.get("id")).intValue();
         } catch (IOException e) {
@@ -64,7 +79,7 @@ public class JsonDataHandler {
         Double jsonX = 0.0;
         Float jsonY = 0f;
         try {
-            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(pathToJsonFile));
+            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(jsonFileName));
             JSONObject json_data = (JSONObject) json_array.get(index);
             jsonX = (Double) json_data.get("coordinate_x");
             jsonY = BigDecimal.valueOf((Double) json_data.get("coordinate_y")).floatValue();
@@ -82,7 +97,7 @@ public class JsonDataHandler {
     public int getHealth(int index) {
         Integer jsonHealth = 0;
         try {
-            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(pathToJsonFile));
+            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(jsonFileName));
             JSONObject json_data = (JSONObject) json_array.get(index);
             jsonHealth = BigDecimal.valueOf((Long) json_data.get("health")).intValue();
         } catch (IOException e) {
@@ -97,7 +112,7 @@ public class JsonDataHandler {
         AstartesCategory jsonCategory = null;
         String temp_comparison;
         try {
-            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(pathToJsonFile));
+            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(jsonFileName));
             JSONObject json_data = (JSONObject) json_array.get(index);
             temp_comparison = (String) json_data.get("category");
             switch (temp_comparison) {
@@ -126,7 +141,7 @@ public class JsonDataHandler {
         Weapon jsonWeapon = null;
         String temp_comparison;
         try {
-            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(pathToJsonFile));
+            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(jsonFileName));
             JSONObject json_data = (JSONObject) json_array.get(index);
             temp_comparison = (String) json_data.get("weapon");
             switch (temp_comparison) {
@@ -162,7 +177,7 @@ public class JsonDataHandler {
         MeleeWeapon jsonMeleeWeapon = null;
         String temp_comparison;
         try {
-            JSONArray jsonArray = (JSONArray) jsonParser.parse(new FileReader(pathToJsonFile));
+            JSONArray jsonArray = (JSONArray) jsonParser.parse(new FileReader(jsonFileName));
             JSONObject jsonData = (JSONObject) jsonArray.get(index);
             temp_comparison = (String) jsonData.get("melee_weapon");
             switch (temp_comparison) {
@@ -191,7 +206,7 @@ public class JsonDataHandler {
     public Chapter getChapter(int index) {
         Chapter chapter = new Chapter();
         try {
-            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(pathToJsonFile));
+            JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(jsonFileName));
             JSONObject json_data = (JSONObject) json_array.get(index);
             chapter.setName((String) json_data.get("chapter"));
         } catch (IOException e) {

@@ -1,3 +1,5 @@
+package spaceMarineProperties;
+
 public enum Weapon {
     MELTAGUN,
     BOLT_PISTOL,
