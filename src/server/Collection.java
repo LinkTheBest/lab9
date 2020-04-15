@@ -32,7 +32,7 @@ public class Collection {
     }
 
     public void setObjects(ArrayDeque<SpaceMarine> spc) {
-         spc = new ArrayDeque<>(spc);
+         this.spc = new ArrayDeque<>(spc);
     }
 
     public void clearCollection(){spc.clear();}

@@ -99,7 +99,7 @@ public class JsonDataHandler {
         try {
             JSONArray json_array = (JSONArray) jsonParser.parse(new FileReader(jsonFileName));
             JSONObject json_data = (JSONObject) json_array.get(index);
-            jsonHealth = BigDecimal.valueOf((Long) json_data.get("health")).intValue();
+            jsonHealth = BigDecimal.valueOf((Double) json_data.get("health")).intValue();
         } catch (IOException e) {
             System.err.println(e);
         } catch (ParseException pe) {

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 public class Command implements Serializable {
     private String objectName;
     private ListOfCommands comandName;
-    private ArrayList<Command> commandsForScript;
     private int id;
 
     public Command(ListOfCommands comandName){

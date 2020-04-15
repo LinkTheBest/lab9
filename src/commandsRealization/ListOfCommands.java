@@ -3,7 +3,6 @@ package commandsRealization;
 import java.io.Serializable;
 
 public enum ListOfCommands implements Serializable {
-    LOAD("LOAD"),
     HELP("help"),
     INFO("info"),
     ADD("add"),

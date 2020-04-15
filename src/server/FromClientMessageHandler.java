@@ -1,5 +1,6 @@
 package server;
 
+import client.Colors;
 import client.FromServerMessageHandler;
 import commandsRealization.Command;
 
@@ -19,7 +20,10 @@ public class FromClientMessageHandler {
         BufferedInputStream inputStream = new BufferedInputStream(socket.getInputStream());
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         Command command = (Command) objectInputStream.readObject();
+        System.out.print(Colors.CYAN_BOLD);
+        System.out.println("Была получена команда:" + command.getCommand());
         objectInputStream.close();
+        socket.close();
         return command;
     }
 }

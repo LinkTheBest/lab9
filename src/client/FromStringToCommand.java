@@ -19,20 +19,20 @@ public class FromStringToCommand {
                 break;
             case "help":
                 command = new Command(ListOfCommands.HELP);
-                break;
+                return command;
             case "info":
                 command = new Command(ListOfCommands.INFO);
-                break;
+                return command;
             case "show":
                 command = new Command(ListOfCommands.SHOW);
-                break;
+                return command;
             case "add":
                 if (devidedComand[devidedComand.length - 1].equals("add")) {
                     System.out.println("Введите имя после команды!");
                     break;
                 } else {
                     command = new Command(ListOfCommands.ADD, devidedComand[1]);
-                    break;
+                    return command;
                 }
             case "remove_by_id":
                 if (devidedComand[devidedComand.length - 1].equals("remove_by_id")) {
@@ -40,21 +40,21 @@ public class FromStringToCommand {
                     break;
                 } else {
                     command = new Command(ListOfCommands.REMOVE_BY_ID, Integer.valueOf(devidedComand[1]));
-                    break;
+                    return command;
                 }
             case "clear":
                 command = new Command(ListOfCommands.CLEAR);
-                break;
+                return command;
             case "save":
                 command = new Command(ListOfCommands.SAVE);
-                break;
+                return command;
             case "execute_script":
                 if (devidedComand[devidedComand.length - 1].equals("execute_script")) {
                     System.out.println("Введите название файла после команды!");
                     break;
                 } else {
                     command = new Command(ListOfCommands.EXECUTE_SCRIPT, devidedComand[1]);
-                    break;
+                    return command;
                 }
             case "add_if_max":
                 if (devidedComand[devidedComand.length - 1].equals("add_if_max")) {
@@ -62,7 +62,7 @@ public class FromStringToCommand {
                     break;
                 } else {
                     command = new Command(ListOfCommands.ADD_IF_MAX, devidedComand[1]);
-                    break;
+                    return command;
                 }
             case "add_if_min":
                 if (devidedComand[devidedComand.length - 1].equals("add_if_min")) {
@@ -70,20 +70,20 @@ public class FromStringToCommand {
                     break;
                 } else {
                     command = new Command(ListOfCommands.ADD_IF_MIN, devidedComand[1]);
-                    break;
+                    return command;
                 }
             case "remove_lower":
                 command = new Command(ListOfCommands.REMOVE_LOWER);
-                break;
+                return command;
             case "sum_of_health":
                 command = new Command(ListOfCommands.SUM_OF_HEALTH);
-                break;
+                return command;
             case "print_descending":
                 command = new Command(ListOfCommands.PRINT_DESCENDING);
-                break;
+                return command;
             case "print_descending_health":
                 command = new Command(ListOfCommands.PRINT_DESCENDING_HEALTH);
-                break;
+                return command;
             default:
                 System.out.print(Colors.RED_BOLD);
                 System.out.println("НЕ ШУТИ ТАК!");

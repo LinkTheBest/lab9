@@ -12,6 +12,6 @@ public class ShowCommand extends FatherOfCommands {
 
     @Override
     public MessageToClient executeCommand(Command command) {
-        return new MessageToClient("Коллкция:", collection.getObjects());
+        return new MessageToClient("Коллeкция:", collection.getObjects());
     }
 }

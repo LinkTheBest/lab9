@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class ServerConnection {
-    private final static String FILE_NAME = "test.json";
+    private final static String FILE_NAME = "C:\\Users\\Nikitka\\IdeaProjects\\lab7\\src\\test.json";
 
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
@@ -27,7 +27,8 @@ public class ServerConnection {
                         try {
                             ServerMain serverMain = new ServerMain(port, FILE_NAME);
                             serverMain.start();
-                        }catch (IOException e){}
+                        }catch (IOException e){
+                        }catch (ClassNotFoundException e){}
 
                     }
                 }catch (NumberFormatException e){

@@ -9,20 +9,22 @@ import java.net.Socket;
 
 public class FromServerMessageHandler {
     private Socket socket;
-    private MessageToClient message;
+
 
     public FromServerMessageHandler(Socket socket) {
         this.socket = socket;
     }
 
-    public MessageToClient getMessage() {
-        try {
-            BufferedInputStream inputStream = new BufferedInputStream(socket.getInputStream());
-            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-            message = (MessageToClient) objectInputStream.readObject();
-        } catch (IOException e) {
-        } catch (ClassNotFoundException e) {
-        }
+    public MessageToClient getMessage() throws IOException, ClassNotFoundException {
+
+        BufferedInputStream inputStream = new BufferedInputStream(socket.getInputStream());
+        ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+        MessageToClient message = (MessageToClient) objectInputStream.readObject();
+        System.out.print(Colors.CYAN_BOLD);
+        System.out.println("Была получена message:" + message.getMessage());
+        objectInputStream.close();
+        socket.close();
+
         return message;
     }
 }
