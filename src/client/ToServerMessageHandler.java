@@ -14,20 +14,14 @@ public class ToServerMessageHandler {
         this.socket = socket;
     }
 
-    public void sendMessage(Command command){
-        try {
-            BufferedOutputStream outputStream = new BufferedOutputStream(socket.getOutputStream());
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(command);
-            System.out.print(Colors.CYAN_BOLD);
-            System.out.println("Отправлено на сервер: " + command.getCommand());
-            objectOutputStream.flush();
-            objectOutputStream.close();
-            socket.close();
-
-
-        }catch (IOException e){}
-
+    public void sendMessage(Command command) throws IOException {
+        BufferedOutputStream outputStream = new BufferedOutputStream(socket.getOutputStream());
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+        objectOutputStream.writeObject(command);
+        System.out.print(Colors.GREEN_BOLD);
+        System.out.println("Отправлено на сервер: " + command.getCommand());
+        objectOutputStream.flush();
+       // objectOutputStream.close();
 
     }
 }
