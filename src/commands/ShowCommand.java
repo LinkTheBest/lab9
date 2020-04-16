@@ -4,6 +4,7 @@ import commandsRealization.Command;
 import server.Collection;
 import server.MessageToClient;
 import server.TbI_PROSTO_SUPER;
+import spaceMarineProperties.SpaceMarine;
 
 public class ShowCommand extends FatherOfCommands {
     public ShowCommand(Collection collection, TbI_PROSTO_SUPER kryto) {
@@ -12,6 +13,10 @@ public class ShowCommand extends FatherOfCommands {
 
     @Override
     public MessageToClient executeCommand(Command command) {
-        return new MessageToClient("Коллeкция:", collection.getObjects());
+        if (collection.getObjects() == null) {
+            return new MessageToClient("Коллекция пуста!");
+        } else {
+            return new MessageToClient("Коллeкция:", collection.getObjects());
+        }
     }
 }
