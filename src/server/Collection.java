@@ -2,10 +2,11 @@ package server;
 
 import spaceMarineProperties.SpaceMarine;
 
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.Date;
 
-public class Collection {
+public class Collection implements Serializable {
     private ArrayDeque<SpaceMarine> spc;
     private Date dateInitialization = new Date();
     private Date dateSave = new Date();
@@ -26,13 +27,12 @@ public class Collection {
         return dateSave;
     }
 
+    public void setObjects(ArrayDeque<SpaceMarine> spc) {
+        this.spc = new ArrayDeque<>(spc);
+    }
 
     public ArrayDeque<SpaceMarine> getObjects() {
         return spc;
-    }
-
-    public void setObjects(ArrayDeque<SpaceMarine> spc) {
-         this.spc = new ArrayDeque<>(spc);
     }
 
     public void clearCollection(){spc.clear();}
