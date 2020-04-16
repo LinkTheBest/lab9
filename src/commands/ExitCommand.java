@@ -1,5 +1,6 @@
 package commands;
 
+import client.Colors;
 import commandsRealization.Command;
 import server.Collection;
 import server.MessageToClient;
@@ -11,7 +12,9 @@ public class ExitCommand extends FatherOfCommands {
     }
     @Override
     public MessageToClient executeCommand(Command command) {
+        System.out.println(Colors.RED_BOLD);
+        System.out.println("ВЫХОД ИЗ ПРОГРАММЫ!");
         System.exit(0);
-        return new MessageToClient("Работа завершена.");
+        return null;
     }
 }
