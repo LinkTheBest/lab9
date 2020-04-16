@@ -18,11 +18,10 @@ public class RemoveByIdCommand extends FatherOfCommands {
 
     @Override
     public MessageToClient executeCommand(Command command) {
-        Scanner scn = new Scanner(System.in);
         ArrayDeque<SpaceMarine> spc = collection.getObjects();
         int startSize = spc.size();
         if (spc.size() > 0) {
-            int id = scn.nextInt();
+            int id = command.getId();
             spc.removeAll((spc.stream().filter(lil -> lil.getId() == id)
                     .collect(Collectors.toCollection(ArrayDeque::new))));
             if (startSize == spc.size()) {
