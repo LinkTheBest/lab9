@@ -1,10 +1,12 @@
 package server;
 
 import client.Colors;
+import spaceMarineProperties.SpaceMarine;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class ToClientMessageHandler {
@@ -14,18 +16,17 @@ public class ToClientMessageHandler {
         clientSocket = socket;
     }
 
-    public void send(MessageToClient message) throws IOException {
-        System.out.println(message.getMessage());
-        BufferedOutputStream outputStream = new BufferedOutputStream(clientSocket.getOutputStream());
-        System.out.println("FFFFFFFFFF");
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-        System.out.println("FFFFFFFFFF");
-        objectOutputStream.writeObject(message);
-        System.out.println("FFFFFFFFFF");
-        objectOutputStream.flush();
-        objectOutputStream.close();
-        clientSocket.close();
-    }
+    public String send(MessageToClient message) throws IOException {
 
+        OutputStream outputStream = new BufferedOutputStream(clientSocket.getOutputStream());
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+        objectOutputStream.writeObject(message);
+        objectOutputStream.flush();
+        if(!message.getMessage().equals("")) {
+            return "Клиенту отправлено сообщение:" + message.getMessage();
+        } else {
+            return "Отправлено клиенту";
+        }
+    }
 
 }
