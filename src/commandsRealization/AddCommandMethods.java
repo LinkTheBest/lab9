@@ -1,5 +1,6 @@
 package commandsRealization;
 
+import client.Colors;
 import spaceMarineProperties.*;
 
 import java.util.Scanner;
@@ -16,8 +17,9 @@ public class AddCommandMethods {
     private AstartesCategory tempCategory = null;
 
     public int readId() {
+        System.out.println(Colors.BLACK_BOLD);
         System.out.println("Чтобы задать ID автоматически введите 0");
-        System.out.println("Введите положительное ID до 99999:");
+        System.out.print("Введите положительное ID до 1 000 000: ");
         while (true) {
             try {
                 if (!tempScn.hasNextInt()) {
@@ -38,7 +40,7 @@ public class AddCommandMethods {
     }
 
     public Coordinates readCoordinates() {
-        System.out.println("Введите координаты, сначала Х, затем Y: ");
+        System.out.print("Введите координаты, сначала Х, затем Y:  ");
         while (true) {
             try {
                 if (!tempScn.hasNextDouble()) {
@@ -62,7 +64,7 @@ public class AddCommandMethods {
     }
 
     public int readHealth() {
-        System.out.println("Введите количество ХП: ");
+        System.out.print("Введите количество ХП: ");
         while (true) {
 
             try {
@@ -81,7 +83,7 @@ public class AddCommandMethods {
     }
 
     public Chapter readChapterName() {
-        System.out.println("Введите имя главы:");
+        System.out.print("Введите имя главы: ");
         while (true) {
             try {
                 if (!tempScn.hasNext()) {
@@ -99,7 +101,7 @@ public class AddCommandMethods {
     }
 
     public Weapon readWeaponType() {
-        System.out.println("Введите номер нужного вам названия 'com.itmo.r3135.spacemarineproperties.Weapon':");
+        System.out.println("Введите номер нужного вам названия 'Weapon': ");
         for (Weapon weapon : Weapon.values()) {
             counter++;
             if (counter == 1) {
@@ -153,7 +155,7 @@ public class AddCommandMethods {
     }
 
     public MeleeWeapon readMeleeWeaponCategory() {
-        System.out.println("Введите номер нужного вам названия 'com.itmo.r3135.spacemarineproperties.MeleeWeapon':");
+        System.out.println("Введите номер нужного вам названия 'MeleeWeapon': ");
         for (MeleeWeapon meleeWeapon : MeleeWeapon.values()) {
             counter++;
             if (counter == 1) {
@@ -187,6 +189,7 @@ public class AddCommandMethods {
                             System.out.println("Выбрать все-таки стоит из списка)");
                         }
                         tempMeleeWeapon = MeleeWeapon.CHAIN_SWORD;
+                        counter = 0;
                         break;
 
                 }
