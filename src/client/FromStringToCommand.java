@@ -7,9 +7,8 @@ public class FromStringToCommand {
 
 
     public Command getCommandFromString(String userCommand) {
-        String[] devidedComand;
+        String devidedComand[];
         Command command = null;
-        int id;
         devidedComand = userCommand.split("\\s");
 
         switch (devidedComand[0]) {
@@ -27,13 +26,9 @@ public class FromStringToCommand {
                 command = new Command(ListOfCommands.SHOW);
                 return command;
             case "add":
-                if (devidedComand[devidedComand.length - 1].equals("add")) {
-                    System.out.println("Введите имя после команды!");
-                    break;
-                } else {
-                    command = new Command(ListOfCommands.ADD, devidedComand[1]);
-                    return command;
-                }
+                CreatingNewObject creatingNewObject = new CreatingNewObject();
+                command = new Command(ListOfCommands.ADD, creatingNewObject.createObject());
+                return command;
             case "remove_by_id":
                 if (devidedComand[devidedComand.length - 1].equals("remove_by_id")) {
                     System.out.println("Введите id после команды!");
@@ -87,7 +82,7 @@ public class FromStringToCommand {
             default:
                 System.out.print(Colors.RED_BOLD);
                 System.out.println("НЕ ШУТИ ТАК!");
-                command = null;
+                command = new Command(ListOfCommands.HELP);
                 break;
         }
         return command;
