@@ -22,31 +22,10 @@ public class AddCommand extends FatherOfCommands {
 
     @Override
     public MessageToClient executeCommand(Command command){
-        Scanner scn = new Scanner(System.in);
-       List<SpaceMarine> tempList = new ArrayList<>(collection.getObjects());
-        AddCommandMethods addCommandMethods = new AddCommandMethods();
-        SpaceMarine addedSpcMrn = new SpaceMarine();
-        System.out.println("Введите имя:");
-        String name = scn.nextLine();
-        addedSpcMrn.setName(name);
-        addedSpcMrn.setId(addCommandMethods.readId());
-// ---------------------------------------------------------------------------------------------------------------------
-        addedSpcMrn.setCoordinates(addCommandMethods.readCoordinates());
-// ---------------------------------------------------------------------------------------------------------------------
-        addedSpcMrn.setHealth(addCommandMethods.readHealth());
-// ---------------------------------------------------------------------------------------------------------------------
-        addedSpcMrn.setChapter(addCommandMethods.readChapterName());
-// --------------------------------------------------------------------------------------------------------------------
-        addedSpcMrn.setWeaponType(addCommandMethods.readWeaponType());
-// ---------------------------------------------------------------------------------------------------------------------
-        addedSpcMrn.setMeleeWeapon(addCommandMethods.readMeleeWeaponCategory());
-// ---------------------------------------------------------------------------------------------------------------------
-        addedSpcMrn.setCategory(addCommandMethods.readAstartesCategory());
-// ---------------------------------------------------------------------------------------------------------------------
-        tempList.add(addedSpcMrn);
-        //spaceDeque = new ArrayDeque<>(tempList);
+        ArrayDeque<SpaceMarine> tempDeque = collection.getObjects();
+        tempDeque.add(command.getSpaceMarine());
+        collection.setObjects(tempDeque);
         System.out.println("Элемент успешно добавлен!");
-
-        return new MessageToClient("Элемент успешно добавлен!", new ArrayDeque<>(tempList));
+        return new MessageToClient("Элемент успешно добавлен! \n" +  command.getSpaceMarine().toString());
     }
 }
