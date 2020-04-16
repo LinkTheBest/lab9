@@ -1,6 +1,8 @@
 package spaceMarineProperties;
 
-public enum Weapon {
+import java.io.Serializable;
+
+public enum Weapon implements Serializable {
     MELTAGUN,
     BOLT_PISTOL,
     COMBI_FLAMER,

@@ -1,8 +1,9 @@
 package spaceMarineProperties;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class SpaceMarine implements Comparable {
+public class SpaceMarine implements Comparable, Serializable {
     private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
@@ -15,7 +16,7 @@ public class SpaceMarine implements Comparable {
 
     public SpaceMarine() {
         double temp;
-        temp = Math.random() * 100000;
+        temp = Math.random() * 1000000;
         id = (int) temp;
         creationDate = LocalDate.now();
     }
@@ -92,6 +93,17 @@ public class SpaceMarine implements Comparable {
         return 0;
     }
 
+    public String toString(){
+        String object = "ID: " + this.getId() + "\n"
+                + "Name: "+ this.getName() + "\n"
+                + "Coordinates: " + this.getCoordinates() + "\n"
+                + "Health: " + this.getHealth() +"\n"
+                + "Category: " +this.getCategory() + "\n"
+                + "Chapter: " +this.getChapter() + "\n"
+                + "MeleeWeapon: " +this.getMeleeWeapon() + "\n"
+                + "Weapon type: " +this.getWeaponType() + "\n";
+        return object;
+    }
 }
 
 

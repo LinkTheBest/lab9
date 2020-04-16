@@ -1,6 +1,8 @@
 package spaceMarineProperties;
 
-public class Coordinates {
+import java.io.Serializable;
+
+public class Coordinates implements Serializable {
     private Double x = null; //Поле не может быть null
     private Float y = null; //Поле не может быть null
 
