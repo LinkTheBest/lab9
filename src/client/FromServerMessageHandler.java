@@ -8,23 +8,17 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 
 public class FromServerMessageHandler {
-    private Socket socket;
+    private Socket clientSocket;
 
 
     public FromServerMessageHandler(Socket socket) {
-        this.socket = socket;
+        clientSocket = socket;
     }
 
     public MessageToClient getMessage() throws IOException, ClassNotFoundException {
-
-        BufferedInputStream inputStream = new BufferedInputStream(socket.getInputStream());
+        BufferedInputStream inputStream = new BufferedInputStream(clientSocket.getInputStream());
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         MessageToClient message = (MessageToClient) objectInputStream.readObject();
-        System.out.print(Colors.CYAN_BOLD);
-        System.out.println("Была получена message:" + message.getMessage());
-        objectInputStream.close();
-        socket.close();
-
         return message;
     }
 }
