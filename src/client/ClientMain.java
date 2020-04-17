@@ -5,23 +5,34 @@ import server.MessageToClient;
 import spaceMarineProperties.SpaceMarine;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class ClientMain {
+    private ConnectionChecker connectionChecker;
     private FromStringToCommand fromStringToCommand;
     private Scanner userInput = new Scanner(System.in);
     private String userCommand = "";
     private static Socket clientSocket;
     private ToServerMessageHandler toServerMessageHandler;
     private FromServerMessageHandler fromServerMessageHandler;
+    private int port;
 
     public ClientMain(int port) throws IOException {
-        clientSocket = new Socket("localhost", port);
+        this.port = port;
+        connectionChecker = new ConnectionChecker(port);
+        if (connectionChecker.checkConnectionSender()) {
+            clientSocket = new Socket("localhost", port);
+        }
     }
 
-    public void start() {
+    public void start() throws IOException {
+        fromStringToCommand = new FromStringToCommand();
+        toServerMessageHandler = new ToServerMessageHandler(clientSocket);
+        fromServerMessageHandler = new FromServerMessageHandler(clientSocket);
         System.out.print(Colors.CYAN);
         System.out.println("Для ознакомлением со списком команд, введите 'help'");
         while (!userCommand.equals("exit")) {
@@ -31,11 +42,11 @@ public class ClientMain {
                 break;
             } else {
                 userCommand = userInput.nextLine();
+                if (!connectionChecker.checkConnectionSender()) {
+                    System.out.println("Соединение потеряно!");
+                }
                 try {
-                    fromStringToCommand = new FromStringToCommand();
                     Command command = fromStringToCommand.getCommandFromString(userCommand);
-                    toServerMessageHandler = new ToServerMessageHandler(clientSocket);
-                    fromServerMessageHandler = new FromServerMessageHandler(clientSocket);
                     toServerMessageHandler.sendMessage(command);
                     MessageToClient message = fromServerMessageHandler.getMessage();
                     if (message != null) {
