@@ -14,7 +14,6 @@ public class ClientConnection {
             if (!scn.hasNextLine()) {
                 break;
             }
-
             String userInput = scn.nextLine();
             if (userInput == "exit" || userInput == "Exit" || userInput == "EXIT") {
                 System.exit(0);
@@ -28,20 +27,11 @@ public class ClientConnection {
                         try {
                             ClientMain clientMain = new ClientMain(port);
                             clientMain.start();
-                        } catch (IOException e) {
-                            System.out.print(Colors.RED_BOLD);
-                            System.out.println("Ошибка");
-                            System.out.printf(e.getMessage());
-                            System.out.print(Colors.CYAN_BOLD);
-                        }
-
+                        } catch (IOException e) {}
                     }
-                } catch (NumberFormatException e) {
-                }//catch (BindException e){}
+                } catch (NumberFormatException e) {}
             }
-
         }
-
     }
 }
 
