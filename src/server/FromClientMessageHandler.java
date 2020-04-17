@@ -1,6 +1,7 @@
 package server;
 
 import client.Colors;
+import client.ConnectionChecker;
 import client.FromServerMessageHandler;
 import commandsRealization.Command;
 
@@ -11,10 +12,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class FromClientMessageHandler {
+    private ConnectionChecker connectionChecker;
     private Socket clientSocket;
 
-    public FromClientMessageHandler(Socket socket) {
-        clientSocket = socket;
+    public FromClientMessageHandler(Socket clientSocket) throws IOException {
+        this.clientSocket = clientSocket;
     }
 
     public Command getMessage() throws IOException, ClassNotFoundException {
@@ -22,8 +24,7 @@ public class FromClientMessageHandler {
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         Command command = (Command) objectInputStream.readObject();
         System.out.print(Colors.GREEN_BOLD);
-        System.out.println("Была получена команда:" + command.getCommand());
-        //objectInputStream.close();
+        System.out.println("\nБыла получена команда:" + command.getCommand());
         return command;
     }
 }
