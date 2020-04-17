@@ -2,9 +2,7 @@ package client;
 
 import server.MessageToClient;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class FromServerMessageHandler {
@@ -20,5 +18,13 @@ public class FromServerMessageHandler {
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         MessageToClient message = (MessageToClient) objectInputStream.readObject();
         return message;
+    }
+
+    public String returnedMessage() throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        if(reader.readLine() == null){
+            return "";
+        }
+        return reader.readLine();
     }
 }
