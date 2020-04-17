@@ -37,6 +37,10 @@ public class Collection implements Serializable {
 
     public void clearCollection(){spc.clear();}
 
+    public int size(){
+        return spc.size();
+    }
+
     public void uptadeDateChange() {
         this.dateChange = new Date();
     }
