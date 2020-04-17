@@ -1,6 +1,7 @@
 package commands;
 
 import commandsRealization.Command;
+import commandsRealization.FindMaxElement;
 import server.Collection;
 import server.MessageToClient;
 import server.TbI_PROSTO_SUPER;
@@ -12,9 +13,8 @@ public class AddIfMaxCommand extends FatherOfCommands  {
     }
     @Override
     public MessageToClient executeCommand(Command command) {
-
-
-        return null;
+        FindMaxElement findMaxElement = new FindMaxElement();
+        return new MessageToClient("Результат операции:", findMaxElement.makeDecision(collection));
     }
 
 }

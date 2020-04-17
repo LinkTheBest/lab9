@@ -15,10 +15,6 @@ public class AddIfMinCommand extends FatherOfCommands {
     @Override
     public MessageToClient executeCommand(Command command) {
         FindMinElement finMin = new FindMinElement();
-        //addCommand(name);
-        // List<SpaceMarine> temp_list = new ArrayList<>(spaceDeque);
-        // spaceDeque = findMax.makeDecision(temp_list);
-
-        return null;
+        return new MessageToClient("Результат работы:", finMin.makeDecision(collection));
     }
 }

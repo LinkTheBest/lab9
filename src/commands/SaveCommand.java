@@ -37,7 +37,6 @@ public class SaveCommand extends FatherOfCommands {
             }
         }
         try {
-            //File finalFile = new File(System.getenv("JSON"));
             File finalFile = new File("test.json");
             PrintWriter writer = new PrintWriter(finalFile);
             writer.print("");
@@ -51,7 +50,6 @@ public class SaveCommand extends FatherOfCommands {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new MessageToClient("Коллкция была сохранена");
-
+        return null;
     }
 }
