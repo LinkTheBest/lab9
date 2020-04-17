@@ -1,18 +1,21 @@
 package server;
 
 import client.Colors;
+import client.ConnectionChecker;
 import commands.*;
 import commandsRealization.Command;
 import commandsRealization.ListOfCommands;
 
-import javax.sound.midi.Soundbank;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
+
 public class ServerMain implements TbI_PROSTO_SUPER {
-    private String usersInput = "";
+    private ConnectionChecker connectionChecker;
+    private String serverInput = "";
     private Scanner scn = new Scanner(System.in);
     private FromClientMessageHandler fromClientMessageHandler;
     private ToClientMessageHandler toClientMessageHandler;
@@ -37,12 +40,16 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     private FatherOfCommands sumOfHealthCommand;
     private FatherOfCommands printDescendingCommand;
     private FatherOfCommands printDescendingHealthCommand;
+    private FatherOfCommands saveCommand;
 
 
     public ServerMain(int port, String fileName) {
         collection = new Collection();
         this.port = port;
-        try { server = new ServerSocket(port); } catch (IOException e) {}
+        try {
+            server = new ServerSocket(port);
+        } catch (IOException e) {
+        }
 
         jsonDataHandler = new JsonDataHandler(fileName);
         startUpObjectLoader = new StartUpObjectLoader(jsonDataHandler.getJsonCollectionSize(), jsonDataHandler);
@@ -62,24 +69,29 @@ public class ServerMain implements TbI_PROSTO_SUPER {
         sumOfHealthCommand = new SumOfHealthCommand(collection, this);
         printDescendingCommand = new PrintDescendingCommand(collection, this);
         printDescendingHealthCommand = new PrintFieldDescendingHealth(collection, this);
+        saveCommand = new SaveCommand(collection, this);
     }
 
-    public void start() throws IOException, ClassNotFoundException {
+    public void start() throws IOException {
         System.out.print(Colors.CYAN_BOLD);
-        System.out.println("Сервер работает!\nДля Выхода введите 'exit'");
-        Thread stopServer = new Thread(() -> stopServer());
-        stopServer.start();
+        System.out.print("Сервер работает! Для Выхода введите 'exit'\n");
+        System.out.print(Colors.RED_BOLD);
+//        Thread stopServer = new Thread(() -> stopServer());
+//        stopServer.start();
         Thread socketWork = new Thread(() -> socketWork(server));
-        socketWork.setDaemon(true);
         socketWork.start();
     }
 
-    public void socketWork(ServerSocket serverSocket) {
+    synchronized public void socketWork(ServerSocket serverSocket) {
+        connectionChecker = new ConnectionChecker(port);
         try {
-                clientSocket = serverSocket.accept();
-                System.out.print(Colors.CYAN_BOLD);
-                System.out.println("Соединение установлено");
-        } catch (IOException e) {}
+            connectionChecker.checkConnectionReciever(serverSocket);
+            clientSocket = serverSocket.accept();
+            System.out.print(Colors.CYAN_BOLD);
+            System.out.println("Соединение установлено");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
         while (true) {
             try {
                 fromClientMessageHandler = new FromClientMessageHandler(clientSocket);
@@ -89,19 +101,31 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 String report = toClientMessageHandler.send(message);
                 System.out.println(report);
             } catch (IOException e) {
-                System.out.println(Colors.RED_BOLD);
-                System.out.println(e.getClass());
             } catch (ClassNotFoundException e) {
             }
         }
     }
 
-    public void stopServer() {
-        String userCommand = "";
-        Scanner scn = new Scanner(System.in);
-        userCommand = scn.nextLine();
-        if (userCommand != "exit") {
-            prostoKlass(new Command(ListOfCommands.EXIT));
+    synchronized public void stopServer() {
+        Scanner serverScn = new Scanner(System.in).useDelimiter("\\n");
+        while (true) {
+            System.out.print("$admen_servera: ");
+            if (serverScn.hasNext()) {
+                serverInput = serverScn.nextLine();
+                switch (serverInput) {
+                    case "exit":
+                        prostoKlass(new Command(ListOfCommands.SAVE));
+                        prostoKlass(new Command(ListOfCommands.EXIT));
+                    case "save":
+                        System.out.println("Сохранено!");
+                        prostoKlass(new Command(ListOfCommands.SAVE));
+                        break;
+                    default:
+                        System.out.println("Неопознанная команда!");
+                }
+            } else {
+                prostoKlass(new Command(ListOfCommands.EXIT));
+            }
         }
     }
 
@@ -136,6 +160,8 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 return printDescendingHealthCommand.executeCommand(command);
             case EXIT:
                 return exitCommand.executeCommand(command);
+            case SAVE:
+                return saveCommand.executeCommand(command);
             default:
                 System.out.print(Colors.RED_UNDERLINED);
                 System.out.println("Лол");
