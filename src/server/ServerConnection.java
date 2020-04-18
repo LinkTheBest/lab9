@@ -14,41 +14,29 @@ public class ServerConnection {
         System.out.println("Для начала работы введите порт или 'exit.'");
         System.out.print(Colors.GREEN_BOLD);
         System.out.print("PORT: ");
-        while(true) {
+        while (true) {
             if (!scn.hasNextLine()) {
                 break;
             }
 
             String userInput = scn.nextLine();
-            if(userInput == "exit" || userInput == "Exit" || userInput == "EXIT"){
+            if (userInput == "exit" || userInput == "Exit" || userInput == "EXIT") {
                 System.exit(0);
-            }else{
-                try{
+            } else {
+                try {
                     int port = Integer.valueOf(userInput);
-                    if(port < 0 || port >= 65535){
+                    if (port < 0 || port >= 65535) {
                         System.out.print(Colors.RED_BOLD);
                         System.out.println("Invalid port!");
-                    } else{
-                        try {
-                            ServerMain serverMain = new ServerMain(port, FILE_NAME);
-                            serverMain.start();
-                        }catch (IOException e){
-                            System.out.print(Colors.RED_BOLD);
-                            System.out.println("Ошибка");
-                            System.out.printf(e.getMessage());
-                            System.out.print(Colors.CYAN_BOLD);
+                    } else {
 
-                        }catch (ClassNotFoundException e){}
+                        ServerMain serverMain = new ServerMain(port, FILE_NAME);
+                        serverMain.start();
 
                     }
-                }catch (NumberFormatException e){
-                }//catch (BindException e){}
+                } catch (NumberFormatException e) {
+                }
             }
-
         }
-
     }
-
-
-
 }
