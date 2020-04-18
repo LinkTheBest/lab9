@@ -5,16 +5,12 @@ import client.ConnectionChecker;
 import commands.*;
 import commandsRealization.Command;
 import commandsRealization.ListOfCommands;
-
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-
 public class ServerMain implements TbI_PROSTO_SUPER {
-    private ConnectionChecker connectionChecker;
     private String serverInput = "";
     private Scanner scn = new Scanner(System.in);
     private FromClientMessageHandler fromClientMessageHandler;
@@ -41,7 +37,6 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     private FatherOfCommands printDescendingCommand;
     private FatherOfCommands printDescendingHealthCommand;
     private FatherOfCommands saveCommand;
-
 
     public ServerMain(int port, String fileName) {
         collection = new Collection();
@@ -72,7 +67,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
         saveCommand = new SaveCommand(collection, this);
     }
 
-    public void start() throws IOException {
+    public void start(){
         System.out.print(Colors.CYAN_BOLD);
         System.out.print("Сервер работает! Для Выхода введите 'exit'\n");
         System.out.print(Colors.RED_BOLD);
@@ -83,9 +78,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     }
 
     synchronized public void socketWork(ServerSocket serverSocket) {
-        connectionChecker = new ConnectionChecker(port);
         try {
-            connectionChecker.checkConnectionReciever(serverSocket);
             clientSocket = serverSocket.accept();
             System.out.print(Colors.CYAN_BOLD);
             System.out.println("Соединение установлено");
