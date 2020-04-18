@@ -12,10 +12,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class FromClientMessageHandler {
-    private ConnectionChecker connectionChecker;
     private Socket clientSocket;
 
-    public FromClientMessageHandler(Socket clientSocket) throws IOException {
+    public FromClientMessageHandler(Socket clientSocket){
         this.clientSocket = clientSocket;
     }
 
@@ -24,7 +23,7 @@ public class FromClientMessageHandler {
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         Command command = (Command) objectInputStream.readObject();
         System.out.print(Colors.GREEN_BOLD);
-        System.out.println("\nБыла получена команда:" + command.getCommand());
+        System.out.println("Была получена команда:" + command.getCommand());
         return command;
     }
 }
