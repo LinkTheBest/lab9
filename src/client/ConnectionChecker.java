@@ -1,61 +1,32 @@
 package client;
 
-import commandsRealization.Command;
-import server.FromClientMessageHandler;
-import server.ToClientMessageHandler;
-
 import java.io.IOException;
-import java.net.*;
-import java.nio.channels.SocketChannel;
+import java.net.Socket;
 
 public class ConnectionChecker {
-    private Socket veryFirstSocket;
-    private SocketChannel socketChannel;
-    private SocketAddress socketAddress;
-    private FromServerMessageHandler fromServerMessageHandler;
-    private FromClientMessageHandler fromClientMessageHandler;
-    private ToServerMessageHandler toServerMessageHandler;
-    private ToClientMessageHandler toClientMessageHandler;
     private int port;
-
+    private Socket socket;
 
     public ConnectionChecker(int port) {
         this.port = port;
-        socketAddress = new InetSocketAddress("localhost", port);
     }
 
-    public boolean checkConnectionSender() throws IOException {
+    public Socket socketConnector() {
         while (true) {
             try {
-                socketChannel = SocketChannel.open();
-                socketChannel.connect(socketAddress);
+                socket = new Socket("localhost", port);
                 break;
-            } catch (ConnectException e) {
-                System.out.println(Colors.RED_BOLD);
-                System.out.println("Подключение не удалось. Пытюсь восстановиться соединение...");
+            } catch (IOException e) {
+                System.out.print(Colors.RED_BOLD);
+                System.out.println("Соединение не удалось, повторяю попытки... ");
                 try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException ie) {
+                    Thread.sleep(5000);
+                } catch (InterruptedException ex) {
                 }
             }
         }
-        socketChannel.finishConnect();
-        socketChannel.close();
-        return true;
+        return socket;
     }
 
-    public void checkConnectionReciever(ServerSocket serverSocket) throws IOException{
-        Socket tempClientSocket = serverSocket.accept();
-        fromClientMessageHandler = new FromClientMessageHandler(tempClientSocket);
-        toClientMessageHandler = new ToClientMessageHandler(tempClientSocket);
-        while (!tempClientSocket.isConnected()) {
-            System.out.println(Colors.RED_BOLD);
-            System.out.println("Жду подключения клиента");
-        }
-        System.out.println("Проверка подключения прошла успешно!");
-    }
 
-    public void checkForStuckedCommands(){
-
-    }
 }
