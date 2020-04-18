@@ -24,12 +24,11 @@ public class ClientConnection {
                         System.out.print(Colors.RED_BOLD);
                         System.out.println("Invalid port!");
                     } else {
-                        try {
-                            ClientMain clientMain = new ClientMain(port);
-                            clientMain.start();
-                        } catch (IOException e) {}
+                        ClientMain clientMain = new ClientMain(port);
+                        clientMain.start();
                     }
-                } catch (NumberFormatException e) {}
+                } catch (NumberFormatException e) {
+                }
             }
         }
     }
