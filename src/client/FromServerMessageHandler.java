@@ -13,18 +13,11 @@ public class FromServerMessageHandler {
         clientSocket = socket;
     }
 
-    public MessageToClient getMessage() throws IOException, ClassNotFoundException {
+    public MessageToClient getMessage() throws ClassNotFoundException, IOException {
         BufferedInputStream inputStream = new BufferedInputStream(clientSocket.getInputStream());
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         MessageToClient message = (MessageToClient) objectInputStream.readObject();
         return message;
     }
 
-    public String returnedMessage() throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        if(reader.readLine() == null){
-            return "";
-        }
-        return reader.readLine();
-    }
 }
