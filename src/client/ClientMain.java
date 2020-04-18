@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
+import java.nio.channels.SocketChannel;
 import java.sql.SQLOutput;
 import java.util.Scanner;
 
@@ -16,23 +18,20 @@ public class ClientMain {
     private FromStringToCommand fromStringToCommand;
     private Scanner userInput = new Scanner(System.in);
     private String userCommand = "";
-    private static Socket clientSocket;
+    private Socket clientSocket;
     private ToServerMessageHandler toServerMessageHandler;
     private FromServerMessageHandler fromServerMessageHandler;
     private int port;
 
-    public ClientMain(int port) throws IOException {
+    public ClientMain(int port) {
         this.port = port;
         connectionChecker = new ConnectionChecker(port);
-        if (connectionChecker.checkConnectionSender()) {
-            clientSocket = new Socket("localhost", port);
-        }
+        clientSocket = connectionChecker.socketConnector();
     }
 
-    public void start() throws IOException {
+    public void start() {
         fromStringToCommand = new FromStringToCommand();
-        toServerMessageHandler = new ToServerMessageHandler(clientSocket);
-        fromServerMessageHandler = new FromServerMessageHandler(clientSocket);
+        toServerMessageHandler = new ToServerMessageHandler(clientSocket, port);
         System.out.print(Colors.CYAN);
         System.out.println("Для ознакомлением со списком команд, введите 'help'");
         while (!userCommand.equals("exit")) {
@@ -42,11 +41,9 @@ public class ClientMain {
                 break;
             } else {
                 userCommand = userInput.nextLine();
-                if (!connectionChecker.checkConnectionSender()) {
-                    System.out.println("Соединение потеряно!");
-                }
                 try {
                     Command command = fromStringToCommand.getCommandFromString(userCommand);
+                    fromServerMessageHandler = new FromServerMessageHandler(toServerMessageHandler.sendMessage(command));
                     toServerMessageHandler.sendMessage(command);
                     MessageToClient message = fromServerMessageHandler.getMessage();
                     if (message != null) {
@@ -80,8 +77,7 @@ public class ClientMain {
                         System.out.print(Colors.GREEN_BOLD);
                         System.out.println("Ответ некорректен");
                     }
-                } catch (IOException e) {
-                } catch (ClassNotFoundException e) {
+                } catch (ClassNotFoundException | IOException e) {
                 }
             }
         }
