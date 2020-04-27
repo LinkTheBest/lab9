@@ -6,14 +6,17 @@ import spaceMarineProperties.SpaceMarine;
 import java.util.Scanner;
 
 public class CreatingNewObject {
+    private String name;
+
+    public CreatingNewObject(String name){
+        this.name = name;
+    }
 
     public SpaceMarine createObject() {
         Scanner scn = new Scanner(System.in);
         AddCommandMethods addCommandMethods = new AddCommandMethods();
         SpaceMarine addedSpcMrn = new SpaceMarine();
         System.out.println(Colors.BLACK_BOLD);
-        System.out.println("Введите имя:");
-        String name = scn.nextLine();
         addedSpcMrn.setName(name);
         addedSpcMrn.setId(addCommandMethods.readId());
 // ---------------------------------------------------------------------------------------------------------------------
