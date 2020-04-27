@@ -3,14 +3,8 @@ package client;
 import commandsRealization.Command;
 import server.MessageToClient;
 import spaceMarineProperties.SpaceMarine;
-
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
-import java.nio.channels.SocketChannel;
-import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class ClientMain {
@@ -31,7 +25,7 @@ public class ClientMain {
 
     public void start() {
         fromStringToCommand = new FromStringToCommand();
-        toServerMessageHandler = new ToServerMessageHandler(clientSocket, port);
+//        toServerMessageHandler = new ToServerMessageHandler(clientSocket, port);
         System.out.print(Colors.CYAN);
         System.out.println("Для ознакомлением со списком команд, введите 'help'");
         while (!userCommand.equals("exit")) {
@@ -42,6 +36,7 @@ public class ClientMain {
             } else {
                 userCommand = userInput.nextLine();
                 try {
+                    toServerMessageHandler = new ToServerMessageHandler(clientSocket, port);
                     Command command = fromStringToCommand.getCommandFromString(userCommand);
                     fromServerMessageHandler = new FromServerMessageHandler(toServerMessageHandler.sendMessage(command));
                     toServerMessageHandler.sendMessage(command);

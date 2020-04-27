@@ -14,8 +14,8 @@ public class FromStringToCommand {
         switch (devidedComand[0]) {
             case "":
                 System.out.println("Команда отсутствует");
-                command = null;
-                break;
+                command = new Command(ListOfCommands.HELP);
+                return command;
             case "help":
                 command = new Command(ListOfCommands.HELP);
                 return command;
@@ -40,9 +40,8 @@ public class FromStringToCommand {
             case "clear":
                 command = new Command(ListOfCommands.CLEAR);
                 return command;
-            case "save":
-                command = new Command(ListOfCommands.SAVE);
-                return command;
+            case "exit":
+                System.exit(0);
             case "execute_script":
                 if (devidedComand[devidedComand.length - 1].equals("execute_script")) {
                     System.out.println("Введите название файла после команды!");
