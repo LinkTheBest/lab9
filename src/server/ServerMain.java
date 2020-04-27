@@ -1,18 +1,20 @@
 package server;
 
 import client.Colors;
-import client.ConnectionChecker;
 import commands.*;
 import commandsRealization.Command;
 import commandsRealization.ListOfCommands;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.concurrent.Semaphore;
 
 public class ServerMain implements TbI_PROSTO_SUPER {
+    private static final Semaphore SEMAPHORE = new Semaphore(1, true);
     private String serverInput = "";
-    private Scanner scn = new Scanner(System.in);
     private FromClientMessageHandler fromClientMessageHandler;
     private ToClientMessageHandler toClientMessageHandler;
     private Collection collection;
@@ -42,7 +44,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
         collection = new Collection();
         this.port = port;
         try {
-            server = new ServerSocket(port);
+            server = new ServerSocket(this.port);
         } catch (IOException e) {
         }
 
@@ -67,17 +69,18 @@ public class ServerMain implements TbI_PROSTO_SUPER {
         saveCommand = new SaveCommand(collection, this);
     }
 
-    public void start(){
+    public void start() {
         System.out.print(Colors.CYAN_BOLD);
-        System.out.print("Сервер работает! Для Выхода введите 'exit'\n");
-        System.out.print(Colors.RED_BOLD);
-//        Thread stopServer = new Thread(() -> stopServer());
-//        stopServer.start();
+        System.out.println("Сервер работает! Для Выхода введите 'exit'");
+        Thread stopServer = new Thread(() -> stopServer());
+        stopServer.setDaemon(false);
         Thread socketWork = new Thread(() -> socketWork(server));
+        socketWork.setDaemon(true);
+        stopServer.start();
         socketWork.start();
     }
 
-    synchronized public void socketWork(ServerSocket serverSocket) {
+     public void socketWork(ServerSocket serverSocket) {
         try {
             clientSocket = serverSocket.accept();
             System.out.print(Colors.CYAN_BOLD);
@@ -93,18 +96,31 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 MessageToClient message = prostoKlass(command);
                 String report = toClientMessageHandler.send(message);
                 System.out.println(report);
+                System.out.print(Colors.RED_BOLD);
+                System.out.println("$odmen_servera: ");
             } catch (IOException e) {
+                System.out.print(Colors.RED_BOLD);
+                System.out.println("Соединение потеряно! Пытаюсь восстановить...");
+                try {
+                    clientSocket = serverSocket.accept();
+                    if(clientSocket.isConnected()){
+                        System.out.print(Colors.CYAN_BOLD);
+                        System.out.println("Соединение установлено");
+                    }
+                }catch (IOException ex){}
             } catch (ClassNotFoundException e) {
             }
         }
     }
 
-    synchronized public void stopServer() {
-        Scanner serverScn = new Scanner(System.in).useDelimiter("\\n");
-        while (true) {
-            System.out.print("$admen_servera: ");
-            if (serverScn.hasNext()) {
+     public void stopServer() {
+
+            Scanner serverScn = new Scanner(System.in);
+            System.out.print(Colors.RED_BOLD);
+            System.out.println("$odmen_servera: ");
+            while (true) {
                 serverInput = serverScn.nextLine();
+
                 switch (serverInput) {
                     case "exit":
                         prostoKlass(new Command(ListOfCommands.SAVE));
@@ -116,10 +132,11 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                     default:
                         System.out.println("Неопознанная команда!");
                 }
-            } else {
-                prostoKlass(new Command(ListOfCommands.EXIT));
+
+                System.out.print("$odmen_servera: ");
+
             }
-        }
+
     }
 
     @Override

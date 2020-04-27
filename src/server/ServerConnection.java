@@ -20,7 +20,8 @@ public class ServerConnection {
             }
 
             String userInput = scn.nextLine();
-            if (userInput == "exit" || userInput == "Exit" || userInput == "EXIT") {
+            if (userInput.equals("exit") || userInput.equals("Exit") || userInput.equals("EXIT")) {
+                System.out.println("Работы завершена");
                 System.exit(0);
             } else {
                 try {
@@ -32,6 +33,7 @@ public class ServerConnection {
 
                         ServerMain serverMain = new ServerMain(port, FILE_NAME);
                         serverMain.start();
+                        break;
 
                     }
                 } catch (NumberFormatException e) {
