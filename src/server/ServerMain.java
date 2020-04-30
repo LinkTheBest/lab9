@@ -2,18 +2,16 @@ package server;
 
 import client.Colors;
 import commands.*;
-import commandsRealization.Command;
+import ComandPack.Command;
 import commandsRealization.ListOfCommands;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
 public class ServerMain implements TbI_PROSTO_SUPER {
-    private static final Semaphore SEMAPHORE = new Semaphore(1, true);
     private String serverInput = "";
     private FromClientMessageHandler fromClientMessageHandler;
     private ToClientMessageHandler toClientMessageHandler;
@@ -80,7 +78,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
         socketWork.start();
     }
 
-     public void socketWork(ServerSocket serverSocket) {
+    public void socketWork(ServerSocket serverSocket) {
         try {
             clientSocket = serverSocket.accept();
             System.out.print(Colors.CYAN_BOLD);
@@ -94,8 +92,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 toClientMessageHandler = new ToClientMessageHandler(clientSocket);
                 Command command = fromClientMessageHandler.getMessage();
                 MessageToClient message = prostoKlass(command);
-                String report = toClientMessageHandler.send(message);
-                System.out.println(report);
+                toClientMessageHandler.send(message);
                 System.out.print(Colors.RED_BOLD);
                 System.out.println("$odmen_servera: ");
             } catch (IOException e) {
@@ -103,39 +100,40 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 System.out.println("Соединение потеряно! Пытаюсь восстановить...");
                 try {
                     clientSocket = serverSocket.accept();
-                    if(clientSocket.isConnected()){
+                    if (clientSocket.isConnected()) {
                         System.out.print(Colors.CYAN_BOLD);
                         System.out.println("Соединение установлено");
                     }
-                }catch (IOException ex){}
+                } catch (IOException ex) {
+                }
             } catch (ClassNotFoundException e) {
             }
         }
     }
 
-     public void stopServer() {
+    public void stopServer() {
 
-            Scanner serverScn = new Scanner(System.in);
-            System.out.print(Colors.RED_BOLD);
-            System.out.println("$odmen_servera: ");
-            while (true) {
-                serverInput = serverScn.nextLine();
+        Scanner serverScn = new Scanner(System.in);
+        System.out.print(Colors.RED_BOLD);
+        System.out.println("$odmen_servera: ");
+        while (true) {
+            serverInput = serverScn.nextLine();
 
-                switch (serverInput) {
-                    case "exit":
-                        prostoKlass(new Command(ListOfCommands.SAVE));
-                        prostoKlass(new Command(ListOfCommands.EXIT));
-                    case "save":
-                        System.out.println("Сохранено!");
-                        prostoKlass(new Command(ListOfCommands.SAVE));
-                        break;
-                    default:
-                        System.out.println("Неопознанная команда!");
-                }
-
-                System.out.print("$odmen_servera: ");
-
+            switch (serverInput) {
+                case "exit":
+                    prostoKlass(new Command(ListOfCommands.SAVE));
+                    prostoKlass(new Command(ListOfCommands.EXIT));
+                case "save":
+                    System.out.println("Сохранено!");
+                    prostoKlass(new Command(ListOfCommands.SAVE));
+                    break;
+                default:
+                    System.out.println("Неопознанная команда!");
             }
+
+            System.out.print("$odmen_servera: ");
+
+        }
 
     }
 

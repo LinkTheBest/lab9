@@ -5,13 +5,14 @@ import spaceMarineProperties.SpaceMarine;
 
 import java.io.Serializable;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MessageToClient implements Serializable {
-    private SpaceMarine spaceMarine;
     private String message;
     private ArrayDeque<SpaceMarine> spaceMarines;
     private List<String> helpArray;
+    private ArrayList<MessageToClient> messageToClientsList = new ArrayList<>();
 
     public MessageToClient(String message){
         this.message = message;
@@ -20,6 +21,11 @@ public class MessageToClient implements Serializable {
     public MessageToClient(String message, ArrayDeque<SpaceMarine> spaceMarines){
         this.message = message;
         this.spaceMarines = spaceMarines;
+    }
+
+    public MessageToClient(String message, ArrayList<MessageToClient> messageToClientsList){
+        this.message = message;
+        this.messageToClientsList = messageToClientsList;
     }
 
     public MessageToClient(String message, List<String> helpArray){
@@ -34,4 +40,5 @@ public class MessageToClient implements Serializable {
     public String getMessage(){
         return message;
     }
+    public ArrayList<MessageToClient> getMessageToClientsList(){return messageToClientsList;}
 }

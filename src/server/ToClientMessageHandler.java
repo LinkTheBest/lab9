@@ -10,16 +10,11 @@ public class ToClientMessageHandler {
         clientSocket = socket;
     }
 
-    public String send(MessageToClient message) throws IOException {
+    public void send(MessageToClient message) throws IOException {
         OutputStream outputStream = new BufferedOutputStream(clientSocket.getOutputStream());
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         objectOutputStream.writeObject(message);
         objectOutputStream.flush();
-        if(message.getMessage().equals("")) {
-            return "Отправлено клиенту";
-        } else {
-            return "Клиенту отправлено сообщение:" + message.getMessage() + "\n";
-        }
     }
 
 

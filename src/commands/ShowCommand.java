@@ -1,10 +1,9 @@
 package commands;
 
-import commandsRealization.Command;
+import ComandPack.Command;
 import server.Collection;
 import server.MessageToClient;
 import server.TbI_PROSTO_SUPER;
-import spaceMarineProperties.SpaceMarine;
 
 public class ShowCommand extends FatherOfCommands {
     public ShowCommand(Collection collection, TbI_PROSTO_SUPER kryto) {

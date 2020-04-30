@@ -1,13 +1,12 @@
 package commands;
 
-import commandsRealization.Command;
+import ComandPack.Command;
 import server.Collection;
 import server.MessageToClient;
 import server.TbI_PROSTO_SUPER;
 import spaceMarineProperties.SpaceMarine;
 
 import java.util.ArrayDeque;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class RemoveByIdCommand extends FatherOfCommands {

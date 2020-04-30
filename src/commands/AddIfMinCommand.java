@@ -1,6 +1,6 @@
 package commands;
 
-import commandsRealization.Command;
+import ComandPack.Command;
 import commandsRealization.FindMinElement;
 import server.Collection;
 import server.MessageToClient;

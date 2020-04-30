@@ -23,7 +23,6 @@ public class JsonDataHandler {
             }catch (IOException e){}
         }
     }
-    public JsonDataHandler(){}
 
     private JSONParser jsonParser = new JSONParser();
 

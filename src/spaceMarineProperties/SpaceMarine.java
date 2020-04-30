@@ -57,9 +57,11 @@ public class SpaceMarine implements Comparable, Serializable {
         this.chapter = chapter;
     }
 
-    public Coordinates getCoordinates() {
-        return coordinates;
+    public String cordinatesToString() {
+        return "X: "+ String.valueOf(coordinates.getX())+"\n" + "Y: " + String.valueOf(coordinates.getY());
     }
+
+    public Coordinates getCoordinates(){return  coordinates;}
 
     public Integer getHealth() {
         return health;
@@ -77,9 +79,11 @@ public class SpaceMarine implements Comparable, Serializable {
         return meleeWeapon;
     }
 
-    public Chapter getChapter() {
-        return chapter;
+    public String chapterToString() {
+        return chapter.getName() + chapter.getParentLegion();
     }
+
+    public Chapter getChapter(){return chapter;}
 
 
     @Override
@@ -96,10 +100,10 @@ public class SpaceMarine implements Comparable, Serializable {
     public String toString(){
         String object = "ID: " + this.getId() + "\n"
                 + "Name: "+ this.getName() + "\n"
-                + "Coordinates: " + this.getCoordinates() + "\n"
+                + "Coordinates: " + this.cordinatesToString() + "\n"
                 + "Health: " + this.getHealth() +"\n"
                 + "Category: " +this.getCategory() + "\n"
-                + "Chapter: " +this.getChapter() + "\n"
+                + "Chapter: " +this.chapterToString() + "\n"
                 + "MeleeWeapon: " +this.getMeleeWeapon() + "\n"
                 + "Weapon type: " +this.getWeaponType() + "\n";
         return object;

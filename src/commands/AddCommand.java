@@ -1,17 +1,12 @@
 package commands;
 
-import commandsRealization.AddCommandMethods;
-import commandsRealization.Command;
+import ComandPack.Command;
 import server.Collection;
 import server.MessageToClient;
 import server.TbI_PROSTO_SUPER;
 import spaceMarineProperties.SpaceMarine;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-
-import java.util.List;
-import java.util.Scanner;
 
 public class AddCommand extends FatherOfCommands {
 

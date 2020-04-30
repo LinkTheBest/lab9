@@ -1,6 +1,6 @@
 package commands;
 
-import commandsRealization.Command;
+import ComandPack.Command;
 import server.Collection;
 import server.MessageToClient;
 import server.TbI_PROSTO_SUPER;
@@ -21,7 +21,7 @@ public class RemoveLowerCommand extends FatherOfCommands{
         try {
             int startSize = spc.size();
             if (startSize != 0) {
-                spc.removeAll((spc.stream().filter(lil -> 0 < lil.compareTo(collection.getObjects()))).collect(Collectors.toCollection(ArrayDeque::new)));
+                spc.removeAll((spc.stream().filter(lil -> lil.getId() < command.getId())).collect(Collectors.toCollection(ArrayDeque::new)));
                 collection.uptadeDateChange();
                 return new MessageToClient("Удалено " + (startSize - spc.size()) + " элементов");
             } else return new MessageToClient("Коллекция пуста");

@@ -1,8 +1,9 @@
 package client;
 
-import commandsRealization.Command;
+import ComandPack.Command;
 import server.MessageToClient;
 import spaceMarineProperties.SpaceMarine;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
@@ -25,7 +26,6 @@ public class ClientMain {
 
     public void start() {
         fromStringToCommand = new FromStringToCommand();
-//        toServerMessageHandler = new ToServerMessageHandler(clientSocket, port);
         System.out.print(Colors.CYAN);
         System.out.println("Для ознакомлением со списком команд, введите 'help'");
         while (!userCommand.equals("exit")) {
@@ -54,6 +54,20 @@ public class ClientMain {
                             System.out.print(Colors.GREEN_BOLD);
                             System.out.println("От сервера нет ответа");
                         }
+
+                        if (message.getMessageToClientsList() != null) {
+                            for (MessageToClient mstoc : message.getMessageToClientsList()) {
+                                System.out.println(mstoc.getMessage());
+                                if (mstoc.getSpaceMarines() != null) {
+                                    for (SpaceMarine scp : mstoc.getSpaceMarines()) {
+                                        System.out.print(Colors.BLACK_BOLD);
+                                        System.out.println(scp.toString());
+                                    }
+
+                                }
+                            }
+                        }
+
                         if (message.getSpaceMarines() != null) {
                             for (SpaceMarine scp : message.getSpaceMarines()) {
                                 System.out.print(Colors.BLACK_BOLD);

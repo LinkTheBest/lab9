@@ -1,6 +1,7 @@
 package client;
 
-import commandsRealization.Command;
+import ComandPack.Command;
+
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -23,7 +24,7 @@ public class ToServerMessageHandler {
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                 objectOutputStream.writeObject(command);
                 System.out.print(Colors.GREEN_BOLD);
-                System.out.println("Отправлено на сервер: " + command.getCommand());
+                //System.out.println("Отправлено на сервер: " + command.getCommand());
                 objectOutputStream.flush();
                 break;
             } catch (IOException e) {
@@ -33,6 +34,7 @@ public class ToServerMessageHandler {
                     clientSocket = new Socket("localhost", port);
                 } catch (IOException ex) {
                 }
+
             }
         }
         return clientSocket;

@@ -1,21 +1,25 @@
 package client;
 
-import commandsRealization.Command;
+import ComandPack.Command;
 import commandsRealization.ListOfCommands;
 
+import java.io.FileNotFoundException;
+
 public class FromStringToCommand {
+
+    private MrScripter mrScripter;
 
 
     public Command getCommandFromString(String userCommand) {
         String devidedComand[];
-        Command command = null;
+        Command command = new Command(ListOfCommands.HELP);
         devidedComand = userCommand.split("\\s");
         System.out.print(Colors.GREEN_BOLD);
         switch (devidedComand[0]) {
             case "":
                 System.out.println("Команда отсутствует");
-                command = null;
-                break;
+                command = new Command(ListOfCommands.HELP);
+                return command;
             case "help":
                 command = new Command(ListOfCommands.HELP);
                 return command;
@@ -56,9 +60,16 @@ public class FromStringToCommand {
                     command = new Command(ListOfCommands.HELP);
                     return command;
                 } else {
-                    command = new Command(ListOfCommands.EXECUTE_SCRIPT, devidedComand[1]);
+                    try {
+                        MrScripter mrScripter = new MrScripter(devidedComand[1]);
+                        command = new Command(ListOfCommands.EXECUTE_SCRIPT, mrScripter.getCommandFromFile());
+                    }catch (FileNotFoundException e){
+                        System.out.println(Colors.RED_BOLD);
+                        System.out.println("Файл не найден!");
+                    }
                     return command;
                 }
+
             case "add_if_max":
                 if (devidedComand[devidedComand.length - 1].equals("add_if_max")) {
                     System.out.println("Введите имя объекта после команды!");
@@ -78,8 +89,14 @@ public class FromStringToCommand {
                     return command;
                 }
             case "remove_lower":
-                command = new Command(ListOfCommands.REMOVE_LOWER);
-                return command;
+                if (devidedComand[devidedComand.length - 1].equals("remove_lower")) {
+                    System.out.println("Введите имя объекта после команды!");
+                    command = new Command(ListOfCommands.HELP);
+                    return command;
+                } else {
+                    command = new Command(ListOfCommands.REMOVE_LOWER, Integer.valueOf(devidedComand[1]));
+                    return command;
+                }
             case "sum_of_health":
                 command = new Command(ListOfCommands.SUM_OF_HEALTH);
                 return command;

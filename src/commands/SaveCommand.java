@@ -1,6 +1,6 @@
 package commands;
 
-import commandsRealization.Command;
+import ComandPack.Command;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.Collection;
@@ -37,7 +37,7 @@ public class SaveCommand extends FatherOfCommands {
             }
         }
         try {
-            File finalFile = new File("test.json");
+            File finalFile = new File(System.getenv("JSON"));
             PrintWriter writer = new PrintWriter(finalFile);
             writer.print("");
             writer.close();

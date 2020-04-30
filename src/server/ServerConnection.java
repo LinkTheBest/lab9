@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class ServerConnection {
-    private final static String FILE_NAME = "C:\\Users\\Nikitka\\IdeaProjects\\lab7\\src\\test.json";
+    private final static String FILE_NAME = System.getenv("JSON");
 
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
