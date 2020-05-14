@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/client/client.iml" filepath="$PROJECT_DIR$/client/client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/comandPack/comandPack.iml" filepath="$PROJECT_DIR$/comandPack/comandPack.iml" />
       <module fileurl="file://$PROJECT_DIR$/laba7.iml" filepath="$PROJECT_DIR$/laba7.iml" />
+      <module fileurl="file://$PROJECT_DIR$/server/server.iml" filepath="$PROJECT_DIR$/server/server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spaceMarineProperties/spaceMarineProperites.iml" filepath="$PROJECT_DIR$/spaceMarineProperties/spaceMarineProperites.iml" />
     </modules>
   </component>
 </project>
