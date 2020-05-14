@@ -2,12 +2,14 @@ package com.gnida.izkadetov;
 
 import com.gnida.izkadetov.commands.*;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class ServerMain implements TbI_PROSTO_SUPER {
+    private Scanner scn = new Scanner(System.in);
     private String serverInput = "";
     private FromClientMessageHandler fromClientMessageHandler;
     private ToClientMessageHandler toClientMessageHandler;
@@ -37,11 +39,24 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     public ServerMain(int port, String fileName) {
         collection = new Collection();
         this.port = port;
-        try {
-            server = new ServerSocket(this.port);
-        } catch (IOException e) {
+        while (true) {
+            try {
+                server = new ServerSocket(this.port);
+                break;
+            } catch (IOException e) {
+                String temp = "";
+                System.out.println(Colors.RED_BOLD);
+                System.out.println("Порт занят, Введите другой!");
+                System.out.println(Colors.GREEN_BOLD);
+                System.out.println("PORT:");
+                temp = scn.nextLine();
+                if (temp.equals("exit") | temp.equals("Exit") | temp.equals("EXIT")) {
+                    System.exit(0);
+                } else {
+                    this.port = Integer.valueOf(temp);
+                }
+            }
         }
-
         jsonDataHandler = new JsonDataHandler(fileName);
         startUpObjectLoader = new StartUpObjectLoader(jsonDataHandler.getJsonCollectionSize(), jsonDataHandler);
         collection.setObjects(startUpObjectLoader.getSpaceDeque());
