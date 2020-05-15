@@ -25,13 +25,15 @@ public class ClientMain {
         System.out.print(Colors.CYAN);
         System.out.println("Для ознакомлением со списком команд, введите 'help'");
         while (true) {
+
+
             System.out.print(Colors.GREEN_BOLD);
             System.out.print("Введите команду: ");
             if (!userInput.hasNextLine()) {
                 break;
             } else {
                 userCommand = userInput.nextLine();
-                if(userCommand.equals("exit")){
+                if (userCommand.equals("exit")) {
                     System.exit(0);
                 }
                 try {
@@ -91,6 +93,17 @@ public class ClientMain {
             }
         }
     }
+
+//    private boolean portInUse(int port) {
+//        boolean result = false;
+//        try {
+//            new Socket("localhost", port);
+//            result = false;
+//        } catch (Exception e) {
+//            result = true;
+//        }
+//        return result;
+//    }
 }
 
 

@@ -13,13 +13,18 @@ public class JsonDataHandler {
     private String jsonFileName;
     private File jsonFile;
 
-    public JsonDataHandler(String fileName){
+    public JsonDataHandler(String fileName) {
         jsonFileName = fileName;
+        if (jsonFileName == null) {
+            System.out.println("Переменна окружения не инициализирована!");
+            System.exit(0);
+        }
         jsonFile = new File(jsonFileName);
-        if(!jsonFile.exists()){
+        if (!jsonFile.exists()) {
             try {
                 jsonFile.createNewFile();
-            }catch (IOException e){}
+            } catch (IOException e) {
+            }
         }
     }
 

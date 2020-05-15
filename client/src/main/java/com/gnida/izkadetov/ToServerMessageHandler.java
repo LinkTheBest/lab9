@@ -21,8 +21,6 @@ public class ToServerMessageHandler {
                 BufferedOutputStream outputStream = new BufferedOutputStream(clientSocket.getOutputStream());
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                 objectOutputStream.writeObject(command);
-                System.out.print(Colors.GREEN_BOLD);
-                //System.out.println("Отправлено на сервер: " + command.getCommand());
                 objectOutputStream.flush();
                 break;
             } catch (IOException e) {

@@ -6,9 +6,11 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ServerMain implements TbI_PROSTO_SUPER {
+
     private Scanner scn = new Scanner(System.in);
     private String serverInput = "";
     private FromClientMessageHandler fromClientMessageHandler;
@@ -81,6 +83,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     public void start() {
         System.out.print(Colors.CYAN_BOLD);
         System.out.println("Сервер работает! Для Выхода введите 'exit'");
+        System.out.println("Для сохранения введите: save; Для выхода: exit");
         Thread stopServer = new Thread(() -> stopServer());
         stopServer.setDaemon(false);
         Thread socketWork = new Thread(() -> socketWork(server));
@@ -92,6 +95,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     public void socketWork(ServerSocket serverSocket) {
         try {
             clientSocket = serverSocket.accept();
+
             System.out.print(Colors.CYAN_BOLD);
             System.out.println("Соединение установлено");
         } catch (IOException e) {
@@ -99,6 +103,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
         }
         while (true) {
             try {
+                server.close();
                 fromClientMessageHandler = new FromClientMessageHandler(clientSocket);
                 toClientMessageHandler = new ToClientMessageHandler(clientSocket);
                 Command command = fromClientMessageHandler.getMessage();
@@ -110,7 +115,8 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 System.out.print(Colors.RED_BOLD);
                 System.out.println("Соединение потеряно! Пытаюсь восстановить...");
                 try {
-                    clientSocket = serverSocket.accept();
+                    server = new ServerSocket(port);
+                    clientSocket = server.accept();
                     if (clientSocket.isConnected()) {
                         System.out.print(Colors.CYAN_BOLD);
                         System.out.println("Соединение установлено");
