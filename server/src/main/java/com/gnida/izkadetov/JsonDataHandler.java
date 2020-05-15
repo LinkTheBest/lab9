@@ -16,7 +16,8 @@ public class JsonDataHandler {
     public JsonDataHandler(String fileName) {
         jsonFileName = fileName;
         if (jsonFileName == null) {
-            System.out.println("Переменна окружения не инициализирована!");
+            System.out.println("Переменна окружения не инициализирована!" + "\n" + "Добавьте переменную JSON, которая указывает на .json файл" + "\n" + "Программа будет завершена");
+
             System.exit(0);
         }
         jsonFile = new File(jsonFileName);
