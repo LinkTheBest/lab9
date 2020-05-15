@@ -18,6 +18,7 @@ public class ConnectionChecker {
                 break;
             } catch (IOException e) {
                 System.out.print(Colors.RED_BOLD);
+                System.out.println("Сервер занят или же недоступен...");
                 System.out.println("Соединение не удалось, повторяю попытки... ");
                 try {
                     Thread.sleep(5000);
@@ -27,8 +28,6 @@ public class ConnectionChecker {
         }
         return socket;
     }
-
-
 
 
 }
