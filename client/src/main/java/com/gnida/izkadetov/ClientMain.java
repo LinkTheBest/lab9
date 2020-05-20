@@ -89,6 +89,7 @@ public class ClientMain {
                         System.out.println("Ответ некорректен");
                     }
                 } catch (ClassNotFoundException | IOException e) {
+                    System.out.print(e.getMessage());
                 }
             }
         }

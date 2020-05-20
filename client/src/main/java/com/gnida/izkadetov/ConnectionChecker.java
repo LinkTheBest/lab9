@@ -23,6 +23,7 @@ public class ConnectionChecker {
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException ex) {
+                    System.out.println(ex.getMessage());
                 }
             }
         }

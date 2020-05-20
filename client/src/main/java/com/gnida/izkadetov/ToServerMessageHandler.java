@@ -29,6 +29,7 @@ public class ToServerMessageHandler {
                 try {
                     clientSocket = new Socket("localhost", port);
                 } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
                 }
 
             }

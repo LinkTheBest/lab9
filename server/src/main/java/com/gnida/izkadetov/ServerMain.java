@@ -122,8 +122,10 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                         System.out.println("Соединение установлено");
                     }
                 } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
                 }
             } catch (ClassNotFoundException e) {
+                System.out.println(e.getMessage());
             }
         }
     }
