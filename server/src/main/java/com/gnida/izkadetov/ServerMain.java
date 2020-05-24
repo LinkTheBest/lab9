@@ -2,15 +2,19 @@ package com.gnida.izkadetov;
 
 import com.gnida.izkadetov.commands.*;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 
-public class ServerMain implements TbI_PROSTO_SUPER {
+public class ServerMain implements TbI_PROSTO_SUPER, Runnable {
 
+    private ForkJoinPool pool = new ForkJoinPool(50);
+    private ExecutorService cachedThread = Executors.newCachedThreadPool();
+    private Socket runSocket;
     private Scanner scn = new Scanner(System.in);
     private String serverInput = "";
     private FromClientMessageHandler fromClientMessageHandler;
@@ -21,6 +25,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     private int port;
     private JsonDataHandler jsonDataHandler;
     private StartUpObjectLoader startUpObjectLoader;
+    private MessageToClient message;
 
     private final FatherOfCommands helpCommand;
     private final FatherOfCommands exitCommand;
@@ -38,8 +43,30 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     private final FatherOfCommands printDescendingHealthCommand;
     private final FatherOfCommands saveCommand;
 
-    public ServerMain(int port, String fileName) {
+    {
+        final String FILE_NAME = System.getenv("JSON");
         collection = new Collection();
+        jsonDataHandler = new JsonDataHandler(FILE_NAME);
+        startUpObjectLoader = new StartUpObjectLoader(jsonDataHandler.getJsonCollectionSize(), jsonDataHandler);
+        collection.setObjects(startUpObjectLoader.getSpaceDeque());
+        helpCommand = new HelpCommand(collection, this);
+        exitCommand = new ExitCommand(collection, this);
+        infoCommand = new InfoCommand(collection, this);
+        showCommand = new ShowCommand(collection, this);
+        addCommand = new AddCommand(collection, this);
+        removeByIdCommand = new RemoveByIdCommand(collection, this);
+        clearCommand = new ClearCommand(collection, this);
+        executeScriptCommand = new ExecuteScriptCommand(collection, this);
+        addIfMaxCommand = new AddIfMaxCommand(collection, this);
+        addIfMinCommand = new AddIfMinCommand(collection, this);
+        removeLowerCommand = new RemoveLowerCommand(collection, this);
+        sumOfHealthCommand = new SumOfHealthCommand(collection, this);
+        printDescendingCommand = new PrintDescendingCommand(collection, this);
+        printDescendingHealthCommand = new PrintFieldDescendingHealth(collection, this);
+        saveCommand = new SaveCommand(collection, this);
+    }
+
+    public ServerMain(int port) {
         this.port = port;
         while (true) {
             try {
@@ -59,25 +86,12 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 }
             }
         }
-        jsonDataHandler = new JsonDataHandler(fileName);
-        startUpObjectLoader = new StartUpObjectLoader(jsonDataHandler.getJsonCollectionSize(), jsonDataHandler);
-        collection.setObjects(startUpObjectLoader.getSpaceDeque());
 
-        helpCommand = new HelpCommand(collection, this);
-        exitCommand = new ExitCommand(collection, this);
-        infoCommand = new InfoCommand(collection, this);
-        showCommand = new ShowCommand(collection, this);
-        addCommand = new AddCommand(collection, this);
-        removeByIdCommand = new RemoveByIdCommand(collection, this);
-        clearCommand = new ClearCommand(collection, this);
-        executeScriptCommand = new ExecuteScriptCommand(collection, this);
-        addIfMaxCommand = new AddIfMaxCommand(collection, this);
-        addIfMinCommand = new AddIfMinCommand(collection, this);
-        removeLowerCommand = new RemoveLowerCommand(collection, this);
-        sumOfHealthCommand = new SumOfHealthCommand(collection, this);
-        printDescendingCommand = new PrintDescendingCommand(collection, this);
-        printDescendingHealthCommand = new PrintFieldDescendingHealth(collection, this);
-        saveCommand = new SaveCommand(collection, this);
+    }
+
+
+    public ServerMain(Socket runSocket) {
+        this.runSocket = runSocket;
     }
 
     public void start() {
@@ -93,40 +107,30 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     }
 
     public void socketWork(ServerSocket serverSocket) {
-        try {
-            clientSocket = serverSocket.accept();
-
-            System.out.print(Colors.CYAN_BOLD);
-            System.out.println("Соединение установлено");
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
         while (true) {
             try {
-                server.close();
-                fromClientMessageHandler = new FromClientMessageHandler(clientSocket);
-                toClientMessageHandler = new ToClientMessageHandler(clientSocket);
-                Command command = fromClientMessageHandler.getMessage();
-                MessageToClient message = prostoKlass(command);
-                toClientMessageHandler.send(message);
-                System.out.print(Colors.RED_BOLD);
-                System.out.println("$odmen_servera: ");
+                clientSocket = serverSocket.accept();
+                System.out.print(Colors.CYAN_BOLD);
+                System.out.println("Соединение установлено");
             } catch (IOException e) {
-                System.out.print(Colors.RED_BOLD);
-                System.out.println("Соединение потеряно! Пытаюсь восстановить...");
-                try {
-                    server = new ServerSocket(port);
-                    clientSocket = server.accept();
-                    if (clientSocket.isConnected()) {
-                        System.out.print(Colors.CYAN_BOLD);
-                        System.out.println("Соединение установлено");
-                    }
-                } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
-                }
-            } catch (ClassNotFoundException e) {
                 System.out.println(e.getMessage());
             }
+            pool.execute(() -> {
+                new Thread(new ServerMain(clientSocket)).start();
+            });
+            cachedThread.submit(() -> {
+                try {
+                    toClientMessageHandler = new ToClientMessageHandler(clientSocket);
+                    toClientMessageHandler.send(message);
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+            });
+
+//                toClientMessageHandler = new ToClientMessageHandler(clientSocket);
+//                toClientMessageHandler.send(message);
+            System.out.print(Colors.RED_BOLD);
+            System.out.println("$odmen_servera: ");
         }
     }
 
@@ -198,5 +202,16 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 System.out.println("Лол");
         }
         return null;
+    }
+
+    @Override
+    public void run() {
+        try {
+            fromClientMessageHandler = new FromClientMessageHandler(runSocket);
+            Command command = fromClientMessageHandler.getMessage();
+            message = prostoKlass(command);
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
