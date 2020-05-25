@@ -1,20 +1,21 @@
 package com.gnida.izkadetov;
 
+import com.gnida.izkadetov.DataBase.DataBaseInitializer;
 import com.gnida.izkadetov.commands.*;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 
-public class ServerMain implements TbI_PROSTO_SUPER, Runnable {
+public class ServerMain implements TbI_PROSTO_SUPER {
 
     private ForkJoinPool pool = new ForkJoinPool(50);
     private ExecutorService cachedThread = Executors.newCachedThreadPool();
-    private Socket runSocket;
     private Scanner scn = new Scanner(System.in);
     private String serverInput = "";
     private FromClientMessageHandler fromClientMessageHandler;
@@ -89,12 +90,21 @@ public class ServerMain implements TbI_PROSTO_SUPER, Runnable {
 
     }
 
+    public void dataBaseConnect(String host, int port, String baseName, String user, String pwd) {
+        DataBaseInitializer dataBaseInitializer = new DataBaseInitializer();
+        boolean connected = dataBaseInitializer.ifDataBaseConnected(host, port, baseName, user, pwd);
+        boolean created = dataBaseInitializer.ifTablesCreated();
+        if (connected & created) {
+            System.out.println("База данных подключена, таблицы созданы!");
+        } else {
+            System.out.println("При загрузку БД произошла ошибка");
+        }
 
-    public ServerMain(Socket runSocket) {
-        this.runSocket = runSocket;
     }
 
+
     public void start() {
+        dataBaseConnect("localhost", 5432, "postgres", "postgres", "pwd");
         System.out.print(Colors.CYAN_BOLD);
         System.out.println("Сервер работает! Для Выхода введите 'exit'");
         System.out.println("Для сохранения введите: save; Для выхода: exit");
@@ -112,24 +122,32 @@ public class ServerMain implements TbI_PROSTO_SUPER, Runnable {
                 clientSocket = serverSocket.accept();
                 System.out.print(Colors.CYAN_BOLD);
                 System.out.println("Соединение установлено");
+
+                pool.execute(() -> {
+//                    try {
+//                        fromClientMessageHandler = new FromClientMessageHandler(clientSocket);
+//                        Command command = fromClientMessageHandler.getMessage();
+//                        message = prostoKlass(command);
+//                    } catch (IOException | ClassNotFoundException e) {
+//                        System.out.println(e.getMessage());
+//                    }
+                    clientMultiDataProccesor(clientSocket);
+                });
+
+//                cachedThread.execute(() -> {
+//                    try {
+//                        toClientMessageHandler = new ToClientMessageHandler(clientSocket);
+//                        toClientMessageHandler.send(message);
+//                    } catch (IOException e) {
+//                        System.out.println(e.getMessage());
+//                    }
+//                });
+
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
-            pool.execute(() -> {
-                new Thread(new ServerMain(clientSocket)).start();
-            });
-            cachedThread.submit(() -> {
-                try {
-                    toClientMessageHandler = new ToClientMessageHandler(clientSocket);
-                    toClientMessageHandler.send(message);
-                } catch (IOException e) {
-                    System.out.println(e.getMessage());
-                }
-            });
-
 //                toClientMessageHandler = new ToClientMessageHandler(clientSocket);
 //                toClientMessageHandler.send(message);
-
             System.out.print(Colors.RED_BOLD);
             System.out.println("$odmen_servera: ");
         }
@@ -162,7 +180,6 @@ public class ServerMain implements TbI_PROSTO_SUPER, Runnable {
 
             }
         }
-
     }
 
     @Override
@@ -205,14 +222,23 @@ public class ServerMain implements TbI_PROSTO_SUPER, Runnable {
         return null;
     }
 
-    @Override
-    public void run() {
+    public void clientMultiDataProccesor(Socket socket) {
         try {
-            fromClientMessageHandler = new FromClientMessageHandler(runSocket);
+            fromClientMessageHandler = new FromClientMessageHandler(socket);
             Command command = fromClientMessageHandler.getMessage();
             message = prostoKlass(command);
+            clientMultiSenderProccesor(message, socket);
         } catch (IOException | ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
     }
+
+    public void clientMultiSenderProccesor(MessageToClient message, Socket socket) {
+        try {
+            toClientMessageHandler = new ToClientMessageHandler(socket);
+            toClientMessageHandler.send(message);
+        } catch (IOException e) {
+        }
+    }
+
 }
