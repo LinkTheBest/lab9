@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
@@ -21,6 +20,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     private FromClientMessageHandler fromClientMessageHandler;
     private ToClientMessageHandler toClientMessageHandler;
     private Collection collection;
+    private DataBaseManager dataBaseManager;
     private Socket clientSocket;
     private ServerSocket server;
     private int port;
@@ -46,25 +46,25 @@ public class ServerMain implements TbI_PROSTO_SUPER {
 
     {
         final String FILE_NAME = System.getenv("JSON");
-        collection = new Collection();
+        dataBaseManager = new DataBaseManager();
         jsonDataHandler = new JsonDataHandler(FILE_NAME);
         startUpObjectLoader = new StartUpObjectLoader(jsonDataHandler.getJsonCollectionSize(), jsonDataHandler);
-        collection.setObjects(startUpObjectLoader.getSpaceDeque());
-        helpCommand = new HelpCommand(collection, this);
-        exitCommand = new ExitCommand(collection, this);
-        infoCommand = new InfoCommand(collection, this);
-        showCommand = new ShowCommand(collection, this);
-        addCommand = new AddCommand(collection, this);
-        removeByIdCommand = new RemoveByIdCommand(collection, this);
-        clearCommand = new ClearCommand(collection, this);
-        executeScriptCommand = new ExecuteScriptCommand(collection, this);
-        addIfMaxCommand = new AddIfMaxCommand(collection, this);
-        addIfMinCommand = new AddIfMinCommand(collection, this);
-        removeLowerCommand = new RemoveLowerCommand(collection, this);
-        sumOfHealthCommand = new SumOfHealthCommand(collection, this);
-        printDescendingCommand = new PrintDescendingCommand(collection, this);
-        printDescendingHealthCommand = new PrintFieldDescendingHealth(collection, this);
-        saveCommand = new SaveCommand(collection, this);
+        dataBaseManager.setObjects(startUpObjectLoader.getSpaceDeque());
+        helpCommand = new HelpCommand(dataBaseManager, this);
+        exitCommand = new ExitCommand(dataBaseManager, this);
+        infoCommand = new InfoCommand(dataBaseManager, this);
+        showCommand = new ShowCommand(dataBaseManager, this);
+        addCommand = new addcommand(dataBaseManager, this);
+        removeByIdCommand = new RemoveByIdCommand(dataBaseManager, this);
+        clearCommand = new ClearCommand(dataBaseManager, this);
+        executeScriptCommand = new ExecuteScriptCommand(dataBaseManager, this);
+        addIfMaxCommand = new AddIfMaxCommand(dataBaseManager, this);
+        addIfMinCommand = new AddIfMinCommand(dataBaseManager, this);
+        removeLowerCommand = new RemoveLowerCommand(dataBaseManager, this);
+        sumOfHealthCommand = new SumOfHealthCommand(dataBaseManager, this);
+        printDescendingCommand = new PrintDescendingCommand(dataBaseManager, this);
+        printDescendingHealthCommand = new PrintFieldDescendingHealth(dataBaseManager, this);
+        saveCommand = new SaveCommand(dataBaseManager, this);
     }
 
     public ServerMain(int port) {
@@ -94,6 +94,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
         DataBaseInitializer dataBaseInitializer = new DataBaseInitializer();
         boolean connected = dataBaseInitializer.ifDataBaseConnected(host, port, baseName, user, pwd);
         boolean created = dataBaseInitializer.ifTablesCreated();
+        dataBaseManager.setDataBaseInitializer(dataBaseInitializer);
         if (connected & created) {
             System.out.println("База данных подключена, таблицы созданы!");
         } else {
@@ -234,11 +235,14 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     }
 
     public void clientMultiSenderProccesor(MessageToClient message, Socket socket) {
-        try {
-            toClientMessageHandler = new ToClientMessageHandler(socket);
-            toClientMessageHandler.send(message);
-        } catch (IOException e) {
-        }
+        cachedThread.execute(() -> {
+            try {
+                toClientMessageHandler = new ToClientMessageHandler(socket);
+                toClientMessageHandler.send(message);
+            } catch (IOException e) {
+            }
+        });
+//            toClientMessageHandler = new ToClientMessageHandler(socket);
+//            toClientMessageHandler.send(message);
     }
-
 }

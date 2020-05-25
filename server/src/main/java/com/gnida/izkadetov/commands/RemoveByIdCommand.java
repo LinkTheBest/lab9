@@ -6,14 +6,14 @@ import java.util.ArrayDeque;
 import java.util.stream.Collectors;
 
 public class RemoveByIdCommand extends FatherOfCommands {
-    public RemoveByIdCommand(Collection collection, TbI_PROSTO_SUPER kryto) {
+    public RemoveByIdCommand(DataBaseManager dataBaseManager, TbI_PROSTO_SUPER kryto) {
 
-        super(collection, kryto);
+        super(dataBaseManager, kryto);
     }
 
     @Override
     public MessageToClient executeCommand(Command command) {
-        ArrayDeque<SpaceMarine> spc = collection.getObjects();
+        ArrayDeque<SpaceMarine> spc = dataBaseManager.getObjects();
         int startSize = spc.size();
         if (spc.size() > 0) {
             int id = command.getId();
@@ -22,7 +22,7 @@ public class RemoveByIdCommand extends FatherOfCommands {
             if (startSize == spc.size()) {
                 return new MessageToClient("Элемент с id " + id + " не существует.");
             }
-            collection.uptadeDateChange();
+            dataBaseManager.uptadeDateChange();
             return new MessageToClient("Элемент коллекции успешно удалён.");
         } else return new MessageToClient("Коллекция пуста.");
     }

@@ -27,7 +27,7 @@ public class ServerConnection {
                         System.out.println("Invalid port!");
                     } else {
 
-                        ServerMain serverMain = new ServerMain(port, FILE_NAME);
+                        ServerMain serverMain = new ServerMain(port);
                         serverMain.start();
                         break;
 

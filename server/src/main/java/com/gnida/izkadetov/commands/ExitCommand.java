@@ -3,8 +3,8 @@ package com.gnida.izkadetov.commands;
 import com.gnida.izkadetov.*;
 
 public class ExitCommand extends FatherOfCommands {
-    public ExitCommand(Collection collection, TbI_PROSTO_SUPER kryto) {
-        super(collection, kryto);
+    public ExitCommand(DataBaseManager dataBaseManager, TbI_PROSTO_SUPER kryto) {
+        super(dataBaseManager, kryto);
     }
     @Override
     public MessageToClient executeCommand(Command command) {

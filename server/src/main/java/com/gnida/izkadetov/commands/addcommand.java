@@ -4,20 +4,20 @@ import com.gnida.izkadetov.*;
 
 import java.util.ArrayDeque;
 
-public class AddCommand extends FatherOfCommands {
+public class addcommand extends FatherOfCommands {
 
-    public AddCommand(Collection collection, TbI_PROSTO_SUPER kryto){
+    public addcommand(DataBaseManager dataBaseManager, TbI_PROSTO_SUPER kryto){
 
-        super(collection, kryto);
+        super(dataBaseManager, kryto);
     }
 
     @Override
     public MessageToClient executeCommand(Command command){
-        ArrayDeque<SpaceMarine> tempDeque = collection.getObjects();
+        ArrayDeque<SpaceMarine> tempDeque = dataBaseManager.getObjects();
         tempDeque.add(command.getSpaceMarine());
-        collection.setObjects(tempDeque);
+        dataBaseManager.setObjects(tempDeque);
         System.out.println("Элемент успешно добавлен!");
-        collection.uptadeDateChange();
+        dataBaseManager.uptadeDateChange();
         return new MessageToClient("Элемент успешно добавлен! \n" +  command.getSpaceMarine().toString());
     }
 }

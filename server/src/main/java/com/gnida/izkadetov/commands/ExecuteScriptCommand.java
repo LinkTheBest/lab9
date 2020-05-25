@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 public class ExecuteScriptCommand extends FatherOfCommands{
 
-    public ExecuteScriptCommand(Collection collection, TbI_PROSTO_SUPER kryto){
-        super(collection, kryto);
+    public ExecuteScriptCommand(DataBaseManager dataBaseManager, TbI_PROSTO_SUPER kryto){
+        super(dataBaseManager, kryto);
     }
     ArrayList<MessageToClient> messageToClientsList = new ArrayList<>();
 
@@ -27,17 +27,17 @@ public class ExecuteScriptCommand extends FatherOfCommands{
                     messageToClientsList.add(messageToClient);
                     break;
                 case "help":
-                    foc = new HelpCommand(collection, kryto);
+                    foc = new HelpCommand(dataBaseManager, kryto);
                     messageToClient = foc.executeCommand(new Command(ListOfCommands.HELP));
                     messageToClientsList.add(messageToClient);
                     break;
                 case "info":
-                    foc = new InfoCommand(collection, kryto);
+                    foc = new InfoCommand(dataBaseManager, kryto);
                     messageToClient = foc.executeCommand(new Command(ListOfCommands.INFO));
                     messageToClientsList.add(messageToClient);
                     break;
                 case "show":
-                    foc = new ShowCommand(collection, kryto);
+                    foc = new ShowCommand(dataBaseManager, kryto);
                     messageToClient = foc.executeCommand(new Command(ListOfCommands.SHOW));
                     messageToClientsList.add(messageToClient);
                     break;
@@ -48,7 +48,7 @@ public class ExecuteScriptCommand extends FatherOfCommands{
                         break;
                     }
                     CreatingNewObject creatingNewObject = new CreatingNewObject(commandFromList[1]);
-                    foc = new AddCommand(collection, kryto);
+                    foc = new addcommand(dataBaseManager, kryto);
                     messageToClient = foc.executeCommand(new Command(ListOfCommands.ADD, creatingNewObject.createObject()));
                     messageToClientsList.add(messageToClient);
                     break;
@@ -58,18 +58,18 @@ public class ExecuteScriptCommand extends FatherOfCommands{
                         messageToClientsList.add(messageToClient);
                         break;
                     } else {
-                        foc = new RemoveByIdCommand(collection, kryto);
+                        foc = new RemoveByIdCommand(dataBaseManager, kryto);
                         messageToClient = foc.executeCommand(new Command(ListOfCommands.REMOVE_BY_ID, Integer.valueOf(commandFromList[1])));
                         messageToClientsList.add(messageToClient);
                         break;
                     }
                 case "clear":
-                    foc = new ClearCommand(collection, kryto);
+                    foc = new ClearCommand(dataBaseManager, kryto);
                     messageToClient = foc.executeCommand(new Command(ListOfCommands.CLEAR));
                     messageToClientsList.add(messageToClient);
                     break;
                 case "save":
-                    foc = new SaveCommand(collection, kryto);
+                    foc = new SaveCommand(dataBaseManager, kryto);
                     messageToClient = foc.executeCommand(new Command(ListOfCommands.SAVE));
                     messageToClientsList.add(messageToClient);
                     break;
@@ -80,7 +80,7 @@ public class ExecuteScriptCommand extends FatherOfCommands{
                         messageToClientsList.add(messageToClient);
                         break;
                     } else {
-                        foc = new AddIfMaxCommand(collection, kryto);
+                        foc = new AddIfMaxCommand(dataBaseManager, kryto);
                         messageToClient = foc.executeCommand(new Command(ListOfCommands.ADD_IF_MAX));
                         messageToClientsList.add(messageToClient);
                         break;
@@ -91,28 +91,28 @@ public class ExecuteScriptCommand extends FatherOfCommands{
                         messageToClientsList.add(messageToClient);
                         break;
                     } else {
-                        foc = new AddIfMaxCommand(collection, kryto);
+                        foc = new AddIfMaxCommand(dataBaseManager, kryto);
                         messageToClient = foc.executeCommand(new Command(ListOfCommands.ADD_IF_MIN));
                         messageToClientsList.add(messageToClient);
                         break;
                     }
                 case "remove_lower":
-                    foc = new RemoveLowerCommand(collection, kryto);
+                    foc = new RemoveLowerCommand(dataBaseManager, kryto);
                     messageToClient = foc.executeCommand(new Command(ListOfCommands.REMOVE_LOWER));
                     messageToClientsList.add(messageToClient);
                     break;
                 case "sum_of_health":
-                    foc = new SumOfHealthCommand(collection, kryto);
+                    foc = new SumOfHealthCommand(dataBaseManager, kryto);
                     messageToClient = foc.executeCommand(new Command(ListOfCommands.SUM_OF_HEALTH));
                     messageToClientsList.add(messageToClient);
                     break;
                 case "print_descending":
-                    foc = new PrintDescendingCommand(collection, kryto);
+                    foc = new PrintDescendingCommand(dataBaseManager, kryto);
                     messageToClient = foc.executeCommand(new Command(ListOfCommands.PRINT_DESCENDING));
                     messageToClientsList.add(messageToClient);
                     break;
                 case "print_descending_health":
-                    foc = new PrintFieldDescendingHealth(collection, kryto);
+                    foc = new PrintFieldDescendingHealth(dataBaseManager, kryto);
                     messageToClient = foc.executeCommand(new Command(ListOfCommands.PRINT_DESCENDING_HEALTH));
                     messageToClientsList.add(messageToClient);
                     break;

@@ -19,15 +19,37 @@ public class DataBaseManager {
         this.dataBaseInitializer = dataBaseInitializer;
     }
 
-    public ArrayDeque<SpaceMarine> getSpc() {
+    public ArrayDeque<SpaceMarine> getObjects() {
         return spc;
     }
 
-    public void setSpc(ArrayDeque<SpaceMarine> spc) {
+    public void setObjects(ArrayDeque<SpaceMarine> spc) {
         this.spc = spc;
     }
 
     public Date getDateInitialization() {
         return dateInitialization;
+    }
+
+    public Date uptadeDateChange() {
+        return dateInitialization = new Date();
+    }
+
+    public void clearCollection() {
+        spc.clear();
+    }
+
+    public boolean checkLogin(String login){
+        if(login.equals(null) | login.equals("") | login.equals(" ")){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return new String("Размер: " +
+                spc.size() + "\n" + "Дата создания: " + this.getDateInitialization() + "\n" + "Дата последнего изменения:" + this.uptadeDateChange());
     }
 }

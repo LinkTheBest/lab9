@@ -17,7 +17,6 @@ public class ClientMain {
     public ClientMain(int port) {
         this.port = port;
         connectionChecker = new ConnectionChecker(port);
-        clientSocket = connectionChecker.socketConnector();
     }
 
     public void start() {
@@ -25,8 +24,7 @@ public class ClientMain {
         System.out.print(Colors.CYAN);
         System.out.println("Для ознакомлением со списком команд, введите 'help'");
         while (true) {
-
-
+            clientSocket = connectionChecker.socketConnector();
             System.out.print(Colors.GREEN_BOLD);
             System.out.print("Введите команду: ");
             if (!userInput.hasNextLine()) {
@@ -39,6 +37,7 @@ public class ClientMain {
                 try {
                     toServerMessageHandler = new ToServerMessageHandler(clientSocket, port);
                     Command command = fromStringToCommand.getCommandFromString(userCommand);
+                    System.out.println(command.getCommand());
                     //fromServerMessageHandler = new FromServerMessageHandler(toServerMessageHandler.sendMessage(command));
                     clientSocket = toServerMessageHandler.sendMessage(command);
                     fromServerMessageHandler = new FromServerMessageHandler(clientSocket);

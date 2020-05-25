@@ -10,8 +10,8 @@ import java.util.List;
 
 public class FindMinElement {
 
-    public ArrayDeque<SpaceMarine> makeDecision(Collection collection) {
-        List<SpaceMarine> tempList = new ArrayList(collection.getObjects());
+    public ArrayDeque<SpaceMarine> makeDecision(ArrayDeque<SpaceMarine> spcArr) {
+        List<SpaceMarine> tempList = new ArrayList(spcArr);
         SpaceMarine newObject = tempList.get(tempList.size() - 1);
         SpaceMarine tempObject = null;
         tempList.remove(tempList.size() - 1);

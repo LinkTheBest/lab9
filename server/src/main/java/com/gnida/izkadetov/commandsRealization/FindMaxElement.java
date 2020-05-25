@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class FindMaxElement {
 
-    public ArrayDeque<SpaceMarine> makeDecision(Collection collection) {
-        ArrayList<SpaceMarine> tempList = new ArrayList<>(collection.getObjects());
+    public ArrayDeque<SpaceMarine> makeDecision(ArrayDeque<SpaceMarine> spcArr) {
+        ArrayList<SpaceMarine> tempList = new ArrayList<>(spcArr);
         SpaceMarine newObject = tempList.get(tempList.size() - 1);
 
         SpaceMarine tempObject = null;

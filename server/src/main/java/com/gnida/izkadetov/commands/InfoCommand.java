@@ -1,16 +1,13 @@
 package com.gnida.izkadetov.commands;
 
 
-import com.gnida.izkadetov.Collection;
-import com.gnida.izkadetov.Command;
-import com.gnida.izkadetov.MessageToClient;
-import com.gnida.izkadetov.TbI_PROSTO_SUPER;
+import com.gnida.izkadetov.*;
 
 public class InfoCommand extends FatherOfCommands {
-    public InfoCommand(Collection collection, TbI_PROSTO_SUPER kryto) {
-        super(collection, kryto);
+    public InfoCommand(DataBaseManager dataBaseManager, TbI_PROSTO_SUPER kryto) {
+        super(dataBaseManager, kryto);
     }
 
     @Override
-    public MessageToClient executeCommand(Command command) { return new MessageToClient(collection.toString()); }
+    public MessageToClient executeCommand(Command command) { return new MessageToClient(dataBaseManager.toString()); }
 }

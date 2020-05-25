@@ -1,23 +1,22 @@
 package com.gnida.izkadetov.commands;
 
 
-import com.gnida.izkadetov.Collection;
-import com.gnida.izkadetov.Command;
-import com.gnida.izkadetov.MessageToClient;
-import com.gnida.izkadetov.TbI_PROSTO_SUPER;
+import com.gnida.izkadetov.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class HelpCommand extends FatherOfCommands {
-    public HelpCommand(Collection collection, TbI_PROSTO_SUPER kryto) {
-        super(collection, kryto);
+    public HelpCommand(DataBaseManager dataBaseManager, TbI_PROSTO_SUPER kryto) {
+        super(dataBaseManager, kryto);
     }
 
     @Override
     public MessageToClient executeCommand(Command command) {
         List<String> helpArray = new ArrayList<>();
+        helpArray.add("register: зарегистрироваться");
+        helpArray.add("login: войти, если вы уже создали аккаунт");
         helpArray.add("help: вывести справку по доступным командам");
         helpArray.add("info: вывести в стандартный поток вывода информацию о коллекции");
         helpArray.add("show: вывести в стандартный поток вывода все элементы коллекции в строковом представлении");

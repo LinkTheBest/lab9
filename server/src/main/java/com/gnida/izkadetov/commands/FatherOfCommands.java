@@ -1,16 +1,13 @@
 package com.gnida.izkadetov.commands;
-import com.gnida.izkadetov.Collection;
-import com.gnida.izkadetov.Command;
-import com.gnida.izkadetov.MessageToClient;
-import com.gnida.izkadetov.TbI_PROSTO_SUPER;
+import com.gnida.izkadetov.*;
 
 public abstract class FatherOfCommands {
-    protected Collection collection;
+    protected DataBaseManager dataBaseManager;
     protected TbI_PROSTO_SUPER kryto;
 
-    public FatherOfCommands(Collection collection, TbI_PROSTO_SUPER kryto){
+    public FatherOfCommands(DataBaseManager dataBaseManager, TbI_PROSTO_SUPER kryto){
 
-        this.collection = collection;
+        this.dataBaseManager = dataBaseManager;
         this.kryto = kryto;
     }
 

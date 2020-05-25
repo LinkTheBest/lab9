@@ -8,14 +8,14 @@ import java.io.*;
 
 public class SaveCommand extends FatherOfCommands {
 
-    public SaveCommand(Collection collection, TbI_PROSTO_SUPER kryto) {
-        super(collection, kryto);
+    public SaveCommand(DataBaseManager dataBaseManager, TbI_PROSTO_SUPER kryto) {
+        super(dataBaseManager, kryto);
     }
 
     @Override
     public MessageToClient executeCommand(Command command) {
         JSONArray toFileArray = new JSONArray();
-        for (SpaceMarine spcMrn : collection.getObjects()) {
+        for (SpaceMarine spcMrn : dataBaseManager.getObjects()) {
             JSONObject toJsonArrayObj = new JSONObject();
             try {
                 toJsonArrayObj.put("name", spcMrn.getName());

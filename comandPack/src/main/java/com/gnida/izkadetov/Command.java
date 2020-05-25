@@ -7,6 +7,8 @@ public class Command implements Serializable {
     private List<String> commandList;
     private SpaceMarine spaceMarine;
     private String objectName;
+    private String userLogin;
+    private String userPassword;
     private ListOfCommands comandName;
     private int id;
 
