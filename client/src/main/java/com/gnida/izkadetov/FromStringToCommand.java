@@ -2,10 +2,14 @@ package com.gnida.izkadetov;
 
 
 import java.io.FileNotFoundException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class FromStringToCommand {
 
-    private MrScripter mrScripter;
+    private String userLogin;
+    private String userPassword;
 
 
     public Command getCommandFromString(String userCommand) {
@@ -28,14 +32,14 @@ public class FromStringToCommand {
                 command = new Command(ListOfCommands.SHOW);
                 return command;
             case "add":
-                if (devidedComand[devidedComand.length-1].equals("add")) {
+                if (devidedComand[devidedComand.length - 1].equals("add")) {
                     System.out.println(Colors.RED_BOLD);
                     System.out.println("Введите имя!");
                     command = new Command(ListOfCommands.HELP);
                     return command;
                 }
                 CreatingNewObject creatingNewObject = new CreatingNewObject(devidedComand[1]);
-                command = new Command(ListOfCommands.ADD, creatingNewObject.createObject());
+                command = new Command(ListOfCommands.ADD, creatingNewObject.createObject(), userLogin, userPassword);
                 return command;
             case "remove_by_id":
                 if (devidedComand[devidedComand.length - 1].equals("remove_by_id")) {
@@ -43,7 +47,7 @@ public class FromStringToCommand {
                     command = new Command(ListOfCommands.HELP);
                     return command;
                 } else {
-                    command = new Command(ListOfCommands.REMOVE_BY_ID, Integer.valueOf(devidedComand[1]));
+                    command = new Command(ListOfCommands.REMOVE_BY_ID, Integer.valueOf(devidedComand[1]), userLogin, userPassword);
                     return command;
                 }
             case "clear":
@@ -60,8 +64,8 @@ public class FromStringToCommand {
                 } else {
                     try {
                         MrScripter mrScripter = new MrScripter(devidedComand[1]);
-                        command = new Command(ListOfCommands.EXECUTE_SCRIPT, mrScripter.getCommandFromFile());
-                    }catch (FileNotFoundException e){
+                        command = new Command(ListOfCommands.EXECUTE_SCRIPT, mrScripter.getCommandFromFile(), userLogin, userPassword);
+                    } catch (FileNotFoundException e) {
                         System.out.println(Colors.RED_BOLD);
                         System.out.println("Файл не найден!");
                     }
@@ -74,7 +78,7 @@ public class FromStringToCommand {
                     command = new Command(ListOfCommands.HELP);
                     return command;
                 } else {
-                    command = new Command(ListOfCommands.ADD_IF_MAX, devidedComand[1]);
+                    command = new Command(ListOfCommands.ADD_IF_MAX, devidedComand[1], userLogin, userPassword);
                     return command;
                 }
             case "add_if_min":
@@ -83,7 +87,7 @@ public class FromStringToCommand {
                     command = new Command(ListOfCommands.HELP);
                     return command;
                 } else {
-                    command = new Command(ListOfCommands.ADD_IF_MIN, devidedComand[1]);
+                    command = new Command(ListOfCommands.ADD_IF_MIN, devidedComand[1], userLogin, userPassword);
                     return command;
                 }
             case "remove_lower":
@@ -92,7 +96,7 @@ public class FromStringToCommand {
                     command = new Command(ListOfCommands.HELP);
                     return command;
                 } else {
-                    command = new Command(ListOfCommands.REMOVE_LOWER, Integer.valueOf(devidedComand[1]));
+                    command = new Command(ListOfCommands.REMOVE_LOWER, Integer.valueOf(devidedComand[1]), userLogin, userPassword);
                     return command;
                 }
             case "sum_of_health":
@@ -104,6 +108,12 @@ public class FromStringToCommand {
             case "print_descending_health":
                 command = new Command(ListOfCommands.PRINT_DESCENDING_HEALTH);
                 return command;
+            case "registration":
+                LoginPasswordReader loginPasswordReader = new LoginPasswordReader();
+                userLogin = loginPasswordReader.getLogin();
+                userPassword = encryptPassword(loginPasswordReader.getPassword());
+                command = new Command(ListOfCommands.REGISTRATION, userLogin, userPassword);
+                return command;
             default:
                 System.out.print(Colors.RED_BOLD);
                 System.out.println("НЕ ШУТИ ТАК!");
@@ -111,5 +121,21 @@ public class FromStringToCommand {
                 break;
         }
         return command;
+    }
+
+    private String encryptPassword(String pwd) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD2");
+            byte[] messageDigest = md.digest(pwd.getBytes());
+            BigInteger no = new BigInteger(1, messageDigest);
+            String hashtext = no.toString(16);
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
