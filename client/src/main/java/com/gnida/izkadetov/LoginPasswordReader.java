@@ -7,27 +7,23 @@ public class LoginPasswordReader {
     private String login;
     private String password;
 
-    public void readLogin() {
+    public String getLogin() {
+        System.out.println("Введите логин");
         if (!scn.hasNextLine()) {
             System.out.println("Зря");
         } else {
             login = scn.nextLine();
         }
+        return login;
     }
 
-    public void readPassword() {
+    public String getPassword() {
+        System.out.println("Введите пароль");
         if (!scn.hasNextLine()) {
             System.out.println("Зря");
         } else {
             password = scn.nextLine();
         }
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public String getPassword() {
         return password;
     }
 }

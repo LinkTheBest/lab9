@@ -14,6 +14,7 @@ public enum ListOfCommands implements Serializable {
     ADD_IF_MAX("add_if_max"),
     ADD_IF_MIN("add_if_min"),
     REGISTRATION("registration"),
+    LOGIN("login"),
     REMOVE_LOWER("remove_lower"),
     SUM_OF_HEALTH("sum_of_health"),
     PRINT_DESCENDING("print_descending"),

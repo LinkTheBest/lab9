@@ -43,6 +43,8 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     private final FatherOfCommands printDescendingCommand;
     private final FatherOfCommands printDescendingHealthCommand;
     private final FatherOfCommands saveCommand;
+    private final FatherOfCommands registrationCommand;
+    private final FatherOfCommands loginCommand;
 
     {
         final String FILE_NAME = System.getenv("JSON");
@@ -65,6 +67,8 @@ public class ServerMain implements TbI_PROSTO_SUPER {
         printDescendingCommand = new PrintDescendingCommand(dataBaseManager, this);
         printDescendingHealthCommand = new PrintFieldDescendingHealth(dataBaseManager, this);
         saveCommand = new SaveCommand(dataBaseManager, this);
+        registrationCommand = new RegistrationCommand(dataBaseManager, this);
+        loginCommand = new LoginCommand(dataBaseManager, this);
     }
 
     public ServerMain(int port) {
@@ -188,6 +192,10 @@ public class ServerMain implements TbI_PROSTO_SUPER {
         switch (command.getCommand()) {
             case HELP:
                 return helpCommand.executeCommand(command);
+            case REGISTRATION:
+                return registrationCommand.executeCommand(command);
+            case LOGIN:
+                return loginCommand.executeCommand(command);
             case INFO:
                 return infoCommand.executeCommand(command);
             case ADD:

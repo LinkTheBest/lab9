@@ -7,7 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class FromStringToCommand {
-
+    private LoginPasswordReader loginPasswordReader = new LoginPasswordReader();
     private String userLogin;
     private String userPassword;
 
@@ -109,10 +109,14 @@ public class FromStringToCommand {
                 command = new Command(ListOfCommands.PRINT_DESCENDING_HEALTH);
                 return command;
             case "registration":
-                LoginPasswordReader loginPasswordReader = new LoginPasswordReader();
                 userLogin = loginPasswordReader.getLogin();
                 userPassword = encryptPassword(loginPasswordReader.getPassword());
                 command = new Command(ListOfCommands.REGISTRATION, userLogin, userPassword);
+                return command;
+            case "login":
+                userLogin = loginPasswordReader.getLogin();
+                userPassword = encryptPassword(loginPasswordReader.getPassword());
+                command = new Command(ListOfCommands.LOGIN, userLogin, userPassword);
                 return command;
             default:
                 System.out.print(Colors.RED_BOLD);
