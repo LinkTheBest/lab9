@@ -39,10 +39,10 @@ public class DataBaseManager {
         spc.clear();
     }
 
-    public boolean checkLogin(String login){
-        if(login.equals(null) | login.equals("") | login.equals(" ")){
+    public boolean checkLogin(String login) {
+        if (login == null) {
             return false;
-        }else {
+        } else {
             return true;
         }
     }

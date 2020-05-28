@@ -9,5 +9,11 @@ public class InfoCommand extends FatherOfCommands {
     }
 
     @Override
-    public MessageToClient executeCommand(Command command) { return new MessageToClient(dataBaseManager.toString()); }
+    public MessageToClient executeCommand(Command command) {
+        if (!dataBaseManager.checkLogin(command.getUserLogin())) {
+            return new MessageToClient("Вы не авторизованы!");
+        } else {
+            return new MessageToClient(dataBaseManager.toString());
+        }
+    }
 }

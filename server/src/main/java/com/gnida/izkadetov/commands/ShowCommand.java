@@ -9,10 +9,14 @@ public class ShowCommand extends FatherOfCommands {
 
     @Override
     public MessageToClient executeCommand(Command command) {
-        if (dataBaseManager.getObjects() == null) {
-            return new MessageToClient("Коллекция пуста!");
+        if (!dataBaseManager.checkLogin(command.getUserLogin())) {
+            return new MessageToClient("Вы не авторизованы!");
         } else {
-            return new MessageToClient("Коллeкция:", dataBaseManager.getObjects());
+            if (dataBaseManager.getObjects() == null) {
+                return new MessageToClient("Коллекция пуста!");
+            } else {
+                return new MessageToClient("Коллeкция:", dataBaseManager.getObjects());
+            }
         }
     }
 }

@@ -14,8 +14,12 @@ public class PrintFieldDescendingHealth extends FatherOfCommands {
 
     @Override
     public MessageToClient executeCommand(Command command) {
-        ArrayDeque<SpaceMarine> spc = dataBaseManager.getObjects();
-        List<SpaceMarine> temp = spc.stream().sorted((c1, c2) -> (int) ((c2.getHealth() - c1.getHealth()) * 100)).collect(Collectors.toCollection(ArrayList::new));
-        return new MessageToClient("Команда была выполнена!", new ArrayDeque<>(temp));
+        if (!dataBaseManager.checkLogin(command.getUserLogin())) {
+            return new MessageToClient("Вы не авторизованы!");
+        } else {
+            ArrayDeque<SpaceMarine> spc = dataBaseManager.getObjects();
+            List<SpaceMarine> temp = spc.stream().sorted((c1, c2) -> (int) ((c2.getHealth() - c1.getHealth()) * 100)).collect(Collectors.toCollection(ArrayList::new));
+            return new MessageToClient("Команда была выполнена!", new ArrayDeque<>(temp));
+        }
     }
 }

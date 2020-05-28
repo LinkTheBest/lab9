@@ -7,16 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PrintDescendingCommand extends FatherOfCommands{
+public class PrintDescendingCommand extends FatherOfCommands {
     public PrintDescendingCommand(DataBaseManager dataBaseManager, TbI_PROSTO_SUPER kryto) {
         super(dataBaseManager, kryto);
     }
 
     @Override
     public MessageToClient executeCommand(Command command) {
-        ArrayDeque<SpaceMarine> spc = dataBaseManager.getObjects();
-        List<SpaceMarine> temp = spc.stream().sorted((c1, c2) -> (int) ((c2.getHealth() - c1.getHealth()) * 100)).collect(Collectors.toCollection(ArrayList::new));
+        if (!dataBaseManager.checkLogin(command.getUserLogin())) {
+            return new MessageToClient("Вы не авторизованы!");
+        } else {
+            ArrayDeque<SpaceMarine> spc = dataBaseManager.getObjects();
+            List<SpaceMarine> temp = spc.stream().sorted((c1, c2) -> (int) ((c2.getHealth() - c1.getHealth()) * 100)).collect(Collectors.toCollection(ArrayList::new));
 
-        return new MessageToClient("Команда была выполнена!", new ArrayDeque<>(temp));
+            return new MessageToClient("Команда была выполнена!", new ArrayDeque<>(temp));
+        }
     }
 }

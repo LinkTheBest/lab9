@@ -14,6 +14,7 @@ public class ClientMain {
     private FromServerMessageHandler fromServerMessageHandler;
     private int port;
 
+
     public ClientMain(int port) {
         this.port = port;
         connectionChecker = new ConnectionChecker(port);
@@ -23,6 +24,7 @@ public class ClientMain {
         fromStringToCommand = new FromStringToCommand();
         System.out.print(Colors.CYAN);
         System.out.println("Для ознакомлением со списком команд, введите 'help'");
+        System.out.println("Чтобы работать с коллекцией, вам надо авторизороваться (login) или же зарегистрироваться (reg)");
         while (true) {
             clientSocket = connectionChecker.socketConnector();
             System.out.print(Colors.GREEN_BOLD);
@@ -37,8 +39,8 @@ public class ClientMain {
                 try {
                     toServerMessageHandler = new ToServerMessageHandler(clientSocket, port);
                     Command command = fromStringToCommand.getCommandFromString(userCommand);
+                    System.out.print("Вы выбрали команду: ");
                     System.out.println(command.getCommand());
-                    //fromServerMessageHandler = new FromServerMessageHandler(toServerMessageHandler.sendMessage(command));
                     clientSocket = toServerMessageHandler.sendMessage(command);
                     fromServerMessageHandler = new FromServerMessageHandler(clientSocket);
                     MessageToClient message = fromServerMessageHandler.getMessage();
@@ -64,7 +66,6 @@ public class ClientMain {
                                         System.out.print(Colors.BLACK_BOLD);
                                         System.out.println(scp.toString());
                                     }
-
                                 }
                             }
                         }
@@ -93,17 +94,6 @@ public class ClientMain {
             }
         }
     }
-
-//    private boolean portInUse(int port) {
-//        boolean result = false;
-//        try {
-//            new Socket("localhost", port);
-//            result = false;
-//        } catch (Exception e) {
-//            result = true;
-//        }
-//        return result;
-//    }
 }
 
 

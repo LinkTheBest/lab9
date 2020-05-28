@@ -15,7 +15,8 @@ public class HelpCommand extends FatherOfCommands {
     @Override
     public MessageToClient executeCommand(Command command) {
         List<String> helpArray = new ArrayList<>();
-        helpArray.add("register: зарегистрироваться");
+        helpArray.add("reg: зарегистрироваться");
+        helpArray.add("login: войти в свой аккаунт");
         helpArray.add("login: войти, если вы уже создали аккаунт");
         helpArray.add("help: вывести справку по доступным командам");
         helpArray.add("info: вывести в стандартный поток вывода информацию о коллекции");

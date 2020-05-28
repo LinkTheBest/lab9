@@ -9,8 +9,12 @@ public class AddIfMaxCommand extends FatherOfCommands  {
     }
     @Override
     public MessageToClient executeCommand(Command command) {
-        FindMaxElement findMaxElement = new FindMaxElement();
-        return new MessageToClient("Результат операции:", findMaxElement.makeDecision(dataBaseManager.getObjects()));
+        if (!dataBaseManager.checkLogin(command.getUserLogin())) {
+            return new MessageToClient("Вы не авторизованы!");
+        } else {
+            FindMaxElement findMaxElement = new FindMaxElement();
+            return new MessageToClient("Результат операции:", findMaxElement.makeDecision(dataBaseManager.getObjects()));
+        }
     }
 
 }

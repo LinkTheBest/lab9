@@ -13,19 +13,23 @@ public class RemoveByIdCommand extends FatherOfCommands {
 
     @Override
     public MessageToClient executeCommand(Command command) {
-        ArrayDeque<SpaceMarine> spc = dataBaseManager.getObjects();
-        int startSize = spc.size();
-        if (spc.size() > 0) {
-            int id = command.getId();
-            spc.removeAll((spc.stream().filter(lil -> lil.getId() == id)
-                    .collect(Collectors.toCollection(ArrayDeque::new))));
-            if (startSize == spc.size()) {
-                return new MessageToClient("Элемент с id " + id + " не существует.");
-            }
-            dataBaseManager.uptadeDateChange();
-            return new MessageToClient("Элемент коллекции успешно удалён.");
-        } else return new MessageToClient("Коллекция пуста.");
+        if (!dataBaseManager.checkLogin(command.getUserLogin())) {
+            return new MessageToClient("Вы не авторизованы!");
+        } else {
+            ArrayDeque<SpaceMarine> spc = dataBaseManager.getObjects();
+            int startSize = spc.size();
+            if (spc.size() > 0) {
+                int id = command.getId();
+                spc.removeAll((spc.stream().filter(lil -> lil.getId() == id)
+                        .collect(Collectors.toCollection(ArrayDeque::new))));
+                if (startSize == spc.size()) {
+                    return new MessageToClient("Элемент с id " + id + " не существует.");
+                }
+                dataBaseManager.uptadeDateChange();
+                return new MessageToClient("Элемент коллекции успешно удалён.");
+            } else return new MessageToClient("Коллекция пуста.");
+        }
     }
 
-    }
+}
 

@@ -12,11 +12,15 @@ public class SumOfHealthCommand extends FatherOfCommands {
 
     @Override
     public MessageToClient executeCommand(Command command) {
-        ArrayDeque<SpaceMarine> spaceDeque = dataBaseManager.getObjects();
-        int sum = 0;
-        for (SpaceMarine spc : spaceDeque) {
-            sum = sum + spc.getHealth();
+        if (!dataBaseManager.checkLogin(command.getUserLogin())) {
+            return new MessageToClient("Вы не авторизованы!");
+        } else {
+            ArrayDeque<SpaceMarine> spaceDeque = dataBaseManager.getObjects();
+            int sum = 0;
+            for (SpaceMarine spc : spaceDeque) {
+                sum = sum + spc.getHealth();
+            }
+            return new MessageToClient("Сумма полей всех объектов: " + sum);
         }
-        return new MessageToClient("Сумма полей всех объектов: " + sum);
     }
 }
