@@ -2,6 +2,9 @@ package com.gnida.izkadetov;
 
 import com.gnida.izkadetov.DataBase.DataBaseInitializer;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayDeque;
 import java.util.Date;
 
@@ -45,6 +48,19 @@ public class DataBaseManager {
         } else {
             return true;
         }
+    }
+    public int getUserId(String login){
+        try {
+            PreparedStatement statement = getDataBaseInitializer().getConnection().prepareStatement("select id from users where(username = ?)");
+            statement.setString(1, login);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                return  resultSet.getInt("id");
+            }
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());;
+        }
+        return 0;
     }
 
     @Override

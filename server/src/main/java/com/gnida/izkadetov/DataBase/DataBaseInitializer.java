@@ -23,9 +23,10 @@ public class DataBaseInitializer {
         try {
             Statement statement = connection.createStatement();
             statement.execute("create table  if not exists users(id serial primary key not null, username text unique, password character varying)");
-            statement.execute("create table if not exists spaceMarines(id serial primary key not null, name text, x double, y float, health int, category text, weaponType text, meleeWeapon text, chapter text, foreign key(userId) references users(id))");
+            statement.execute("create table if not exists spaceMarines(spcid int, spcname text, x double precision, y float, health int, category text, weaponType text, meleeWeapon text, chapter text, userId int, foreign key(userId) references users(id)on delete cascade)");
             return true;
         } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
             return false;
         }
     }
