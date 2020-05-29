@@ -21,9 +21,13 @@ public class SpaceMarine implements Comparable, Serializable {
         creationDate = LocalDate.now();
     }
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public void setId(int id){ this.id = id; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -58,32 +62,36 @@ public class SpaceMarine implements Comparable, Serializable {
     }
 
     public String cordinatesToString() {
-        return "X: "+ String.valueOf(coordinates.getX())+"\n" + "Y: " + String.valueOf(coordinates.getY());
+        return "X: " + String.valueOf(coordinates.getX()) + "\n" + "Y: " + String.valueOf(coordinates.getY());
     }
 
-    public Coordinates getCoordinates(){return  coordinates;}
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
 
     public Integer getHealth() {
         return health;
     }
 
-    public AstartesCategory getCategory() {
-        return category;
+    public String getCategory() {
+        return category.getCategoryName();
     }
 
-    public Weapon getWeaponType() {
-        return weaponType;
+    public String getWeaponType() {
+        return weaponType.getWeaponName();
     }
 
-    public MeleeWeapon getMeleeWeapon() {
-        return meleeWeapon;
+    public String getMeleeWeapon() {
+        return meleeWeapon.getMeleeWeaponName();
     }
 
     public String chapterToString() {
         return chapter.getName();
     }
 
-    public Chapter getChapter(){return chapter;}
+    public Chapter getChapter() {
+        return chapter;
+    }
 
 
     @Override
@@ -97,15 +105,15 @@ public class SpaceMarine implements Comparable, Serializable {
         return 0;
     }
 
-    public String toString(){
+    public String toString() {
         String object = "ID: " + this.getId() + "\n"
-                + "Name: "+ this.getName() + "\n"
+                + "Name: " + this.getName() + "\n"
                 + "Coordinates: " + this.cordinatesToString() + "\n"
-                + "Health: " + this.getHealth() +"\n"
-                + "Category: " +this.getCategory() + "\n"
-                + "Chapter: " +this.chapterToString() + "\n"
-                + "MeleeWeapon: " +this.getMeleeWeapon() + "\n"
-                + "Weapon type: " +this.getWeaponType() + "\n";
+                + "Health: " + this.getHealth() + "\n"
+                + "Category: " + this.getCategory() + "\n"
+                + "Chapter: " + this.chapterToString() + "\n"
+                + "MeleeWeapon: " + this.getMeleeWeapon() + "\n"
+                + "Weapon type: " + this.getWeaponType() + "\n";
         return object;
     }
 }
