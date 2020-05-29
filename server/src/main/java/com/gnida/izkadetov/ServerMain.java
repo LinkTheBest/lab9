@@ -47,11 +47,11 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     private final FatherOfCommands loginCommand;
 
     {
-        final String FILE_NAME = System.getenv("JSON");
+//        final String FILE_NAME = System.getenv("JSON");
         dataBaseManager = new DataBaseManager();
-        jsonDataHandler = new JsonDataHandler(FILE_NAME);
-        startUpObjectLoader = new StartUpObjectLoader(jsonDataHandler.getJsonCollectionSize(), jsonDataHandler);
-        dataBaseManager.setObjects(startUpObjectLoader.getSpaceDeque());
+//        jsonDataHandler = new JsonDataHandler(FILE_NAME);
+//        startUpObjectLoader = new StartUpObjectLoader(jsonDataHandler.getJsonCollectionSize(), jsonDataHandler);
+//        dataBaseManager.setObjects(startUpObjectLoader.getSpaceDeque());
         helpCommand = new HelpCommand(dataBaseManager, this);
         exitCommand = new ExitCommand(dataBaseManager, this);
         infoCommand = new InfoCommand(dataBaseManager, this);
@@ -102,7 +102,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
         if (connected & created) {
             System.out.println("База данных подключена, таблицы созданы!");
         } else {
-            System.out.println("При загрузку БД произошла ошибка");
+            System.out.println("При загрузкe БД произошла ошибка");
         }
 
     }

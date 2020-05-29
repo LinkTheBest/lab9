@@ -23,7 +23,7 @@ public class addcommand extends FatherOfCommands {
         } else {
             try {
                 addElementToDataBase(command);
-                List<SpaceMarine> tempDeque = Collections.synchronizedList(new ArrayList<>(dataBaseManager.getObjects()));
+                List<SpaceMarine> tempDeque = Collections.synchronizedList(new ArrayList<>());
                 synchronized (tempDeque) {
                     tempDeque.add(command.getSpaceMarine());
                 }

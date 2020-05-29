@@ -26,7 +26,7 @@ public class FromStringToCommand {
                 command = new Command(ListOfCommands.HELP);
                 return command;
             case "info":
-                command = new Command(ListOfCommands.INFO);
+                command = new Command(ListOfCommands.INFO, userLogin, userPassword);
                 return command;
             case "show":
                 command = new Command(ListOfCommands.SHOW);
@@ -51,7 +51,7 @@ public class FromStringToCommand {
                     return command;
                 }
             case "clear":
-                command = new Command(ListOfCommands.CLEAR);
+                command = new Command(ListOfCommands.CLEAR, userLogin, userPassword);
                 return command;
             case "save":
                 command = new Command(ListOfCommands.SAVE);
@@ -108,7 +108,7 @@ public class FromStringToCommand {
             case "print_descending_health":
                 command = new Command(ListOfCommands.PRINT_DESCENDING_HEALTH);
                 return command;
-            case "registration":
+            case "reg":
                 userLogin = loginPasswordReader.getLogin();
                 userPassword = encryptPassword(loginPasswordReader.getPassword());
                 command = new Command(ListOfCommands.REGISTRATION, userLogin, userPassword);

@@ -9,7 +9,7 @@ import java.util.ArrayDeque;
 import java.util.Date;
 
 public class DataBaseManager {
-    private ArrayDeque<SpaceMarine> spc;
+    private ArrayDeque<SpaceMarine> spc = new ArrayDeque<>();
     private Date dateInitialization = new Date();
     private DataBaseInitializer dataBaseInitializer;
 
