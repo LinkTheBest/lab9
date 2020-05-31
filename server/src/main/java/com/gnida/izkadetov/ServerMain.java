@@ -45,12 +45,13 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     private final FatherOfCommands saveCommand;
     private final FatherOfCommands registrationCommand;
     private final FatherOfCommands loginCommand;
+    private final FatherOfCommands logoutCommand;
 
     {
 //        final String FILE_NAME = System.getenv("JSON");
         dataBaseManager = new DataBaseManager();
 //        jsonDataHandler = new JsonDataHandler(FILE_NAME);
-//        startUpObjectLoader = new StartUpObjectLoader(jsonDataHandler.getJsonCollectionSize(), jsonDataHandler);
+
 //        dataBaseManager.setObjects(startUpObjectLoader.getSpaceDeque());
         helpCommand = new HelpCommand(dataBaseManager, this);
         exitCommand = new ExitCommand(dataBaseManager, this);
@@ -69,6 +70,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
         saveCommand = new SaveCommand(dataBaseManager, this);
         registrationCommand = new RegistrationCommand(dataBaseManager, this);
         loginCommand = new LoginCommand(dataBaseManager, this);
+        logoutCommand = new LogoutCommand(dataBaseManager, this);
     }
 
     public ServerMain(int port) {
@@ -104,6 +106,8 @@ public class ServerMain implements TbI_PROSTO_SUPER {
         } else {
             System.out.println("При загрузкe БД произошла ошибка");
         }
+        startUpObjectLoader = new StartUpObjectLoader(dataBaseInitializer.getConnection());
+        dataBaseManager.setObjects(startUpObjectLoader.loader());
 
     }
 
@@ -127,32 +131,12 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 clientSocket = serverSocket.accept();
                 System.out.print(Colors.CYAN_BOLD);
                 System.out.println("Соединение установлено");
-
                 pool.execute(() -> {
-//                    try {
-//                        fromClientMessageHandler = new FromClientMessageHandler(clientSocket);
-//                        Command command = fromClientMessageHandler.getMessage();
-//                        message = prostoKlass(command);
-//                    } catch (IOException | ClassNotFoundException e) {
-//                        System.out.println(e.getMessage());
-//                    }
                     clientMultiDataProccesor(clientSocket);
                 });
-
-//                cachedThread.execute(() -> {
-//                    try {
-//                        toClientMessageHandler = new ToClientMessageHandler(clientSocket);
-//                        toClientMessageHandler.send(message);
-//                    } catch (IOException e) {
-//                        System.out.println(e.getMessage());
-//                    }
-//                });
-
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
-//                toClientMessageHandler = new ToClientMessageHandler(clientSocket);
-//                toClientMessageHandler.send(message);
             System.out.print(Colors.RED_BOLD);
             System.out.println("$odmen_servera: ");
         }
@@ -196,6 +180,8 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 return registrationCommand.executeCommand(command);
             case LOGIN:
                 return loginCommand.executeCommand(command);
+            case LOGOUT:
+                return logoutCommand.executeCommand(command);
             case INFO:
                 return infoCommand.executeCommand(command);
             case ADD:
@@ -250,7 +236,5 @@ public class ServerMain implements TbI_PROSTO_SUPER {
             } catch (IOException e) {
             }
         });
-//            toClientMessageHandler = new ToClientMessageHandler(socket);
-//            toClientMessageHandler.send(message);
     }
 }
