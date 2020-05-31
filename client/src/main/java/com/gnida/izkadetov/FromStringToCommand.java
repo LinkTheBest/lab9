@@ -29,7 +29,7 @@ public class FromStringToCommand {
                 command = new Command(ListOfCommands.INFO, userLogin, userPassword);
                 return command;
             case "show":
-                command = new Command(ListOfCommands.SHOW);
+                command = new Command(ListOfCommands.SHOW, userLogin, userPassword);
                 return command;
             case "add":
                 if (devidedComand[devidedComand.length - 1].equals("add")) {
@@ -100,13 +100,13 @@ public class FromStringToCommand {
                     return command;
                 }
             case "sum_of_health":
-                command = new Command(ListOfCommands.SUM_OF_HEALTH);
+                command = new Command(ListOfCommands.SUM_OF_HEALTH, userLogin, userPassword);
                 return command;
             case "print_descending":
-                command = new Command(ListOfCommands.PRINT_DESCENDING);
+                command = new Command(ListOfCommands.PRINT_DESCENDING, userLogin, userPassword);
                 return command;
             case "print_descending_health":
-                command = new Command(ListOfCommands.PRINT_DESCENDING_HEALTH);
+                command = new Command(ListOfCommands.PRINT_DESCENDING_HEALTH, userLogin, userPassword);
                 return command;
             case "reg":
                 userLogin = loginPasswordReader.getLogin();

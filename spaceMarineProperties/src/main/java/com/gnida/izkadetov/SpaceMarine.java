@@ -6,7 +6,7 @@ import java.time.LocalDate;
 public class SpaceMarine implements Comparable, Serializable {
     private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
-    private Coordinates coordinates; //Поле не может быть null
+    private Coordinates coordinates = new Coordinates();; //Поле не может быть null
     private java.time.LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
     private Integer health; //Поле может быть null, Значение поля должно быть больше 0
     private AstartesCategory category; //Поле не может быть null
@@ -37,28 +37,73 @@ public class SpaceMarine implements Comparable, Serializable {
         this.name = name;
     }
 
-    public void setCoordinates(Coordinates coordinates) {
-        this.coordinates = coordinates;
+    public void setXCoordinate(Double xCoordinate) {
+        coordinates.setX(xCoordinate);
+    }
+
+    public void setYCoordinate(Float yCoordinate) {
+        coordinates.setY(yCoordinate);
     }
 
     public void setHealth(Integer health) {
         this.health = health;
     }
 
-    public void setCategory(AstartesCategory category) {
-        this.category = category;
+    public void setCategory(String categoryName) {
+
+        switch (categoryName) {
+            case "agressor":
+                category = AstartesCategory.AGGRESSOR;
+                return;
+            case "inceptor":
+                category = AstartesCategory.INCEPTOR;
+                return;
+            case "tactical":
+                category = AstartesCategory.TACTICAL;
+                return;
+            case "terminator":
+                category = AstartesCategory.TERMINATOR;
+                return;
+        }
     }
 
-    public void setWeaponType(Weapon weaponType) {
-        this.weaponType = weaponType;
+    public void setWeaponType(String weaponName) {
+        switch (weaponName) {
+            case "meltagun":
+                weaponType = Weapon.MELTAGUN;
+                return;
+            case "boltPistol":
+                weaponType = Weapon.BOLT_PISTOL;
+                return;
+            case "combiFlamer":
+                weaponType = Weapon.COMBI_FLAMER;
+                return;
+            case "combiPlasmaGun":
+                weaponType = Weapon.COMBI_PLASMA_GUN;
+                return;
+            case "missileLauncher":
+                weaponType = Weapon.MISSILE_LAUNCHER;
+                return;
+        }
     }
 
-    public void setMeleeWeapon(MeleeWeapon meleeWeapon) {
-        this.meleeWeapon = meleeWeapon;
+    public void setMeleeWeapon(String meleeWeaponName) {
+        switch (meleeWeaponName) {
+            case "chainSword":
+                meleeWeapon = MeleeWeapon.CHAIN_SWORD;
+                return;
+            case "manreaper":
+                meleeWeapon = MeleeWeapon.MANREAPER;
+                return;
+            case "powerBlade":
+                meleeWeapon = MeleeWeapon.POWER_BLADE;
+                return;
+        }
     }
 
-    public void setChapter(Chapter chapter) {
-        this.chapter = chapter;
+    public void setChapter(String chapterName) {
+        chapter = new Chapter();
+        chapter.setName(chapterName);
     }
 
     public String cordinatesToString() {

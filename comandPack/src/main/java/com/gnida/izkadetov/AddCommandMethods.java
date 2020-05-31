@@ -38,8 +38,8 @@ public class AddCommandMethods {
         return id;
     }
 
-    public Coordinates readCoordinates() {
-        System.out.print("Введите координаты, сначала Х, затем Y:  ");
+    public Coordinates readXCoordinate() {
+        System.out.println("Введите Х:  ");
         while (true) {
             try {
                 if (!tempScn.hasNextDouble()) {
@@ -48,6 +48,17 @@ public class AddCommandMethods {
                     continue;
                 }
                 tempCoords.setX(tempScn.nextDouble());
+            } catch (Exception e) {
+                System.out.println("Вызовите команду снова и введите координаты в заданном формате!");
+            }
+            break;
+        }
+        return tempCoords;
+    }
+    public Coordinates readYCoordinate(){
+        System.out.println("Введите Y:  ");
+        while (true) {
+            try {
                 if (!tempScn.hasNextFloat()) {
                     System.out.println("Введите число!");
                     tempScn.next();

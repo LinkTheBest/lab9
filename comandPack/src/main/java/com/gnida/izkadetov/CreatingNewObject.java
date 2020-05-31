@@ -1,33 +1,31 @@
 package com.gnida.izkadetov;
 
-import java.util.Scanner;
-
 public class CreatingNewObject {
     private String name;
 
-    public CreatingNewObject(String name){
+    public CreatingNewObject(String name) {
         this.name = name;
     }
 
     public SpaceMarine createObject() {
-        Scanner scn = new Scanner(System.in);
         AddCommandMethods addCommandMethods = new AddCommandMethods();
         SpaceMarine addedSpcMrn = new SpaceMarine();
         System.out.println(Colors.BLACK_BOLD);
         addedSpcMrn.setName(name);
         addedSpcMrn.setId(addCommandMethods.readId());
 // ---------------------------------------------------------------------------------------------------------------------
-        addedSpcMrn.setCoordinates(addCommandMethods.readCoordinates());
+        addedSpcMrn.setXCoordinate(addCommandMethods.readXCoordinate().getX());
+        addedSpcMrn.setYCoordinate(addCommandMethods.readYCoordinate().getY());
 // ---------------------------------------------------------------------------------------------------------------------
         addedSpcMrn.setHealth(addCommandMethods.readHealth());
 // ---------------------------------------------------------------------------------------------------------------------
-        addedSpcMrn.setChapter(addCommandMethods.readChapterName());
+        addedSpcMrn.setChapter(addCommandMethods.readChapterName().getName());
 // --------------------------------------------------------------------------------------------------------------------
-        addedSpcMrn.setWeaponType(addCommandMethods.readWeaponType());
+        addedSpcMrn.setWeaponType(addCommandMethods.readWeaponType().getWeaponName());
 // ---------------------------------------------------------------------------------------------------------------------
-        addedSpcMrn.setMeleeWeapon(addCommandMethods.readMeleeWeaponCategory());
+        addedSpcMrn.setMeleeWeapon(addCommandMethods.readMeleeWeaponCategory().getMeleeWeaponName());
 // ---------------------------------------------------------------------------------------------------------------------
-        addedSpcMrn.setCategory(addCommandMethods.readAstartesCategory());
+        addedSpcMrn.setCategory(addCommandMethods.readAstartesCategory().getCategoryName());
 // ---------------------------------------------------------------------------------------------------------------------
         return addedSpcMrn;
     }
