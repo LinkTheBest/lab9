@@ -29,7 +29,7 @@ public class ClearCommand extends FatherOfCommands {
                     while (resultSet.next()) {
                         Iterator<SpaceMarine> iterator = tempDeque.iterator();
                         while (iterator.hasNext()) {
-                            if (iterator.next().getId() == resultSet.getInt("id")) {
+                            if (iterator.next().getId() == resultSet.getInt("spcid")) {
                                 iterator.remove();
                             }
                         }

@@ -20,7 +20,8 @@ public class LoginCommand extends FatherOfCommands {
             PreparedStatement preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("insert into users (username) values (?)");
             preparedStatement.setString(1, command.getUserLogin());
             try {
-                preparedStatement.execute();
+                ResultSet resultSet = preparedStatement.executeQuery();
+                resultSet.updateRow();
                 preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("delete from users where username = ?");
                 preparedStatement.setString(1, command.getUserLogin());
                 preparedStatement.execute();

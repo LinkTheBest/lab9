@@ -21,6 +21,7 @@ public class RegistrationCommand extends FatherOfCommands {
             preparedStatement.setString(2, command.getUserPassword());
             try {
                 preparedStatement.execute();
+                return new MessageToClient("Регистрация прошла успешно!");
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
                 return new MessageToClient("Такой логин уже существует! Попробуйте другой");
@@ -29,6 +30,5 @@ public class RegistrationCommand extends FatherOfCommands {
             System.out.println(e.getMessage());
             return new MessageToClient("Ошибка регистрации");
         }
-        return null;
     }
 }

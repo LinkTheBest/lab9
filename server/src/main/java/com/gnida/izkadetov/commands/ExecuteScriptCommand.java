@@ -38,12 +38,12 @@ public class ExecuteScriptCommand extends FatherOfCommands {
                         break;
                     case "info":
                         foc = new InfoCommand(dataBaseManager, kryto);
-                        messageToClient = foc.executeCommand(new Command(ListOfCommands.INFO));
+                        messageToClient = foc.executeCommand(new Command(ListOfCommands.INFO, command.getUserLogin(), command.getUserPassword()));
                         messageToClientsList.add(messageToClient);
                         break;
                     case "show":
                         foc = new ShowCommand(dataBaseManager, kryto);
-                        messageToClient = foc.executeCommand(new Command(ListOfCommands.SHOW));
+                        messageToClient = foc.executeCommand(new Command(ListOfCommands.SHOW, command.getUserLogin(), command.getUserPassword()));
                         messageToClientsList.add(messageToClient);
                         break;
                     case "add":
@@ -54,7 +54,7 @@ public class ExecuteScriptCommand extends FatherOfCommands {
                         }
                         CreatingNewObject creatingNewObject = new CreatingNewObject(commandFromList[1]);
                         foc = new addcommand(dataBaseManager, kryto);
-                        messageToClient = foc.executeCommand(new Command(ListOfCommands.ADD, creatingNewObject.createObject(), command.getUserPassword(), command.getUserLogin()));
+                        messageToClient = foc.executeCommand(new Command(ListOfCommands.ADD, creatingNewObject.createObject(), command.getUserLogin(), command.getUserPassword()));
                         messageToClientsList.add(messageToClient);
                         break;
                     case "remove_by_id":
@@ -64,18 +64,18 @@ public class ExecuteScriptCommand extends FatherOfCommands {
                             break;
                         } else {
                             foc = new RemoveByIdCommand(dataBaseManager, kryto);
-                            messageToClient = foc.executeCommand(new Command(ListOfCommands.REMOVE_BY_ID, Integer.valueOf(commandFromList[1]), command.getUserPassword(), command.getUserLogin()));
+                            messageToClient = foc.executeCommand(new Command(ListOfCommands.REMOVE_BY_ID, Integer.valueOf(commandFromList[1]), command.getUserLogin(), command.getUserPassword()));
                             messageToClientsList.add(messageToClient);
                             break;
                         }
                     case "clear":
                         foc = new ClearCommand(dataBaseManager, kryto);
-                        messageToClient = foc.executeCommand(new Command(ListOfCommands.CLEAR));
+                        messageToClient = foc.executeCommand(new Command(ListOfCommands.CLEAR, command.getUserLogin(), command.getUserPassword()));
                         messageToClientsList.add(messageToClient);
                         break;
                     case "save":
                         foc = new SaveCommand(dataBaseManager, kryto);
-                        messageToClient = foc.executeCommand(new Command(ListOfCommands.SAVE));
+                        messageToClient = foc.executeCommand(new Command(ListOfCommands.SAVE, command.getUserLogin(), command.getUserPassword()));
                         messageToClientsList.add(messageToClient);
                         break;
 
@@ -86,7 +86,7 @@ public class ExecuteScriptCommand extends FatherOfCommands {
                             break;
                         } else {
                             foc = new AddIfMaxCommand(dataBaseManager, kryto);
-                            messageToClient = foc.executeCommand(new Command(ListOfCommands.ADD_IF_MAX));
+                            messageToClient = foc.executeCommand(new Command(ListOfCommands.ADD_IF_MAX, command.getUserLogin(), command.getUserPassword()));
                             messageToClientsList.add(messageToClient);
                             break;
                         }
@@ -97,28 +97,28 @@ public class ExecuteScriptCommand extends FatherOfCommands {
                             break;
                         } else {
                             foc = new AddIfMaxCommand(dataBaseManager, kryto);
-                            messageToClient = foc.executeCommand(new Command(ListOfCommands.ADD_IF_MIN));
+                            messageToClient = foc.executeCommand(new Command(ListOfCommands.ADD_IF_MIN, command.getUserLogin(), command.getUserPassword()));
                             messageToClientsList.add(messageToClient);
                             break;
                         }
                     case "remove_lower":
                         foc = new RemoveLowerCommand(dataBaseManager, kryto);
-                        messageToClient = foc.executeCommand(new Command(ListOfCommands.REMOVE_LOWER));
+                        messageToClient = foc.executeCommand(new Command(ListOfCommands.REMOVE_LOWER, command.getUserLogin(), command.getUserPassword()));
                         messageToClientsList.add(messageToClient);
                         break;
                     case "sum_of_health":
                         foc = new SumOfHealthCommand(dataBaseManager, kryto);
-                        messageToClient = foc.executeCommand(new Command(ListOfCommands.SUM_OF_HEALTH));
+                        messageToClient = foc.executeCommand(new Command(ListOfCommands.SUM_OF_HEALTH, command.getUserLogin(), command.getUserPassword()));
                         messageToClientsList.add(messageToClient);
                         break;
                     case "print_descending":
                         foc = new PrintDescendingCommand(dataBaseManager, kryto);
-                        messageToClient = foc.executeCommand(new Command(ListOfCommands.PRINT_DESCENDING));
+                        messageToClient = foc.executeCommand(new Command(ListOfCommands.PRINT_DESCENDING, command.getUserLogin(), command.getUserPassword()));
                         messageToClientsList.add(messageToClient);
                         break;
                     case "print_descending_health":
                         foc = new PrintFieldDescendingHealth(dataBaseManager, kryto);
-                        messageToClient = foc.executeCommand(new Command(ListOfCommands.PRINT_DESCENDING_HEALTH));
+                        messageToClient = foc.executeCommand(new Command(ListOfCommands.PRINT_DESCENDING_HEALTH, command.getUserLogin(), command.getUserPassword()));
                         messageToClientsList.add(messageToClient);
                         break;
                     default:

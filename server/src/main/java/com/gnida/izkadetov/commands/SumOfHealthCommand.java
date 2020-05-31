@@ -3,7 +3,7 @@ package com.gnida.izkadetov.commands;
 
 import com.gnida.izkadetov.*;
 
-import java.util.ArrayDeque;
+import java.util.*;
 
 public class SumOfHealthCommand extends FatherOfCommands {
     public SumOfHealthCommand(DataBaseManager dataBaseManager, TbI_PROSTO_SUPER kryto) {
@@ -15,12 +15,15 @@ public class SumOfHealthCommand extends FatherOfCommands {
         if (!dataBaseManager.checkLogin(command.getUserLogin())) {
             return new MessageToClient("Вы не авторизованы!");
         } else {
-            ArrayDeque<SpaceMarine> spaceDeque = dataBaseManager.getObjects();
-            int sum = 0;
-            for (SpaceMarine spc : spaceDeque) {
-                sum = sum + spc.getHealth();
+            List<SpaceMarine> spc = Collections.synchronizedList(new ArrayList<>(dataBaseManager.getObjects()));
+            synchronized (spc) {
+                int sum = 0;
+                Iterator<SpaceMarine> iterator = spc.iterator();
+                while (iterator.hasNext()) {
+                    sum = sum + iterator.next().getHealth();
+                }
+                return new MessageToClient("Сумма полей всех объектов: " + sum);
             }
-            return new MessageToClient("Сумма полей всех объектов: " + sum);
         }
     }
 }
