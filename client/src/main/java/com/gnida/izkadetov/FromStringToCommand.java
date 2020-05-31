@@ -118,6 +118,10 @@ public class FromStringToCommand {
                 userPassword = encryptPassword(loginPasswordReader.getPassword());
                 command = new Command(ListOfCommands.LOGIN, userLogin, userPassword);
                 return command;
+            case "logout":
+                userLogin = null;
+                userPassword = null;
+                return new Command(ListOfCommands.LOGOUT, userLogin, userPassword);
             default:
                 System.out.print(Colors.RED_BOLD);
                 System.out.println("НЕ ШУТИ ТАК!");

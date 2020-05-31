@@ -20,20 +20,23 @@ public class LoginCommand extends FatherOfCommands {
             PreparedStatement preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("insert into users (username) values (?)");
             preparedStatement.setString(1, command.getUserLogin());
             try {
-                ResultSet resultSet = preparedStatement.executeQuery();
-                resultSet.updateRow();
+                preparedStatement.execute();
+                //ResultSet resultSet = preparedStatement.executeQuery();
+                //resultSet.updateRow();
                 preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("delete from users where username = ?");
                 preparedStatement.setString(1, command.getUserLogin());
                 preparedStatement.execute();
                 return new MessageToClient("Такой пользователь не существует! Зарегистрируйтесь !");
             } catch (SQLException e) {
-                preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("select password from users where(username = ?)");
-                preparedStatement.setString(1, command.getUserLogin());
+                System.out.println(e.getMessage());
                 try {
+                    preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("select password from users where(username = ?)");
+                    preparedStatement.setString(1, command.getUserLogin());
                     ResultSet resultSet = preparedStatement.executeQuery();
                     if (resultSet.next()) {
-                        if (command.getUserPassword() == resultSet.getString("password")) ;
-                        return new MessageToClient("Вход выполнен!");
+                        if (command.getUserPassword() == resultSet.getString("password")) {
+                            return new MessageToClient("Вход выполнен!");
+                        }
                     } else {
                         return new MessageToClient("Произошла ошибка");
                     }
@@ -45,6 +48,6 @@ public class LoginCommand extends FatherOfCommands {
             System.out.println(e.getMessage());
             System.out.println("Ошибка входа");
         }
-        return null;
+        return new MessageToClient("Вход выполнен");
     }
 }
