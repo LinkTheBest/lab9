@@ -27,7 +27,7 @@ public class addcommand extends FatherOfCommands {
                 synchronized (tempDeque) {
                     tempDeque.add(command.getSpaceMarine());
                 }
-                dataBaseManager.setObjects(new ArrayDeque<>(tempDeque));
+                dataBaseManager.addToCollection(tempDeque);
                 System.out.println("Элемент успешно добавлен!");
                 dataBaseManager.uptadeDateChange();
                 return new MessageToClient("Элемент успешно добавлен! \n" + command.getSpaceMarine().toString());
