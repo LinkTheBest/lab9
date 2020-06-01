@@ -23,34 +23,28 @@ public class RemoveByIdCommand extends FatherOfCommands {
             return new MessageToClient("Вы не авторизованы!");
         } else {
             try {
-                deleteElementFromDataBase(command);
+                PreparedStatement preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("delete from spaceMarines where spcid = ? and userid = ?");
+                preparedStatement.setInt(1, command.getId());
+                preparedStatement.setInt(2, dataBaseManager.getUserId(command.getUserLogin()));
+                ResultSet resultSet = preparedStatement.executeQuery();
                 List<SpaceMarine> spc = Collections.synchronizedList(new ArrayList<>(dataBaseManager.getObjects()));
                 synchronized (spc) {
-                    int startSize = spc.size();
                     if (spc.size() > 0) {
-                        int id = command.getId();
-                        spc.removeAll((spc.stream().filter(lil -> lil.getId() == id)
-                                .collect(Collectors.toCollection(ArrayDeque::new))));
-                        if (startSize == spc.size()) {
-                            return new MessageToClient("Элемент с id " + id + " не существует.");
+                        if (resultSet.next()) {
+                            int id = command.getId();
+                            spc.removeAll((spc.stream().filter(lil -> lil.getId() == id)
+                                    .collect(Collectors.toCollection(ArrayDeque::new))));
                         }
                         dataBaseManager.uptadeDateChange();
                         dataBaseManager.setObjects(new ArrayDeque<>(spc));
                         return new MessageToClient("Элемент коллекции успешно удалён.");
                     } else return new MessageToClient("Коллекция пуста.");
                 }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-                return new MessageToClient("Ошибка при удалении из БД, у вас недостаточно прав!");
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                return new MessageToClient("Произошла ошибка удаления из БД!");
             }
         }
-    }
-
-    public void deleteElementFromDataBase(Command command) throws SQLException {
-        PreparedStatement preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("delete from spaceMarines where userId = ? and spcid = ?");
-        preparedStatement.setInt(1, dataBaseManager.getUserId(command.getUserLogin()));
-        preparedStatement.setInt(2, command.getId());
-        preparedStatement.executeUpdate();
     }
 }
 
