@@ -23,7 +23,7 @@ public class RemoveByIdCommand extends FatherOfCommands {
             return new MessageToClient("Вы не авторизованы!");
         } else {
             try {
-                PreparedStatement preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("delete from spaceMarines where spcid = ? and userid = ?");
+                PreparedStatement preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("delete from spaceMarines where spcid = ? and userid = ? returning spcid");
                 preparedStatement.setInt(1, command.getId());
                 preparedStatement.setInt(2, dataBaseManager.getUserId(command.getUserLogin()));
                 ResultSet resultSet = preparedStatement.executeQuery();
