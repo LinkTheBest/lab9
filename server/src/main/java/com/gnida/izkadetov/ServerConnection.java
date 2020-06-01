@@ -1,8 +1,8 @@
 package com.gnida.izkadetov;
+
 import java.util.Scanner;
 
 public class ServerConnection {
-    private final static String FILE_NAME = System.getenv("JSON");
 
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
@@ -14,7 +14,6 @@ public class ServerConnection {
             if (!scn.hasNextLine()) {
                 break;
             }
-
             String userInput = scn.nextLine();
             if (userInput.equals("exit") || userInput.equals("Exit") || userInput.equals("EXIT")) {
                 System.out.println("Работы завершена");
@@ -26,15 +25,13 @@ public class ServerConnection {
                         System.out.print(Colors.RED_BOLD);
                         System.out.println("Invalid port!");
                     } else {
-
                         ServerMain serverMain = new ServerMain(port);
                         serverMain.start();
                         break;
-
                     }
                 } catch (NumberFormatException e) {
                     System.out.println(Colors.RED_BOLD);
-                    System.out.println("Введите циферки");
+                    System.out.println("Введите адекватные циферки:");
                 }
             }
         }

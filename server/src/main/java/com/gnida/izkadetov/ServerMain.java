@@ -48,11 +48,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     private final FatherOfCommands logoutCommand;
 
     {
-//        final String FILE_NAME = System.getenv("JSON");
         dataBaseManager = new DataBaseManager();
-//        jsonDataHandler = new JsonDataHandler(FILE_NAME);
-
-//        dataBaseManager.setObjects(startUpObjectLoader.getSpaceDeque());
         helpCommand = new HelpCommand(dataBaseManager, this);
         exitCommand = new ExitCommand(dataBaseManager, this);
         infoCommand = new InfoCommand(dataBaseManager, this);
@@ -89,7 +85,12 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 if (temp.equals("exit") | temp.equals("Exit") | temp.equals("EXIT")) {
                     System.exit(0);
                 } else {
-                    this.port = Integer.valueOf(temp);
+                    try {
+                        this.port = Integer.valueOf(temp);
+                    } catch (Exception ex) {
+                        System.out.println(ex.getMessage());
+                        System.out.println("Введите адекватные циферки:");
+                    }
                 }
             }
         }
