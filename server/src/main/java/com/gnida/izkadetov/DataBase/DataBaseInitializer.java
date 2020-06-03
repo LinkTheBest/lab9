@@ -7,9 +7,22 @@ import java.sql.Statement;
 
 public class DataBaseInitializer {
     private Connection connection;
+    private String host;
+    private int port;
+    private String name;
+    private String user;
+    private String pwd;
 
-    public boolean ifDataBaseConnected(String host, int port, String baseName, String user, String pwd) {
-        String databaseUrl = "jdbc:postgresql://" + host + ":" + port + "/" + baseName;
+    public DataBaseInitializer(String host, int port, String name, String user, String pwd) {
+        this.host = host;
+        this.port = port;
+        this.name = name;
+        this.user = user;
+        this.pwd = pwd;
+    }
+
+    public boolean ifDataBaseConnected() {
+        String databaseUrl = "jdbc:postgresql://" + host + ":" + port + "/" + name;
         try {
             connection = DriverManager.getConnection(databaseUrl, user, pwd);
             return true;

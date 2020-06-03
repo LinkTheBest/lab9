@@ -3,9 +3,11 @@ package com.gnida.izkadetov;
 import com.gnida.izkadetov.DataBase.DataBaseInitializer;
 import com.gnida.izkadetov.commands.*;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,20 +15,20 @@ import java.util.concurrent.ForkJoinPool;
 
 public class ServerMain implements TbI_PROSTO_SUPER {
 
+    private DataBaseInitializer dataBaseInitializer;
     private ForkJoinPool pool = new ForkJoinPool(50);
     private ExecutorService cachedThread = Executors.newCachedThreadPool();
     private Scanner scn = new Scanner(System.in);
     private String serverInput = "";
     private FromClientMessageHandler fromClientMessageHandler;
     private ToClientMessageHandler toClientMessageHandler;
-    private Collection collection;
     private DataBaseManager dataBaseManager;
     private Socket clientSocket;
     private ServerSocket server;
     private int port;
-    private JsonDataHandler jsonDataHandler;
     private StartUpObjectLoader startUpObjectLoader;
     private MessageToClient message;
+    private final String PATH_TO_CONFIG_FILE = "server/src/main/java/res/config.properties";
 
     private final FatherOfCommands helpCommand;
     private final FatherOfCommands exitCommand;
@@ -42,7 +44,6 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     private final FatherOfCommands sumOfHealthCommand;
     private final FatherOfCommands printDescendingCommand;
     private final FatherOfCommands printDescendingHealthCommand;
-    private final FatherOfCommands saveCommand;
     private final FatherOfCommands registrationCommand;
     private final FatherOfCommands loginCommand;
     private final FatherOfCommands logoutCommand;
@@ -63,7 +64,6 @@ public class ServerMain implements TbI_PROSTO_SUPER {
         sumOfHealthCommand = new SumOfHealthCommand(dataBaseManager, this);
         printDescendingCommand = new PrintDescendingCommand(dataBaseManager, this);
         printDescendingHealthCommand = new PrintFieldDescendingHealth(dataBaseManager, this);
-        saveCommand = new SaveCommand(dataBaseManager, this);
         registrationCommand = new RegistrationCommand(dataBaseManager, this);
         loginCommand = new LoginCommand(dataBaseManager, this);
         logoutCommand = new LogoutCommand(dataBaseManager, this);
@@ -97,9 +97,22 @@ public class ServerMain implements TbI_PROSTO_SUPER {
 
     }
 
-    public void dataBaseConnect(String host, int port, String baseName, String user, String pwd) {
-        DataBaseInitializer dataBaseInitializer = new DataBaseInitializer();
-        boolean connected = dataBaseInitializer.ifDataBaseConnected(host, port, baseName, user, pwd);
+    public void dataBaseConnect() {
+        Properties properties = new Properties();
+        try {
+            FileInputStream fileInputStream = new FileInputStream(PATH_TO_CONFIG_FILE);
+            properties.load(fileInputStream);
+            String host = properties.getProperty("host");
+            String name = properties.getProperty("name");
+            String user = properties.getProperty("login");
+            String pwd = properties.getProperty("pwd");
+            int bPort = Integer.valueOf(properties.getProperty("port"));
+            dataBaseInitializer = new DataBaseInitializer(host, bPort, name, user, pwd);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        boolean connected = dataBaseInitializer.ifDataBaseConnected();
         boolean created = dataBaseInitializer.ifTablesCreated();
         dataBaseManager.setDataBaseInitializer(dataBaseInitializer);
         if (connected & created) {
@@ -114,7 +127,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
 
 
     public void start() {
-        dataBaseConnect("localhost", 5432, "postgres", "postgres", "pwd");
+        dataBaseConnect();
         System.out.print(Colors.CYAN_BOLD);
         System.out.println("Сервер работает! Для Выхода введите 'exit'");
         System.out.println("Для сохранения введите: save; Для выхода: exit");
@@ -157,11 +170,6 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                     case "exit":
                         prostoKlass(new Command(ListOfCommands.SAVE));
                         prostoKlass(new Command(ListOfCommands.EXIT));
-                    case "save":
-                        System.out.println("Сохранено!");
-                        prostoKlass(new Command(ListOfCommands.SAVE));
-                        collection.updateSaveDate();
-                        break;
                     default:
                         System.out.println("Неопознанная команда!");
                 }
@@ -209,8 +217,6 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 return printDescendingHealthCommand.executeCommand(command);
             case EXIT:
                 return exitCommand.executeCommand(command);
-            case SAVE:
-                return saveCommand.executeCommand(command);
             default:
                 System.out.print(Colors.RED_UNDERLINED);
                 System.out.println("Лол");
