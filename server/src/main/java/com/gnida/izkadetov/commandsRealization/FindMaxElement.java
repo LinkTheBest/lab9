@@ -9,11 +9,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class FindMaxElement {
+    private SpaceMarine newObject;
 
-    public ArrayDeque<SpaceMarine> makeDecision(ArrayDeque<SpaceMarine> spcArr) {
+    public boolean makeDecision(ArrayDeque<SpaceMarine> spcArr) {
         List<SpaceMarine> tempList = Collections.synchronizedList(new ArrayList<>(spcArr));
         synchronized (tempList) {
-            SpaceMarine newObject = tempList.get(tempList.size() - 1);
+            newObject = tempList.get(tempList.size() - 1);
             SpaceMarine tempObject = null;
             tempList.remove(tempList.size() - 1);
             int maxId = 0;
@@ -27,13 +28,19 @@ public class FindMaxElement {
                 if (tempObject.getId() < newObject.getId()) {
                     tempList.add(newObject);
                     System.out.println("Объект был добавлен");
+                    return true;
                 } else {
                     System.out.println("Объект не был добавлен");
+                    return false;
                 }
             } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
-            ArrayDeque<SpaceMarine> tempDeque = new ArrayDeque(tempList);
-            return tempDeque;
+            return false;
         }
+    }
+
+    public SpaceMarine getNewElement() {
+        return newObject;
     }
 }

@@ -1,7 +1,6 @@
 package com.gnida.izkadetov.commandsRealization;
 
 
-import com.gnida.izkadetov.Collection;
 import com.gnida.izkadetov.SpaceMarine;
 
 import java.util.ArrayDeque;
@@ -10,13 +9,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class FindMinElement {
+    private SpaceMarine newObject;
 
-    public ArrayDeque<SpaceMarine> makeDecision(ArrayDeque<SpaceMarine> spcArr) {
+    public boolean makeDecision(ArrayDeque<SpaceMarine> spcArr) {
         List<SpaceMarine> tempList = Collections.synchronizedList(new ArrayList<>(spcArr));
         synchronized (tempList) {
-            SpaceMarine newObject = tempList.get(tempList.size() - 1);
-            SpaceMarine tempObject = null;
+            newObject = tempList.get(tempList.size() - 1);
             tempList.remove(tempList.size() - 1);
+            SpaceMarine tempObject = null;
             int maxId = 1000000;
             for (SpaceMarine spc : tempList) {
                 if (spc.getId() < maxId) {
@@ -28,14 +28,20 @@ public class FindMinElement {
                 if (tempObject.getId() > newObject.getId()) {
                     tempList.add(newObject);
                     System.out.println("Объект был добавлен");
+                    return true;
                 } else {
                     System.out.println("Объект не был добавлен");
+                    return false;
                 }
             } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
-            ArrayDeque<SpaceMarine> temp_deque = new ArrayDeque<>(tempList);
-            return temp_deque;
+            return false;
         }
+    }
+
+    public SpaceMarine getNewElement() {
+        return newObject;
     }
 }
 

@@ -41,11 +41,15 @@ public class DataBaseManager {
         return dateInitialization = new Date();
     }
 
-    public void addToCollection(List<SpaceMarine> spcList) {
+    public void addMoreThanOneElementToCollection(List<SpaceMarine> spcList) {
         Iterator<SpaceMarine> iterator = spcList.iterator();
         while (iterator.hasNext()) {
             spc.add(iterator.next());
         }
+    }
+
+    public void addOneElementToCollection(SpaceMarine spaceMarine) {
+        spc.add(spaceMarine);
     }
 
     public boolean checkLogin(String login) {
