@@ -5,6 +5,8 @@ import com.gnida.izkadetov.commands.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Properties;
@@ -28,7 +30,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     private int port;
     private StartUpObjectLoader startUpObjectLoader;
     private MessageToClient message;
-    private final String PATH_TO_CONFIG_FILE = "server/src/main/java/res/config.properties";
+    private final String PATH_TO_CONFIG_FILE = "config.properties";
 
     private final FatherOfCommands helpCommand;
     private final FatherOfCommands exitCommand;
@@ -99,17 +101,38 @@ public class ServerMain implements TbI_PROSTO_SUPER {
 
     public void dataBaseConnect() {
         Properties properties = new Properties();
-        try {
-            FileInputStream fileInputStream = new FileInputStream(PATH_TO_CONFIG_FILE);
-            properties.load(fileInputStream);
-            String host = properties.getProperty("host");
-            String name = properties.getProperty("name");
-            String user = properties.getProperty("login");
-            String pwd = properties.getProperty("pwd");
-            int bPort = Integer.valueOf(properties.getProperty("port"));
-            dataBaseInitializer = new DataBaseInitializer(host, bPort, name, user, pwd);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+        while (true) {
+            try {
+                InputStream fileInputStream = ServerMain.class.getClassLoader().getResourceAsStream(PATH_TO_CONFIG_FILE);
+                properties.load(fileInputStream);
+                String host = properties.getProperty("host");
+                String name = properties.getProperty("name");
+                String user = properties.getProperty("login");
+                String pwd = properties.getProperty("pwd");
+                int bPort = Integer.valueOf(properties.getProperty("port"));
+                dataBaseInitializer = new DataBaseInitializer(host, bPort, name, user, pwd);
+                break;
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+                try {
+                    System.out.println("Произошла ошибка, введите данные для подключения БД вручную!");
+                    System.out.print("host: ");
+                    String host = scn.nextLine();
+                    System.out.print("name: ");
+                    String name = scn.nextLine();
+                    System.out.print("user: ");
+                    String user = scn.nextLine();
+                    System.out.print("pwd: ");
+                    String pwd = scn.nextLine();
+                    int pport = Integer.valueOf(scn.nextLine());
+                    dataBaseInitializer = new DataBaseInitializer(host, pport, name, user, pwd);
+                    break;
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                    System.out.println("Выход из программы!");
+                    System.exit(0);
+                }
+            }
         }
 
         boolean connected = dataBaseInitializer.ifDataBaseConnected();
