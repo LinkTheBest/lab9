@@ -21,7 +21,7 @@ public class ConnectionChecker {
                 System.out.println("Сервер занят или же недоступен...");
                 System.out.println("Соединение не удалось, повторяю попытки... ");
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(2500);
                 } catch (InterruptedException ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -29,6 +29,4 @@ public class ConnectionChecker {
         }
         return socket;
     }
-
-
 }

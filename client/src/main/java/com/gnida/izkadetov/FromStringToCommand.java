@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class FromStringToCommand {
+    private CreatingNewObject creatingNewObject;
     private LoginPasswordReader loginPasswordReader = new LoginPasswordReader();
     private String userLogin;
     private String userPassword;
@@ -38,7 +39,7 @@ public class FromStringToCommand {
                     command = new Command(ListOfCommands.HELP);
                     return command;
                 }
-                CreatingNewObject creatingNewObject = new CreatingNewObject(devidedComand[1]);
+                 creatingNewObject = new CreatingNewObject(devidedComand[1]);
                 command = new Command(ListOfCommands.ADD, creatingNewObject.createObject(), userLogin, userPassword);
                 return command;
             case "remove_by_id":
@@ -52,9 +53,6 @@ public class FromStringToCommand {
                 }
             case "clear":
                 command = new Command(ListOfCommands.CLEAR, userLogin, userPassword);
-                return command;
-            case "save":
-                command = new Command(ListOfCommands.SAVE);
                 return command;
             case "execute_script":
                 if (devidedComand[devidedComand.length - 1].equals("execute_script")) {
@@ -78,7 +76,8 @@ public class FromStringToCommand {
                     command = new Command(ListOfCommands.HELP);
                     return command;
                 } else {
-                    command = new Command(ListOfCommands.ADD_IF_MAX, devidedComand[1], userLogin, userPassword);
+                    creatingNewObject = new CreatingNewObject(devidedComand[1]);
+                    command = new Command(ListOfCommands.ADD_IF_MAX, creatingNewObject.createObject(), userLogin, userPassword);
                     return command;
                 }
             case "add_if_min":
@@ -87,7 +86,8 @@ public class FromStringToCommand {
                     command = new Command(ListOfCommands.HELP);
                     return command;
                 } else {
-                    command = new Command(ListOfCommands.ADD_IF_MIN, devidedComand[1], userLogin, userPassword);
+                    creatingNewObject = new CreatingNewObject(devidedComand[1]);
+                    command = new Command(ListOfCommands.ADD_IF_MIN, creatingNewObject.createObject(), userLogin, userPassword);
                     return command;
                 }
             case "remove_lower":
@@ -144,6 +144,5 @@ public class FromStringToCommand {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-
     }
 }

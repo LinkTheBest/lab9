@@ -114,24 +114,6 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 break;
             } catch (IOException e) {
                 System.out.println(e.getMessage());
-                try {
-                    System.out.println("Произошла ошибка, введите данные для подключения БД вручную!");
-                    System.out.print("host: ");
-                    String host = scn.nextLine();
-                    System.out.print("name: ");
-                    String name = scn.nextLine();
-                    System.out.print("user: ");
-                    String user = scn.nextLine();
-                    System.out.print("pwd: ");
-                    String pwd = scn.nextLine();
-                    int pport = Integer.valueOf(scn.nextLine());
-                    dataBaseInitializer = new DataBaseInitializer(host, pport, name, user, pwd);
-                    break;
-                } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
-                    System.out.println("Выход из программы!");
-                    System.exit(0);
-                }
             }
         }
 

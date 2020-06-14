@@ -1,6 +1,5 @@
 package com.gnida.izkadetov;
 
-import com.gnida.izkadetov.*;
 
 import java.util.Scanner;
 
@@ -30,6 +29,11 @@ public class AddCommandMethods {
                 if (id < 0) {
                     id = 0;
                 }
+                if (id == 0) {
+                    double temp;
+                    temp = Math.random() * 1000000;
+                    id = (int) temp;
+                }
             } catch (Exception ex) {
                 System.out.println("Введите целочисленное значение!");
             }
@@ -55,7 +59,8 @@ public class AddCommandMethods {
         }
         return tempCoords;
     }
-    public Coordinates readYCoordinate(){
+
+    public Coordinates readYCoordinate() {
         System.out.println("Введите Y:  ");
         while (true) {
             try {
@@ -116,8 +121,8 @@ public class AddCommandMethods {
             counter++;
             if (counter == 1) {
                 System.out.println("[" + counter + "]" + ". " + weapon.name());
-            }else
-            System.out.println(counter + ". " + weapon.name());
+            } else
+                System.out.println(counter + ". " + weapon.name());
         }
         while (true) {
             try {
@@ -170,8 +175,8 @@ public class AddCommandMethods {
             counter++;
             if (counter == 1) {
                 System.out.println("[" + counter + "]" + ". " + meleeWeapon.name());
-            }else
-            System.out.println(counter + ". " + meleeWeapon.name());
+            } else
+                System.out.println(counter + ". " + meleeWeapon.name());
         }
         while (true) {
             try {
@@ -216,8 +221,8 @@ public class AddCommandMethods {
             counter++;
             if (counter == 1) {
                 System.out.println("[" + counter + "]" + ". " + category.name());
-            }else
-            System.out.println(counter + ". " + category.name());
+            } else
+                System.out.println(counter + ". " + category.name());
         }
         while (true) {
             try {

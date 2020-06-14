@@ -14,6 +14,7 @@ public class FromClientMessageHandler {
     }
 
     public Command getMessage() throws IOException, ClassNotFoundException {
+        System.out.println(clientSocket);
         BufferedInputStream inputStream = new BufferedInputStream(clientSocket.getInputStream());
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         Command command = (Command) objectInputStream.readObject();

@@ -26,9 +26,9 @@ public class SaveCommand extends FatherOfCommands {
                     toJsonArrayObj.put("coordinate_x", spcMrn.getCoordinates().getX());
                     toJsonArrayObj.put("coordinate_y", spcMrn.getCoordinates().getY());
                     toJsonArrayObj.put("health", spcMrn.getHealth());
-                    toJsonArrayObj.put("category", spcMrn.getCategory().name());
-                    toJsonArrayObj.put("weapon", spcMrn.getWeaponType().name());
-                    toJsonArrayObj.put("melee_weapon", spcMrn.getMeleeWeapon().name());
+                    toJsonArrayObj.put("category", spcMrn.getCategory());
+                    toJsonArrayObj.put("weapon", spcMrn.getWeaponType());
+                    toJsonArrayObj.put("melee_weapon", spcMrn.getMeleeWeapon());
                     toJsonArrayObj.put("chapter", spcMrn.getChapter().getName());
                     toFileArray.add(toJsonArrayObj);
                 } catch (Exception e) {

@@ -1,8 +1,5 @@
 package com.gnida.izkadetov;
 
-import com.gnida.izkadetov.MessageToClient;
-
-
 import java.io.*;
 import java.net.Socket;
 

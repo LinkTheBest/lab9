@@ -1,5 +1,9 @@
 package com.gnida.izkadetov.DataBase;
 
+import com.gnida.izkadetov.Colors;
+
+import javax.sound.midi.Soundbank;
+import java.awt.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -38,8 +42,10 @@ public class DataBaseInitializer {
             statement.execute("create table  if not exists users(id serial primary key not null, username text unique, password character varying)");
             statement.execute("create table if not exists spaceMarines(spcid int, spcname text, x double precision, y float, health int, category text, weaponType text, meleeWeapon text, chapter text, userId int, foreign key(userId) references users(id)on delete cascade)");
             return true;
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+        } catch (Exception ex) {
+            System.out.println(Colors.RED_BOLD);
+            System.out.println("Проверьте файл confing.properties");
+            System.exit(0);
             return false;
         }
     }

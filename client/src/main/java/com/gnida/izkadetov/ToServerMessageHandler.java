@@ -25,13 +25,13 @@ public class ToServerMessageHandler {
                 break;
             } catch (IOException e) {
                 System.out.println(Colors.RED_BOLD);
+                System.out.println(e.getMessage());
                 System.out.println("Не удалось отправить сообщение, повторяю попытку...");
                 try {
                     clientSocket = new Socket("localhost", port);
                 } catch (IOException ex) {
                     System.out.println(ex.getMessage());
                 }
-
             }
         }
         return clientSocket;

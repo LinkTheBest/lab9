@@ -15,9 +15,6 @@ public class SpaceMarine implements Comparable, Serializable {
     private Chapter chapter; //Поле может быть null
 
     public SpaceMarine() {
-        double temp;
-        temp = Math.random() * 1000000;
-        id = (int) temp;
         creationDate = LocalDate.now();
     }
 

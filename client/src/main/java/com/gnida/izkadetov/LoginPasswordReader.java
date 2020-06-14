@@ -8,7 +8,7 @@ public class LoginPasswordReader {
     private String password;
 
     public String getLogin() {
-        System.out.println("Введите логин");
+        System.out.println("Введите логин:");
         if (!scn.hasNextLine()) {
             System.out.println("Зря");
         } else {
@@ -18,7 +18,7 @@ public class LoginPasswordReader {
     }
 
     public String getPassword() {
-        System.out.println("Введите пароль");
+        System.out.println("Введите пароль:");
         if (!scn.hasNextLine()) {
             System.out.println("Зря");
         } else {

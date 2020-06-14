@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class ClientMain {
+
     private ConnectionChecker connectionChecker;
     private FromStringToCommand fromStringToCommand;
     private Scanner userInput = new Scanner(System.in);

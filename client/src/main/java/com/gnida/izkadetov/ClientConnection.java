@@ -27,6 +27,8 @@ public class ClientConnection {
                         clientMain.start();
                     }
                 } catch (NumberFormatException e) {
+                    System.out.println(e.getMessage());
+                    System.out.println("Порт некорректен!");
                 }
             }
         }
