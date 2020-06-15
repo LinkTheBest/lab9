@@ -48,7 +48,7 @@
                     <finalName>labCl</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>com.gnida.izkadetov.ClientConnection</mainClass>
+                            <mainClass>com.gnida.izkadetov.ConnectionView.ConnectionView</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

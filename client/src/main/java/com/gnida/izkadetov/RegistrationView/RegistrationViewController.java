@@ -1,0 +1,19 @@
+package com.gnida.izkadetov.RegistrationView;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+
+public class RegistrationViewController {
+
+    @FXML
+    private PasswordField passwordField;
+
+    @FXML
+    private TextField loginTextField;
+
+    @FXML
+    private Button registrationButton;
+
+}

@@ -5,28 +5,25 @@ import java.net.Socket;
 
 public class ConnectionChecker {
     private int port;
+    private String host;
     private Socket socket;
 
-    public ConnectionChecker(int port) {
+    public ConnectionChecker(String host, int port) {
+        this.host = host;
         this.port = port;
     }
 
-    public Socket socketConnector() {
-        while (true) {
-            try {
-                socket = new Socket("localhost", port);
-                break;
-            } catch (IOException e) {
-                System.out.print(Colors.RED_BOLD);
-                System.out.println("Сервер занят или же недоступен...");
-                System.out.println("Соединение не удалось, повторяю попытки... ");
-                try {
-                    Thread.sleep(2500);
-                } catch (InterruptedException ex) {
-                    System.out.println(ex.getMessage());
-                }
-            }
+    public void socketConnector() {
+        try {
+            socket = new Socket(host, port);
+        } catch (IOException e) {
+            System.out.print(Colors.RED_BOLD);
+            System.out.println("Сервер занят или же недоступен...");
         }
+    }
+
+    public Socket getSocket() {
         return socket;
     }
+
 }

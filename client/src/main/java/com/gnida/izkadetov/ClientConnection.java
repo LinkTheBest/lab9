@@ -26,7 +26,7 @@ public class ClientConnection {
                         ClientMain clientMain = new ClientMain(port);
                         clientMain.start();
                     }
-                } catch (NumberFormatException e) {
+                } catch (Exception e) {
                     System.out.println(e.getMessage());
                     System.out.println("Порт некорректен!");
                 }

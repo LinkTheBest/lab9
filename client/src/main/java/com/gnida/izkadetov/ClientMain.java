@@ -18,16 +18,16 @@ public class ClientMain {
 
     public ClientMain(int port) {
         this.port = port;
-        connectionChecker = new ConnectionChecker(port);
     }
 
-    public void start() {
+    public void start() throws IOException {
         fromStringToCommand = new FromStringToCommand();
         System.out.print(Colors.CYAN);
         System.out.println("Для ознакомлением со списком команд, введите 'help'");
         System.out.println("Чтобы работать с коллекцией, вам надо авторизороваться (login) или же зарегистрироваться (reg)");
         while (true) {
-            clientSocket = connectionChecker.socketConnector();
+            clientSocket = new Socket("localhost", port);
+            System.out.println(clientSocket);
             System.out.print(Colors.GREEN_BOLD);
             System.out.print("Введите команду: ");
             if (!userInput.hasNextLine()) {
@@ -42,7 +42,7 @@ public class ClientMain {
                     Command command = fromStringToCommand.getCommandFromString(userCommand);
                     System.out.print("Вы выбрали команду: ");
                     System.out.println(command.getCommand());
-                    clientSocket = toServerMessageHandler.sendMessage(command);
+                    toServerMessageHandler.sendMessage(command);
                     fromServerMessageHandler = new FromServerMessageHandler(clientSocket);
                     MessageToClient message = fromServerMessageHandler.getMessage();
                     if (message != null) {

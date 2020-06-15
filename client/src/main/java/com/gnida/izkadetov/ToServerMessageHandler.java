@@ -1,5 +1,7 @@
 package com.gnida.izkadetov;
 
+import com.sun.xml.internal.ws.api.client.WSPortInfo;
+
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -15,7 +17,7 @@ public class ToServerMessageHandler {
         this.clientSocket = clientSocket;
     }
 
-    public Socket sendMessage(Command command) {
+    public void sendMessage(Command command) {
         while (true) {
             try {
                 BufferedOutputStream outputStream = new BufferedOutputStream(clientSocket.getOutputStream());
@@ -34,7 +36,7 @@ public class ToServerMessageHandler {
                 }
             }
         }
-        return clientSocket;
+        //return clientSocket;
     }
 }
 
