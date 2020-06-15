@@ -15,8 +15,6 @@ import java.net.Socket;
 
 public class ConnectionController {
 
-    private ConnectionChecker connectionChecker;
-
     @FXML
     private TextField hostTextField;
 
@@ -33,8 +31,6 @@ public class ConnectionController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             try {
                 int port = Integer.valueOf(portTextField.getText());
-//                connectionChecker = new ConnectionChecker(hostTextField.getText(), port);
-//                connectionChecker.socketConnector();
                 Socket socket = new Socket(hostTextField.getText(), port);
                 if (socket.isConnected()) {
                     System.out.println(socket);

@@ -1,6 +1,7 @@
 package com.gnida.izkadetov.LoginView;
 
 import com.gnida.izkadetov.*;
+import com.gnida.izkadetov.RegistrationView.RegistrationViewController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,6 +44,25 @@ public class LoginViewController {
     private void initialize() {
 
         loginButton.setOnAction(event -> {
+            try {
+                socket = new Socket(socket.getInetAddress().getHostName(), socket.getPort());
+                toServerMessageHandler = new ToServerMessageHandler(socket, socket.getPort());
+                fromServerMessageHandler = new FromServerMessageHandler(socket);
+            } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Connection error");
+                alert.setContentText("Server is unavialible!");
+                alert.showAndWait();
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/connection.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage stage = (Stage) loginButton.getScene().getWindow();
+                    stage.setTitle("Connection");
+                    stage.setScene(scene);
+                } catch (Exception ex) {
+                    System.out.println(e.getMessage());
+                }
+            }
             setLoginButtonAction();
         });
 
@@ -58,22 +78,19 @@ public class LoginViewController {
 
     public void setSocket(Socket socket) {
         this.socket = socket;
-        toServerMessageHandler = new ToServerMessageHandler(socket, socket.getPort());
-        fromServerMessageHandler = new FromServerMessageHandler(socket);
     }
 
     public void setLoginButtonAction() {
         try {
-            System.out.println(socket.isConnected());
             command = new Command(ListOfCommands.LOGIN, loginTextField.getText(), passwordField.getText());
             toServerMessageHandler.sendMessage(command);
-            RecieveMessage();
+            recieveMessage();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void RecieveMessage() {
+    public void recieveMessage() {
         cachedThreadPool.execute(() -> {
             try {
                 message = fromServerMessageHandler.getMessage();
@@ -96,7 +113,10 @@ public class LoginViewController {
     }
 
     public void setRegistrationButtonAction() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/registration.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/registration.fxml"));
+        Parent root = loader.load();
+        RegistrationViewController registrationViewController = loader.getController();
+        registrationViewController.setSocket(socket);
         Scene scene = new Scene(root);
         Stage stage = (Stage) registrationButton.getScene().getWindow();
         stage.setTitle("Registration");
