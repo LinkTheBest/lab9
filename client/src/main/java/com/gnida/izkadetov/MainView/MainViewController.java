@@ -1,7 +1,9 @@
 package com.gnida.izkadetov.MainView;
 
+import com.gnida.izkadetov.*;
 import com.gnida.izkadetov.LoginView.LoginViewController;
-import com.gnida.izkadetov.SpaceMarine;
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,15 +17,28 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 
 public class MainViewController {
 
+    private Command command;
     private Socket socket;
     private ObservableList<SpaceMarine> observableList = FXCollections.observableArrayList();
+    private ToServerMessageHandler toServerMessageHandler;
+    private FromServerMessageHandler fromServerMessageHandler;
+    private Executor cachedThread = Executors.newCachedThreadPool();
+    private MessageToClient messageToClient;
+    private ArrayList<SpaceMarine> spaceMarines;
 
     @FXML
     private Label userLoginLabel;
@@ -86,12 +101,18 @@ public class MainViewController {
     @FXML
     private void initialize() {
 
-        try {
-            tableViewPane.getChildren().addAll(initTableView());
-        } catch (Exception e) {
-            System.out.println(e.getCause());
-            System.out.println(e.getMessage());
-        }
+        tableViewPane.getChildren().addAll(initTableView());
+
+        updateButton.setOnAction(event -> {
+            try {
+                socket = new Socket(socket.getInetAddress().getHostName(), socket.getPort());
+                toServerMessageHandler = new ToServerMessageHandler(socket, socket.getPort());
+                fromServerMessageHandler = new FromServerMessageHandler(socket);
+                sendRequestForGettingElements();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        });
 
         exitButton.setOnAction(event -> {
             System.exit(0);
@@ -104,12 +125,22 @@ public class MainViewController {
                 System.out.println(e.getMessage());
             }
         });
-
-
     }
 
     public void setUserLogin(String userLogin) {
         userLoginLabel.setText(userLogin);
+    }
+
+    public void setSocket(Socket loginSocket) {
+        try {
+            socket = new Socket(loginSocket.getInetAddress().getHostName(), loginSocket.getPort());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void setPassword(String pwd) {
+        command = new Command(ListOfCommands.SHOW, userLoginLabel.getText(), pwd);
     }
 
     public void logOutButtonAction() throws IOException {
@@ -120,10 +151,6 @@ public class MainViewController {
         Stage stage = (Stage) logoutButton.getScene().getWindow();
         stage.setTitle("Login Page");
         stage.setScene(new Scene(root, 600, 400));
-    }
-
-    public void setSocket(Socket socket) {
-        this.socket = socket;
     }
 
     public TableView<SpaceMarine> initTableView() {
@@ -150,44 +177,43 @@ public class MainViewController {
         meleeWeaponTypeCol.setCellValueFactory(new PropertyValueFactory<>("meleeWeapon"));
         chapterCol.setCellValueFactory(new PropertyValueFactory<>("chapter"));
 
-        //objectsTableView.getColumns().addAll(spcIdCol, spcNameCol, xCol, yCol, healthCol, categoryCol, weaponTypeCol, meleeWeaponTypeCol, chapterCol);
-//        try {
-//            ObservableList<SpaceMarine> list = getAllElementsFromDataBase();
-//            objectsTableView.setItems(list);
         objectsTableView.getColumns().addAll(spcIdCol, spcNameCol, xCol, yCol, healthCol, categoryCol, weaponTypeCol, meleeWeaponTypeCol, chapterCol);
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//            System.out.println(e.getSQLState());
-//        }
         return objectsTableView;
     }
 
     public void sendRequestForGettingElements() {
         try {
-
+            toServerMessageHandler.sendMessage(command);
+            getServerMessage();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("ОШИБКА ОТПРАВКИ");
         }
-
     }
 
-    public ObservableList<SpaceMarine> setElementsForTableView() {
+    public void getServerMessage() {
+        cachedThread.execute(() -> {
+            try {
+                messageToClient = fromServerMessageHandler.getMessage();
+                if (messageToClient.getSpaceMarines().isEmpty()) {
+                    System.out.println("WOW");
+                }
+                observableList = setElementsForTableView(new ArrayList<>(messageToClient.getSpaceMarines()));
+                System.out.println(observableList.size());
+                TableView<SpaceMarine> tableView = initTableView();
+                tableView.setItems(observableList);
+                Platform.runLater(() -> {
+                    tableViewPane.getChildren().addAll(tableView);
+                });
+            } catch (IOException | ClassNotFoundException e) {
+            }
+        });
+    }
 
-
-//                    SpaceMarine spc = new SpaceMarine();
-//                    spc.setHealth(resultSet.getInt("health"));
-//                    spc.setMeleeWeapon(resultSet.getString("meleeweapon"));
-//                    spc.setYCoordinate(resultSet.getFloat("y"));
-//                    spc.setXCoordinate(resultSet.getDouble("x"));
-//                    spc.setName(resultSet.getString("spcname"));
-//                    spc.setId(resultSet.getInt("scpid"));
-//                    spc.setCategory(resultSet.getString("category"));
-//                    spc.setWeaponType(resultSet.getString("weapontype"));
-//                    spc.setChapter(resultSet.getString("chapter"));
-
-        //observableList.add(spc);
-
-
+    public ObservableList<SpaceMarine> setElementsForTableView(ArrayList<SpaceMarine> spaceMarines) {
+        Iterator<SpaceMarine> iterator = spaceMarines.iterator();
+        while (iterator.hasNext()) {
+            observableList.add(iterator.next());
+        }
         return observableList;
     }
 

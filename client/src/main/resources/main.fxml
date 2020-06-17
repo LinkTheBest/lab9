@@ -8,11 +8,6 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gnida.izkadetov.MainView.MainViewController">
     <children>
-        <Pane fx:id="userInfoPane" prefHeight="85.0" prefWidth="256.0">
-            <children>
-                <Separator layoutX="-3.0" layoutY="84.0" prefHeight="3.0" prefWidth="256.0" />
-            </children>
-        </Pane>
         <Separator layoutX="253.0" orientation="VERTICAL" prefHeight="720.0" prefWidth="0.0" />
         <Pane fx:id="commandsButtonPane" prefHeight="720.0" prefWidth="256.0">
             <children>
@@ -41,7 +36,7 @@
                 <Button fx:id="printDeshealthButton" layoutX="135.0" layoutY="235.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Print des health" />
                 <Button layoutX="135.0" layoutY="266.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Button" />
                 <Button fx:id="exitButton" layoutX="135.0" layoutY="298.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Exit" />
-                <Button fx:id="updateButton" layoutX="102.0" layoutY="360.0" mnemonicParsing="false" text="Button" />
+                <Button fx:id="updateButton" layoutX="88.0" layoutY="360.0" mnemonicParsing="false" text="update data" />
             </children>
         </Pane>
         <Pane layoutX="255.0" layoutY="326.0" prefHeight="400.0" prefWidth="1022.0" />

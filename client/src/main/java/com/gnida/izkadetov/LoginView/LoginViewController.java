@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -134,6 +135,7 @@ public class LoginViewController {
         Parent root = loader.load();
         MainViewController mainViewController = loader.getController();
         mainViewController.setUserLogin(loginTextField.getText());
+        mainViewController.setPassword(passwordField.getText());
         mainViewController.setSocket(socket);
         Scene scene = new Scene(root);
         Stage stage = (Stage) loginButton.getScene().getWindow();

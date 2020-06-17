@@ -85,7 +85,7 @@ public class RegistrationViewController {
                     if (message.getMessage().equals("Такой логин уже существует! Попробуйте другой") | message.getMessage().equals("Ошибка регистрации")) {
                         alert = new Alert(Alert.AlertType.WARNING);
                         alert.setTitle("Warning!");
-                        alert.setContentText("Такой пользователь не существует! Зарегистрируйтесь !");
+                        alert.setContentText("Такой логин уже существует! Попробуйте другой");
                         alert.showAndWait();
                     } else {
                         System.out.println("Успех");
