@@ -1,6 +1,5 @@
 package com.gnida.izkadetov.MainView;
 
-import com.gnida.izkadetov.DataBaseManager;
 import com.gnida.izkadetov.LoginView.LoginViewController;
 import com.gnida.izkadetov.SpaceMarine;
 import javafx.collections.FXCollections;
@@ -19,14 +18,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 
 public class MainViewController {
 
     private Socket socket;
-    private DataBaseManager dataBaseManager;
     private ObservableList<SpaceMarine> observableList = FXCollections.observableArrayList();
 
     @FXML
@@ -144,21 +140,21 @@ public class MainViewController {
         TableColumn<SpaceMarine, Double> meleeWeaponTypeCol = new TableColumn<>("meleeweapon");
         TableColumn<SpaceMarine, Double> chapterCol = new TableColumn<>("chapter");
 
-//        spcIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-//        spcNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-//        xCol.setCellValueFactory(new PropertyValueFactory<>("x"));
-//        yCol.setCellValueFactory(new PropertyValueFactory<>("y"));
-//        healthCol.setCellValueFactory(new PropertyValueFactory<>("health"));
-//        categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
-//        weaponTypeCol.setCellValueFactory(new PropertyValueFactory<>("weaponType"));
-//        meleeWeaponTypeCol.setCellValueFactory(new PropertyValueFactory<>("meleeWeapon"));
-//        chapterCol.setCellValueFactory(new PropertyValueFactory<>("chapter"));
+        spcIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        spcNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        xCol.setCellValueFactory(new PropertyValueFactory<>("x"));
+        yCol.setCellValueFactory(new PropertyValueFactory<>("y"));
+        healthCol.setCellValueFactory(new PropertyValueFactory<>("health"));
+        categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
+        weaponTypeCol.setCellValueFactory(new PropertyValueFactory<>("weaponType"));
+        meleeWeaponTypeCol.setCellValueFactory(new PropertyValueFactory<>("meleeWeapon"));
+        chapterCol.setCellValueFactory(new PropertyValueFactory<>("chapter"));
 
-        objectsTableView.getColumns().addAll(spcIdCol, spcNameCol, xCol, yCol, healthCol, categoryCol, weaponTypeCol, meleeWeaponTypeCol, chapterCol);
+        //objectsTableView.getColumns().addAll(spcIdCol, spcNameCol, xCol, yCol, healthCol, categoryCol, weaponTypeCol, meleeWeaponTypeCol, chapterCol);
 //        try {
-//            //ObservableList<SpaceMarine> list = getAllElementsFromDataBase();
-//            //objectsTableView.setItems(list);
-//            objectsTableView.getColumns().addAll(spcIdCol, spcNameCol, xCol, yCol, healthCol, categoryCol, weaponTypeCol, meleeWeaponTypeCol, chapterCol);
+//            ObservableList<SpaceMarine> list = getAllElementsFromDataBase();
+//            objectsTableView.setItems(list);
+        objectsTableView.getColumns().addAll(spcIdCol, spcNameCol, xCol, yCol, healthCol, categoryCol, weaponTypeCol, meleeWeaponTypeCol, chapterCol);
 //        } catch (SQLException e) {
 //            System.out.println(e.getMessage());
 //            System.out.println(e.getSQLState());
@@ -166,27 +162,33 @@ public class MainViewController {
         return objectsTableView;
     }
 
-    public ObservableList<SpaceMarine> getAllElementsFromDataBase() {
-        dataBaseManager = new DataBaseManager();
+    public void sendRequestForGettingElements() {
         try {
-            PreparedStatement preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("select * from spacemarines");
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                SpaceMarine spc = new SpaceMarine();
-                spc.setHealth(resultSet.getInt("health"));
-                spc.setMeleeWeapon(resultSet.getString("meleeweapon"));
-                spc.setYCoordinate(resultSet.getFloat("y"));
-                spc.setXCoordinate(resultSet.getDouble("x"));
-                spc.setName(resultSet.getString("spcname"));
-                spc.setId(resultSet.getInt("scpid"));
-                spc.setCategory(resultSet.getString("category"));
-                spc.setWeaponType(resultSet.getString("weapontype"));
-                spc.setChapter(resultSet.getString("chapter"));
-                observableList.add(spc);
-            }
-        } catch (SQLException e) {
+
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+    }
+
+    public ObservableList<SpaceMarine> setElementsForTableView() {
+
+
+//                    SpaceMarine spc = new SpaceMarine();
+//                    spc.setHealth(resultSet.getInt("health"));
+//                    spc.setMeleeWeapon(resultSet.getString("meleeweapon"));
+//                    spc.setYCoordinate(resultSet.getFloat("y"));
+//                    spc.setXCoordinate(resultSet.getDouble("x"));
+//                    spc.setName(resultSet.getString("spcname"));
+//                    spc.setId(resultSet.getInt("scpid"));
+//                    spc.setCategory(resultSet.getString("category"));
+//                    spc.setWeaponType(resultSet.getString("weapontype"));
+//                    spc.setChapter(resultSet.getString("chapter"));
+
+        //observableList.add(spc);
+
+
         return observableList;
     }
+
 }

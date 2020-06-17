@@ -38,12 +38,6 @@
             <artifactId>javafx-controls</artifactId>
             <version>11.0.2</version>
         </dependency>
-        <dependency>
-            <groupId>prikoldes</groupId>
-            <artifactId>server</artifactId>
-            <version>0.1.0</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>
