@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class SpaceMarine implements Comparable, Serializable {
-    private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    private int id;
+    private Double x;
+    private Float y; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
-    private Coordinates coordinates = new Coordinates();; //Поле не может быть null
+    private Coordinates coordinates = new Coordinates(); //Поле не может быть null
     private java.time.LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
     private Integer health; //Поле может быть null, Значение поля должно быть больше 0
     private AstartesCategory category; //Поле не может быть null
@@ -35,10 +37,13 @@ public class SpaceMarine implements Comparable, Serializable {
     }
 
     public void setXCoordinate(Double xCoordinate) {
+        x = xCoordinate;
         coordinates.setX(xCoordinate);
     }
 
     public void setYCoordinate(Float yCoordinate) {
+
+        y = yCoordinate;
         coordinates.setY(yCoordinate);
     }
 
@@ -109,6 +114,14 @@ public class SpaceMarine implements Comparable, Serializable {
 
     public Coordinates getCoordinates() {
         return coordinates;
+    }
+
+    public Double getX() {
+        return x;
+    }
+
+    public Float getY() {
+        return y;
     }
 
     public Integer getHealth() {

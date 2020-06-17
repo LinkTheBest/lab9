@@ -33,7 +33,6 @@ public class ConnectionController {
                 int port = Integer.valueOf(portTextField.getText());
                 Socket socket = new Socket(hostTextField.getText(), port);
                 if (socket.isConnected()) {
-                    System.out.println(socket);
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
                     Parent root = loader.load();
                     LoginViewController loginViewController = loader.getController();

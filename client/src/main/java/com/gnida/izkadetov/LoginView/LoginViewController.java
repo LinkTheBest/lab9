@@ -1,6 +1,7 @@
 package com.gnida.izkadetov.LoginView;
 
 import com.gnida.izkadetov.*;
+import com.gnida.izkadetov.MainView.MainViewController;
 import com.gnida.izkadetov.RegistrationView.RegistrationViewController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -12,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -101,7 +101,12 @@ public class LoginViewController {
                         alert.setContentText("Такой пользователь не существует! Зарегистрируйтесь !");
                         alert.showAndWait();
                     } else {
-                        System.out.println("Успех");
+                        try {
+                            goToMainView();
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                            System.out.println(e.getCause());
+                        }
                     }
                 });
 
@@ -122,5 +127,18 @@ public class LoginViewController {
         stage.setTitle("Registration");
         stage.setScene(scene);
 
+    }
+
+    public void goToMainView() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main.fxml"));
+        Parent root = loader.load();
+        MainViewController mainViewController = loader.getController();
+        mainViewController.setUserLogin(loginTextField.getText());
+        mainViewController.setSocket(socket);
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) loginButton.getScene().getWindow();
+        stage.setResizable(false);
+        stage.setTitle("Working area");
+        stage.setScene(scene);
     }
 }
