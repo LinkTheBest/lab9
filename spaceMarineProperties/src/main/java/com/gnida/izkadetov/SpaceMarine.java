@@ -66,6 +66,9 @@ public class SpaceMarine implements Comparable, Serializable {
             case "terminator":
                 category = AstartesCategory.TERMINATOR;
                 return;
+            default:
+                category = AstartesCategory.AGGRESSOR;
+                return;
         }
     }
 
@@ -86,6 +89,9 @@ public class SpaceMarine implements Comparable, Serializable {
             case "missileLauncher":
                 weaponType = Weapon.MISSILE_LAUNCHER;
                 return;
+            default:
+                weaponType = Weapon.MELTAGUN;
+                return;
         }
     }
 
@@ -99,6 +105,9 @@ public class SpaceMarine implements Comparable, Serializable {
                 return;
             case "powerBlade":
                 meleeWeapon = MeleeWeapon.POWER_BLADE;
+                return;
+            default:
+                meleeWeapon = MeleeWeapon.CHAIN_SWORD;
                 return;
         }
     }

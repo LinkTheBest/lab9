@@ -134,8 +134,7 @@ public class LoginViewController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/main.fxml"));
         Parent root = loader.load();
         MainViewController mainViewController = loader.getController();
-        mainViewController.setUserLogin(loginTextField.getText());
-        mainViewController.setPassword(passwordField.getText());
+        mainViewController.setUserLogin(loginTextField.getText(), passwordField.getText());
         mainViewController.setSocket(socket);
         Scene scene = new Scene(root);
         Stage stage = (Stage) loginButton.getScene().getWindow();

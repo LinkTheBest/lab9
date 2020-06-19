@@ -1,6 +1,7 @@
 package com.gnida.izkadetov.MainView;
 
 import com.gnida.izkadetov.*;
+import com.gnida.izkadetov.AddView.AddViewController;
 import com.gnida.izkadetov.LoginView.LoginViewController;
 import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import javafx.application.Platform;
@@ -31,14 +32,21 @@ import java.util.concurrent.Executors;
 
 public class MainViewController {
 
-    private Command command;
+    private Command commandShow;
+    private Command commandAdd;
     private Socket socket;
+    private String login;
+    private String pwd;
     private ObservableList<SpaceMarine> observableList = FXCollections.observableArrayList();
     private ToServerMessageHandler toServerMessageHandler;
     private FromServerMessageHandler fromServerMessageHandler;
     private Executor cachedThread = Executors.newCachedThreadPool();
     private MessageToClient messageToClient;
     private ArrayList<SpaceMarine> spaceMarines;
+
+    {
+
+    }
 
     @FXML
     private Label userLoginLabel;
@@ -115,6 +123,7 @@ public class MainViewController {
         });
 
         exitButton.setOnAction(event -> {
+            Platform.exit();
             System.exit(0);
         });
 
@@ -125,10 +134,21 @@ public class MainViewController {
                 System.out.println(e.getMessage());
             }
         });
+
+        addButton.setOnAction(event -> {
+            try {
+                moveToAddElementScreen();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        });
     }
 
-    public void setUserLogin(String userLogin) {
+    public void setUserLogin(String userLogin, String pwd) {
         userLoginLabel.setText(userLogin);
+        commandShow = new Command(ListOfCommands.SHOW, userLoginLabel.getText(), pwd);
+        login = userLogin;
+        this.pwd = pwd;
     }
 
     public void setSocket(Socket loginSocket) {
@@ -139,9 +159,6 @@ public class MainViewController {
         }
     }
 
-    public void setPassword(String pwd) {
-        command = new Command(ListOfCommands.SHOW, userLoginLabel.getText(), pwd);
-    }
 
     public void logOutButtonAction() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
@@ -183,7 +200,7 @@ public class MainViewController {
 
     public void sendRequestForGettingElements() {
         try {
-            toServerMessageHandler.sendMessage(command);
+            toServerMessageHandler.sendMessage(commandShow);
             getServerMessage();
         } catch (Exception e) {
             System.out.println("ОШИБКА ОТПРАВКИ");
@@ -198,7 +215,6 @@ public class MainViewController {
                     System.out.println("WOW");
                 }
                 observableList = setElementsForTableView(new ArrayList<>(messageToClient.getSpaceMarines()));
-                System.out.println(observableList.size());
                 TableView<SpaceMarine> tableView = initTableView();
                 tableView.setItems(observableList);
                 Platform.runLater(() -> {
@@ -215,6 +231,17 @@ public class MainViewController {
             observableList.add(iterator.next());
         }
         return observableList;
+    }
+
+    public void moveToAddElementScreen() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/add.fxml"));
+        Parent root = loader.load();
+        AddViewController controller = loader.getController();
+        controller.setLoginAndPassword(login, pwd);
+        controller.setSocket(socket);
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
 }

@@ -61,6 +61,8 @@ public class RegistrationViewController {
             }
             sendToServer();
         });
+
+
     }
 
     public void setSocket(Socket socket) {
