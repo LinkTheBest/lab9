@@ -44,9 +44,6 @@ public class MainViewController {
     private MessageToClient messageToClient;
     private ArrayList<SpaceMarine> spaceMarines;
 
-    {
-
-    }
 
     @FXML
     private Label userLoginLabel;
@@ -138,6 +135,7 @@ public class MainViewController {
         addButton.setOnAction(event -> {
             try {
                 moveToAddElementScreen();
+                updateButton.fire();
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -177,12 +175,12 @@ public class MainViewController {
         TableColumn<SpaceMarine, Integer> spcIdCol = new TableColumn<>("spcid");
         TableColumn<SpaceMarine, String> spcNameCol = new TableColumn<>("spcname");
         TableColumn<SpaceMarine, Double> xCol = new TableColumn<>("x");
-        TableColumn<SpaceMarine, Double> yCol = new TableColumn<>("y");
-        TableColumn<SpaceMarine, Double> healthCol = new TableColumn<>("health");
-        TableColumn<SpaceMarine, Double> categoryCol = new TableColumn<>("category");
-        TableColumn<SpaceMarine, Double> weaponTypeCol = new TableColumn<>("weapontype");
-        TableColumn<SpaceMarine, Double> meleeWeaponTypeCol = new TableColumn<>("meleeweapon");
-        TableColumn<SpaceMarine, Double> chapterCol = new TableColumn<>("chapter");
+        TableColumn<SpaceMarine, Float> yCol = new TableColumn<>("y");
+        TableColumn<SpaceMarine, Integer> healthCol = new TableColumn<>("health");
+        TableColumn<SpaceMarine, String> categoryCol = new TableColumn<>("category");
+        TableColumn<SpaceMarine, String> weaponTypeCol = new TableColumn<>("weapontype");
+        TableColumn<SpaceMarine, String> meleeWeaponTypeCol = new TableColumn<>("meleeweapon");
+        TableColumn<SpaceMarine, String> chapterCol = new TableColumn<>("chapter");
 
         spcIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         spcNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -192,7 +190,7 @@ public class MainViewController {
         categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
         weaponTypeCol.setCellValueFactory(new PropertyValueFactory<>("weaponType"));
         meleeWeaponTypeCol.setCellValueFactory(new PropertyValueFactory<>("meleeWeapon"));
-        chapterCol.setCellValueFactory(new PropertyValueFactory<>("chapter"));
+        chapterCol.setCellValueFactory(new PropertyValueFactory<>("chapterName"));
 
         objectsTableView.getColumns().addAll(spcIdCol, spcNameCol, xCol, yCol, healthCol, categoryCol, weaponTypeCol, meleeWeaponTypeCol, chapterCol);
         return objectsTableView;
@@ -214,13 +212,17 @@ public class MainViewController {
                 if (messageToClient.getSpaceMarines().isEmpty()) {
                     System.out.println("WOW");
                 }
+                observableList.removeAll();
+                observableList.clear();
                 observableList = setElementsForTableView(new ArrayList<>(messageToClient.getSpaceMarines()));
                 TableView<SpaceMarine> tableView = initTableView();
+                tableView.getItems().clear();
                 tableView.setItems(observableList);
                 Platform.runLater(() -> {
                     tableViewPane.getChildren().addAll(tableView);
                 });
             } catch (IOException | ClassNotFoundException e) {
+                System.out.println(e.getMessage());
             }
         });
     }
@@ -243,5 +245,6 @@ public class MainViewController {
         stage.setScene(new Scene(root));
         stage.show();
     }
+
 
 }

@@ -15,6 +15,7 @@ public class SpaceMarine implements Comparable, Serializable {
     private Weapon weaponType; //Поле может быть null
     private MeleeWeapon meleeWeapon; //Поле может быть null
     private Chapter chapter; //Поле может быть null
+    private String chapterName;
 
     public SpaceMarine() {
         creationDate = LocalDate.now();
@@ -25,7 +26,12 @@ public class SpaceMarine implements Comparable, Serializable {
     }
 
     public void setId(int id) {
-        this.id = id;
+        if (id > 0) {
+            this.id = id;
+        } else {
+            double temp = Math.random() * 1000000;
+            this.id = (int) temp;
+        }
     }
 
     public String getName() {
@@ -115,6 +121,7 @@ public class SpaceMarine implements Comparable, Serializable {
     public void setChapter(String chapterName) {
         chapter = new Chapter();
         chapter.setName(chapterName);
+        this.chapterName = chapter.getName();
     }
 
     public String cordinatesToString() {
@@ -155,6 +162,10 @@ public class SpaceMarine implements Comparable, Serializable {
 
     public Chapter getChapter() {
         return chapter;
+    }
+
+    public String getChapterName() {
+        return chapterName;
     }
 
 
