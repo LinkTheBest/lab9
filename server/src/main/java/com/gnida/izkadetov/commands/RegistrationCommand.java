@@ -5,6 +5,9 @@ import com.gnida.izkadetov.DataBaseManager;
 import com.gnida.izkadetov.MessageToClient;
 import com.gnida.izkadetov.TbI_PROSTO_SUPER;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -18,7 +21,7 @@ public class RegistrationCommand extends FatherOfCommands {
         try {
             PreparedStatement preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("insert into users (username, password) values (?, ?) ");
             preparedStatement.setString(1, command.getUserLogin());
-            preparedStatement.setString(2, command.getUserPassword());
+            preparedStatement.setString(2, encryptPassword(command.getUserPassword()));
             try {
                 preparedStatement.execute();
                 return new MessageToClient("Регистрация прошла успешно!");
@@ -29,6 +32,21 @@ public class RegistrationCommand extends FatherOfCommands {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return new MessageToClient("Ошибка регистрации");
+        }
+    }
+
+    private String encryptPassword(String pwd) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD2");
+            byte[] messageDigest = md.digest(pwd.getBytes());
+            BigInteger no = new BigInteger(1, messageDigest);
+            String hashtext = no.toString(16);
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
     }
 }

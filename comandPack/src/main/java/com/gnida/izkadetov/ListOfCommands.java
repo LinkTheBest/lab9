@@ -7,7 +7,7 @@ public enum ListOfCommands implements Serializable {
     INFO("info"),
     ADD("add"),
     SHOW("show"),
-    UPDATE("update"),
+    GET_USER_ID("get_user_id"),
     REMOVE_BY_ID("remove_by_id"),
     CLEAR("clear"),
     EXECUTE_SCRIPT("execute_script"),

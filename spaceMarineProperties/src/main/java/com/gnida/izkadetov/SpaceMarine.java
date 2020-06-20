@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class SpaceMarine implements Comparable, Serializable {
+    private int userId;
     private int id;
     private Double x;
     private Float y; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
@@ -32,6 +33,10 @@ public class SpaceMarine implements Comparable, Serializable {
             double temp = Math.random() * 1000000;
             this.id = (int) temp;
         }
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -138,6 +143,10 @@ public class SpaceMarine implements Comparable, Serializable {
 
     public Float getY() {
         return y;
+    }
+
+    public int getUserId() {
+        return userId;
     }
 
     public Integer getHealth() {

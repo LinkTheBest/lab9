@@ -28,15 +28,23 @@
                 <Button fx:id="removeLowerButton" layoutX="7.0" layoutY="202.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Remove Lower" />
                 <Button fx:id="removeByIdButton" layoutX="7.0" layoutY="235.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Remove by id" />
                 <Button fx:id="clearButton" layoutX="7.0" layoutY="266.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Clear" />
-                <Button fx:id="infoButton" layoutX="7.0" layoutY="298.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Info" />
-                <Button fx:id="helpButton" layoutX="135.0" layoutY="106.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Help" />
-                <Button fx:id="executeButton" layoutX="135.0" layoutY="137.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Execute script" />
-                <Button fx:id="sumButtton" layoutX="135.0" layoutY="170.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Sum of health" />
-                <Button fx:id="printDesButton" layoutX="135.0" layoutY="202.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Print descending" />
-                <Button fx:id="printDeshealthButton" layoutX="135.0" layoutY="235.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Print des health" />
-                <Button layoutX="135.0" layoutY="266.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Button" />
-                <Button fx:id="exitButton" layoutX="135.0" layoutY="298.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Exit" />
-                <Button fx:id="updateButton" layoutX="88.0" layoutY="360.0" mnemonicParsing="false" text="update data" />
+                <Button fx:id="infoButton" layoutX="135.0" layoutY="235.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Info" />
+                <Button fx:id="executeButton" layoutX="135.0" layoutY="106.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Execute script" />
+                <Button fx:id="sumButtton" layoutX="135.0" layoutY="137.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Sum of health" />
+                <Button fx:id="printDesButton" layoutX="135.0" layoutY="170.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Print descending" />
+                <Button fx:id="printDeshealthButton" layoutX="135.0" layoutY="202.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Print des health" />
+                <Button fx:id="exitButton" layoutX="135.0" layoutY="266.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Exit" />
+                <Button fx:id="updateButton" layoutX="66.0" layoutY="335.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="update data" />
+            <Label alignment="CENTER" layoutX="7.0" layoutY="57.0" prefHeight="28.0" prefWidth="82.0" text="ID: ">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="userIdLabel" alignment="CENTER" layoutX="81.0" layoutY="57.0" prefHeight="28.0" prefWidth="64.0" text="0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
             </children>
         </Pane>
         <Pane layoutX="255.0" layoutY="326.0" prefHeight="400.0" prefWidth="1022.0" />

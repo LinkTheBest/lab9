@@ -25,7 +25,9 @@ public class addcommand extends FatherOfCommands {
                 addElementToDataBase(command);
                 List<SpaceMarine> tempDeque = Collections.synchronizedList(new ArrayList<>());
                 synchronized (tempDeque) {
-                    tempDeque.add(command.getSpaceMarine());
+                    SpaceMarine spc = command.getSpaceMarine();
+                    spc.setUserId(dataBaseManager.getUserId(command.getUserLogin()));
+                    tempDeque.add(spc);
                 }
                 dataBaseManager.addMoreThanOneElementToCollection(tempDeque);
                 System.out.println("Элемент успешно добавлен!");

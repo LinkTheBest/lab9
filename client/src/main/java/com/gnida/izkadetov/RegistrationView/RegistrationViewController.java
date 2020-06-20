@@ -1,6 +1,7 @@
 package com.gnida.izkadetov.RegistrationView;
 
 import com.gnida.izkadetov.*;
+import com.gnida.izkadetov.MainView.MainViewController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -85,12 +86,14 @@ public class RegistrationViewController {
                 message = fromServerMessageHandler.getMessage();
                 Platform.runLater(() -> {
                     if (message.getMessage().equals("Такой логин уже существует! Попробуйте другой") | message.getMessage().equals("Ошибка регистрации")) {
-                        alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Warning!");
-                        alert.setContentText("Такой логин уже существует! Попробуйте другой");
-                        alert.showAndWait();
+                        negativeAlert();
                     } else {
-                        System.out.println("Успех");
+                        positiveAlert();
+                        try {
+                            goToMainView();
+                        } catch (IOException e) {
+                            System.out.println(e.getMessage());
+                        }
                     }
                 });
 
@@ -98,6 +101,35 @@ public class RegistrationViewController {
                 System.out.println(e.getMessage());
             }
         });
+    }
+
+    public Alert positiveAlert() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Succeed!");
+        alert.setContentText("Successful registration!");
+        alert.showAndWait();
+        return alert;
+    }
+
+    public Alert negativeAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error!");
+        alert.setContentText("Error!");
+        alert.showAndWait();
+        return alert;
+    }
+
+    public void goToMainView() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main.fxml"));
+        Parent root = loader.load();
+        MainViewController mainViewController = loader.getController();
+        mainViewController.setUserLogin(loginTextField.getText(), passwordField.getText(), 0);
+        mainViewController.setSocket(socket);
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) registrationButton.getScene().getWindow();
+        stage.setResizable(false);
+        stage.setTitle("Working area");
+        stage.setScene(scene);
     }
 
 }

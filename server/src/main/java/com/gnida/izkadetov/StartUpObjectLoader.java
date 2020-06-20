@@ -31,6 +31,7 @@ public class StartUpObjectLoader {
                 spaceMarine.setWeaponType(resultSet.getString("weapontype"));
                 spaceMarine.setMeleeWeapon(resultSet.getString("meleeweapon"));
                 spaceMarine.setChapter(resultSet.getString("chapter"));
+                spaceMarine.setUserId(resultSet.getInt("userid"));
                 spaceDeque.add(spaceMarine);
             }
         } catch (SQLException ex) {

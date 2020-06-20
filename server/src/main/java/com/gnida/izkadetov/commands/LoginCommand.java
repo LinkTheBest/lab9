@@ -4,7 +4,11 @@ import com.gnida.izkadetov.Command;
 import com.gnida.izkadetov.DataBaseManager;
 import com.gnida.izkadetov.MessageToClient;
 import com.gnida.izkadetov.TbI_PROSTO_SUPER;
+import sun.applet.AppletResourceLoader;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,8 +25,6 @@ public class LoginCommand extends FatherOfCommands {
             preparedStatement.setString(1, command.getUserLogin());
             try {
                 preparedStatement.execute();
-//                ResultSet resultSet = preparedStatement.executeQuery();
-//                resultSet.updateRow();
                 preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("delete from users where username = ?");
                 preparedStatement.setString(1, command.getUserLogin());
                 preparedStatement.execute();
@@ -30,11 +32,11 @@ public class LoginCommand extends FatherOfCommands {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
                 try {
-                    preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("select password from users where(username = ?)");
+                    preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("select password from users where username = ?");
                     preparedStatement.setString(1, command.getUserLogin());
                     ResultSet resultSet = preparedStatement.executeQuery();
                     if (resultSet.next()) {
-                        if (command.getUserPassword() == resultSet.getString("password")) {
+                        if (encryptPassword(command.getUserPassword()) == resultSet.getString("password")) {
                             return new MessageToClient("Вход выполнен!");
                         }
                     } else {
@@ -48,6 +50,35 @@ public class LoginCommand extends FatherOfCommands {
             System.out.println(e.getMessage());
             System.out.println("Ошибка входа");
         }
-        return new MessageToClient("Вход выполнен");
+        try {
+            int i = 0;
+            PreparedStatement preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("select id from users where username = ?");
+            preparedStatement.setString(1, command.getUserLogin());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                i = resultSet.getInt("id");
+                System.out.println(i);
+            }
+            System.out.println(i);
+            return new MessageToClient("Вход выполнен", i);
+        } catch (SQLException e) {
+            return new MessageToClient("");
+        }
+
+    }
+
+    private String encryptPassword(String pwd) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD2");
+            byte[] messageDigest = md.digest(pwd.getBytes());
+            BigInteger no = new BigInteger(1, messageDigest);
+            String hashtext = no.toString(16);
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -19,6 +19,7 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+
 public class LoginViewController {
 
     private Socket socket;
@@ -28,6 +29,8 @@ public class LoginViewController {
     private Command command;
     private Alert alert;
     private ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
+    private ExecutorService scachedThreadPool = Executors.newCachedThreadPool();
+    private int id;
 
     @FXML
     private PasswordField passwordField;
@@ -82,19 +85,17 @@ public class LoginViewController {
     }
 
     public void setLoginButtonAction() {
-        try {
-            command = new Command(ListOfCommands.LOGIN, loginTextField.getText(), passwordField.getText());
-            toServerMessageHandler.sendMessage(command);
-            recieveMessage();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        command = new Command(ListOfCommands.LOGIN, loginTextField.getText(), passwordField.getText());
+        toServerMessageHandler.sendMessage(command);
+        recieveMessage();
     }
 
     public void recieveMessage() {
+
         cachedThreadPool.execute(() -> {
             try {
                 message = fromServerMessageHandler.getMessage();
+                //sendIdRequest();
                 Platform.runLater(() -> {
                     if (message.getMessage().equals("Такой пользователь не существует! Зарегистрируйтесь !") | message.getMessage().equals("Произошла ошибка") | message.getMessage().equals("Ошибка входа")) {
                         alert = new Alert(Alert.AlertType.WARNING);
@@ -103,7 +104,7 @@ public class LoginViewController {
                         alert.showAndWait();
                     } else {
                         try {
-                            goToMainView();
+                            goToMainView(message.getId());
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
                             System.out.println(e.getCause());
@@ -130,11 +131,12 @@ public class LoginViewController {
 
     }
 
-    public void goToMainView() throws IOException {
+    public void goToMainView(int id) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/main.fxml"));
         Parent root = loader.load();
         MainViewController mainViewController = loader.getController();
-        mainViewController.setUserLogin(loginTextField.getText(), passwordField.getText());
+        System.out.println(id);
+        mainViewController.setUserLogin(loginTextField.getText(), passwordField.getText(), id);
         mainViewController.setSocket(socket);
         Scene scene = new Scene(root);
         Stage stage = (Stage) loginButton.getScene().getWindow();

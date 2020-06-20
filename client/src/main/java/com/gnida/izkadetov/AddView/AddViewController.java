@@ -18,6 +18,8 @@ import java.util.concurrent.Executors;
 
 public class AddViewController {
 
+    private Command command;
+    private String status;
     private String login;
     private String password;
     private Socket socket;
@@ -111,10 +113,19 @@ public class AddViewController {
             showErrorAlert();
         }
         try {
-
             socket = new Socket(socket.getInetAddress().getHostName(), socket.getPort());
             toServerMessageHandler = new ToServerMessageHandler(socket, socket.getPort());
-            Command command = new Command(ListOfCommands.ADD, spaceMarine, login, password);
+            switch (status) {
+                case "max":
+                    command = new Command(ListOfCommands.ADD_IF_MAX, spaceMarine, login, password);
+                    break;
+                case "min":
+                    command = new Command(ListOfCommands.ADD_IF_MIN, spaceMarine, login, password);
+                    break;
+                default:
+                    command = new Command(ListOfCommands.ADD, spaceMarine, login, password);
+                    break;
+            }
             toServerMessageHandler.sendMessage(command);
             recieveMessage();
         } catch (IOException e) {
@@ -129,7 +140,7 @@ public class AddViewController {
                 fromServerMessageHandler = new FromServerMessageHandler(socket);
                 messageToClient = fromServerMessageHandler.getMessage();
                 Platform.runLater(() -> {
-                    if (messageToClient.getMessage().startsWith("Элемент успешно добавлен! ")) {
+                    if (messageToClient.getMessage().startsWith("Элемент успешно добавлен! ") | messageToClient.getMessage().startsWith("Команда была выполнена")) {
                         showPositiveAlert();
                     }
                 });
@@ -150,11 +161,15 @@ public class AddViewController {
     }
 
     public Alert showPositiveAlert() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Succeed!");
         alert.setContentText("Element added!");
         alert.showAndWait();
         return alert;
+    }
+
+    public void setAddStatus(String status) {
+        this.status = status;
     }
 
 }
