@@ -5,10 +5,7 @@ import com.gnida.izkadetov.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class ClearCommand extends FatherOfCommands {
 
@@ -34,6 +31,7 @@ public class ClearCommand extends FatherOfCommands {
                             }
                         }
                     }
+                    dataBaseManager.setObjects(new ArrayDeque<>(tempDeque));
                 }
                 return new MessageToClient("Коллекция была очищена");
             } catch (SQLException ex) {

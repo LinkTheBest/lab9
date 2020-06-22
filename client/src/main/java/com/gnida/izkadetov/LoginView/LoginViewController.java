@@ -29,8 +29,6 @@ public class LoginViewController {
     private Command command;
     private Alert alert;
     private ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
-    private ExecutorService scachedThreadPool = Executors.newCachedThreadPool();
-    private int id;
 
     @FXML
     private PasswordField passwordField;
@@ -95,7 +93,6 @@ public class LoginViewController {
         cachedThreadPool.execute(() -> {
             try {
                 message = fromServerMessageHandler.getMessage();
-                //sendIdRequest();
                 Platform.runLater(() -> {
                     if (message.getMessage().equals("Такой пользователь не существует! Зарегистрируйтесь !") | message.getMessage().equals("Произошла ошибка") | message.getMessage().equals("Ошибка входа")) {
                         alert = new Alert(Alert.AlertType.WARNING);
@@ -135,7 +132,6 @@ public class LoginViewController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/main.fxml"));
         Parent root = loader.load();
         MainViewController mainViewController = loader.getController();
-        System.out.println(id);
         mainViewController.setUserLogin(loginTextField.getText(), passwordField.getText(), id);
         mainViewController.setSocket(socket);
         Scene scene = new Scene(root);

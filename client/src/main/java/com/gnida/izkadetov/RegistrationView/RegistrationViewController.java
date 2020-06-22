@@ -1,6 +1,7 @@
 package com.gnida.izkadetov.RegistrationView;
 
 import com.gnida.izkadetov.*;
+import com.gnida.izkadetov.LoginView.LoginViewController;
 import com.gnida.izkadetov.MainView.MainViewController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -90,7 +91,7 @@ public class RegistrationViewController {
                     } else {
                         positiveAlert();
                         try {
-                            goToMainView();
+                            goToLoginView();
                         } catch (IOException e) {
                             System.out.println(e.getMessage());
                         }
@@ -119,17 +120,14 @@ public class RegistrationViewController {
         return alert;
     }
 
-    public void goToMainView() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main.fxml"));
+    public void goToLoginView() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
         Parent root = loader.load();
-        MainViewController mainViewController = loader.getController();
-        mainViewController.setUserLogin(loginTextField.getText(), passwordField.getText(), 0);
-        mainViewController.setSocket(socket);
-        Scene scene = new Scene(root);
+        LoginViewController loginViewController = loader.getController();
+        loginViewController.setSocket(socket);
         Stage stage = (Stage) registrationButton.getScene().getWindow();
-        stage.setResizable(false);
-        stage.setTitle("Working area");
-        stage.setScene(scene);
+        stage.setTitle("Login Page");
+        stage.setScene(new Scene(root));
     }
 
 }

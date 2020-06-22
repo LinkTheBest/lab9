@@ -17,7 +17,7 @@ public class SumOfHealthCommand extends FatherOfCommands {
         } else {
             List<SpaceMarine> spc = Collections.synchronizedList(new ArrayList<>(dataBaseManager.getObjects()));
             synchronized (spc) {
-                int sum = 0;
+                long sum = 0;
                 Iterator<SpaceMarine> iterator = spc.iterator();
                 while (iterator.hasNext()) {
                     sum = sum + iterator.next().getHealth();

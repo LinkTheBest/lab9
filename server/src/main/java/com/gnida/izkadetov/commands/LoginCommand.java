@@ -57,9 +57,7 @@ public class LoginCommand extends FatherOfCommands {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 i = resultSet.getInt("id");
-                System.out.println(i);
             }
-            System.out.println(i);
             return new MessageToClient("Вход выполнен", i);
         } catch (SQLException e) {
             return new MessageToClient("");

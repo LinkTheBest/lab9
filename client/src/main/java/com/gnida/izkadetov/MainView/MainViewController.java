@@ -10,10 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -24,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
 
 public class MainViewController {
 
@@ -53,9 +49,7 @@ public class MainViewController {
     @FXML
     private Button addMinButton;
     @FXML
-    private Button removeLowerButton;
-    @FXML
-    private Button removeByIdButton;
+    private Button removeButton;
     @FXML
     private Button clearButton;
     @FXML
@@ -78,6 +72,8 @@ public class MainViewController {
     private Pane tableViewPane;
     @FXML
     private Label userIdLabel;
+
+    private TableView<SpaceMarine> tableView;
 
     @FXML
     private void initialize() {
@@ -134,6 +130,57 @@ public class MainViewController {
                 System.out.println(e.getMessage());
             }
         });
+
+        removeButton.setOnAction(event -> {
+            SpaceMarine spaceMarine = tableView.getSelectionModel().getSelectedItem();
+            if (spaceMarine.getUserId() == Integer.valueOf(userIdLabel.getText())) {
+                try {
+                    socket = new Socket(socket.getInetAddress().getHostName(), socket.getPort());
+                    toServerMessageHandler = new ToServerMessageHandler(socket, socket.getPort());
+                    fromServerMessageHandler = new FromServerMessageHandler(socket);
+                } catch (IOException e) {
+                }
+                sendRemoveRequest(spaceMarine.getId());
+                tableView.getItems().remove(spaceMarine);
+            }
+
+        });
+
+        clearButton.setOnAction(event -> {
+            try {
+                socket = new Socket(socket.getInetAddress().getHostName(), socket.getPort());
+                toServerMessageHandler = new ToServerMessageHandler(socket, socket.getPort());
+                fromServerMessageHandler = new FromServerMessageHandler(socket);
+            } catch (IOException e) {
+            }
+            sendClearRequest();
+            updateButton.fire();
+        });
+
+        sumButtton.setOnAction(event -> {
+            try {
+                sendSumRequest();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        infoButton.setOnAction(event -> {
+            try {
+                sendInfoRequest();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+    }
+
+    public Alert sendingError() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error!");
+        alert.setContentText("Ошибка отправки!");
+        alert.showAndWait();
+        return alert;
     }
 
     public void setUserLogin(String userLogin, String pwd, int userID) {
@@ -196,7 +243,7 @@ public class MainViewController {
             toServerMessageHandler.sendMessage(commandShow);
             getServerMessage();
         } catch (Exception e) {
-            System.out.println("ОШИБКА ОТПРАВКИ");
+            sendingError();
         }
     }
 
@@ -204,13 +251,18 @@ public class MainViewController {
         cachedThread.execute(() -> {
             try {
                 messageToClient = fromServerMessageHandler.getMessage();
-                if (messageToClient.getSpaceMarines().isEmpty()) {
-                    System.out.println("WOW");
-                }
+                Platform.runLater(() -> {
+                    if (messageToClient.getSpaceMarines().isEmpty()) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Info");
+                        alert.setContentText("Пустая коллекция!");
+                        alert.showAndWait();
+                    }
+                });
                 observableList.removeAll();
                 observableList.clear();
                 observableList = setElementsForTableView(new ArrayList<>(messageToClient.getSpaceMarines()));
-                TableView<SpaceMarine> tableView = initTableView();
+                tableView = initTableView();
                 tableView.getItems().clear();
                 tableView.setItems(observableList);
                 Platform.runLater(() -> {
@@ -240,5 +292,109 @@ public class MainViewController {
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
+    }
+
+    public void sendRemoveRequest(int id) {
+        try {
+            toServerMessageHandler.sendMessage(new Command(ListOfCommands.REMOVE_BY_ID, id, login, pwd));
+            getRemoveAnswer();
+        } catch (Exception e) {
+            sendingError();
+        }
+    }
+
+    public void getRemoveAnswer() {
+        cachedThread.execute(() -> {
+            try {
+                messageToClient = fromServerMessageHandler.getMessage();
+                Platform.runLater(() -> {
+                    if (messageToClient.getMessage().startsWith("Элемент коллекции успешно удалён.")) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Succeed!");
+                        alert.setContentText("Element removed!");
+                        alert.showAndWait();
+                    }
+                });
+
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
+        });
+    }
+
+    public void sendClearRequest() {
+        try {
+            toServerMessageHandler.sendMessage(new Command(ListOfCommands.CLEAR, login, pwd));
+            getClearAnswer();
+        } catch (Exception e) {
+            sendingError();
+        }
+    }
+
+    public void getClearAnswer() {
+        cachedThread.execute(() -> {
+            try {
+                messageToClient = fromServerMessageHandler.getMessage();
+                Platform.runLater(() -> {
+                    if (messageToClient.getMessage().startsWith("Коллекция была очищена")) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Succeed!");
+                        alert.setContentText("Collection Cleared!");
+                        alert.showAndWait();
+                    }
+                });
+
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
+        });
+    }
+
+    public void sendSumRequest() throws IOException {
+        socket = new Socket(socket.getInetAddress().getHostName(), socket.getPort());
+        toServerMessageHandler = new ToServerMessageHandler(socket, socket.getPort());
+        toServerMessageHandler.sendMessage(new Command(ListOfCommands.SUM_OF_HEALTH, login, pwd));
+        getSumAnswer();
+    }
+
+    public void getSumAnswer() {
+        cachedThread.execute(() -> {
+            fromServerMessageHandler = new FromServerMessageHandler(socket);
+            try {
+                MessageToClient message = fromServerMessageHandler.getMessage();
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Sum");
+                    alert.setContentText(message.getMessage());
+                    alert.showAndWait();
+                });
+            } catch (ClassNotFoundException | IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void sendInfoRequest() throws IOException {
+        socket = new Socket(socket.getInetAddress().getHostName(), socket.getPort());
+        toServerMessageHandler = new ToServerMessageHandler(socket, socket.getPort());
+        toServerMessageHandler.sendMessage(new Command(ListOfCommands.INFO, login, pwd));
+        getInfoAnswer();
+    }
+
+    public void getInfoAnswer() {
+        cachedThread.execute(() -> {
+            fromServerMessageHandler = new FromServerMessageHandler(socket);
+            try {
+                MessageToClient message = fromServerMessageHandler.getMessage();
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Info");
+                    alert.setContentText(message.getMessage());
+                    alert.showAndWait();
+                });
+            } catch (ClassNotFoundException | IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }
