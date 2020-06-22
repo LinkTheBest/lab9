@@ -1,15 +1,11 @@
 package com.gnida.izkadetov;
 
 import com.gnida.izkadetov.DataBase.DataBaseInitializer;
-import sun.java2d.pipe.SpanClipRenderer;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayDeque;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class DataBaseManager {
     private ArrayDeque<SpaceMarine> spc = new ArrayDeque<>();
@@ -50,6 +46,17 @@ public class DataBaseManager {
 
     public void addOneElementToCollection(SpaceMarine spaceMarine) {
         spc.add(spaceMarine);
+    }
+
+    public void removeElement(SpaceMarine spaceMarine) {
+        int i = 0;
+        ArrayList<SpaceMarine> spcc = new ArrayList<>(spc);
+        while (i != spcc.size()) {
+            if (spaceMarine.getId() == spcc.get(i).getId()) {
+                spcc.remove(i);
+                break;
+            }
+        }
     }
 
     public boolean checkLogin(String login) {

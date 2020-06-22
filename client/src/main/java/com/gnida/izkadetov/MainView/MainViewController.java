@@ -2,7 +2,9 @@ package com.gnida.izkadetov.MainView;
 
 import com.gnida.izkadetov.*;
 import com.gnida.izkadetov.AddView.AddViewController;
+import com.gnida.izkadetov.ChangeView.ChangeViewController;
 import com.gnida.izkadetov.LoginView.LoginViewController;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,13 +12,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.chart.BubbleChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.Executor;
@@ -33,13 +43,10 @@ public class MainViewController {
     private FromServerMessageHandler fromServerMessageHandler;
     private Executor cachedThread = Executors.newCachedThreadPool();
     private MessageToClient messageToClient;
+    private ArrayList<SpaceMarine> spaceMarines = new ArrayList<>();
 
     @FXML
     private Label userLoginLabel;
-    @FXML
-    private Pane userInfoPane;
-    @FXML
-    private Pane commandsButtonPane;
     @FXML
     private Button logoutButton;
     @FXML
@@ -55,21 +62,15 @@ public class MainViewController {
     @FXML
     private Button infoButton;
     @FXML
-    private Button helpButton;
-    @FXML
-    private Button executeButton;
-    @FXML
     private Button sumButtton;
-    @FXML
-    private Button printDesButton;
-    @FXML
-    private Button printDeshealthButton;
     @FXML
     private Button exitButton;
     @FXML
     private Button updateButton;
     @FXML
     private Pane tableViewPane;
+    @FXML
+    private Pane graphicPane;
     @FXML
     private Label userIdLabel;
 
@@ -183,6 +184,13 @@ public class MainViewController {
         return alert;
     }
 
+    public void showAlert(String text) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Error!");
+        alert.setContentText(text);
+        alert.showAndWait();
+    }
+
     public void setUserLogin(String userLogin, String pwd, int userID) {
         userLoginLabel.setText(userLogin);
         userIdLabel.setText(String.valueOf(userID));
@@ -266,12 +274,66 @@ public class MainViewController {
                 tableView.getItems().clear();
                 tableView.setItems(observableList);
                 Platform.runLater(() -> {
+                    graphicPane.getChildren().removeAll();
+                    graphicPane.getChildren().clear();
+                    setGraphic(messageToClient.getSpaceMarines());
                     tableViewPane.getChildren().addAll(tableView);
                 });
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println(e.getMessage());
             }
         });
+    }
+
+    public void setGraphic(ArrayDeque<SpaceMarine> spaceMarines) {
+        ArrayList<SpaceMarine> spc = new ArrayList<>(spaceMarines);
+        int i = 0;
+        while (i != spc.size()) {
+            Canvas canvasOne = new Canvas(50, 50);
+            GraphicsContext gc = canvasOne.getGraphicsContext2D();
+            gc.setLineWidth(1);
+            try {
+                gc.setFill(Color.rgb(spc.get(i).getUserId() * 3, (int) Math.sqrt(spc.get(i).getUserId()), spc.get(i).getUserId() * 10));
+            } catch (IllegalArgumentException e) {
+                gc.setFill(Color.PAPAYAWHIP);
+            }
+            gc.fillOval(0, 0, 40, 25);
+            //gc.fillText(spc.get(i).getName(), 0, 0);
+            canvasOne.setLayoutX(spc.get(i).getX());
+            canvasOne.setLayoutY(spc.get(i).getY());
+            canvasOne.setOnMouseClicked(event -> {
+                findByCoordinates(spc, canvasOne.getLayoutX(), Float.valueOf((float) canvasOne.getLayoutY()));
+            });
+            if (canvasOne.getLayoutY() > graphicPane.getHeight()) {
+                canvasOne.setVisible(false);
+            }
+            Duration duration = Duration.millis(2500);
+            TranslateTransition transition = new TranslateTransition(duration, canvasOne);
+            transition.setByX(200);
+            transition.setByY(100);
+            transition.setAutoReverse(true);
+            transition.setCycleCount(2);
+            transition.play();
+            graphicPane.setRotationAxis(Rotate.Z_AXIS);
+            graphicPane.setRotate(180);
+            graphicPane.setRotationAxis(Rotate.X_AXIS);
+            graphicPane.setRotate(180);
+            graphicPane.getChildren().addAll(canvasOne);
+            i++;
+        }
+    }
+
+    public void findByCoordinates(ArrayList<SpaceMarine> spaceMarines, double x, float y) {
+        for (int i = 0; i < spaceMarines.size(); i++) {
+            if (spaceMarines.get(i).getX() == x && spaceMarines.get(i).getY() == y) {
+                try {
+                    moveToChangeView(spaceMarines.get(i));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+        }
     }
 
     public ObservableList<SpaceMarine> setElementsForTableView(ArrayList<SpaceMarine> spaceMarines) {
@@ -396,5 +458,17 @@ public class MainViewController {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void moveToChangeView(SpaceMarine spaceMarine) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/change.fxml"));
+        Parent root = loader.load();
+        ChangeViewController changeViewController = loader.getController();
+        changeViewController.setLoginAndPassword(login, pwd);
+        changeViewController.setSocket(socket);
+        changeViewController.setSpaceMarine(spaceMarine);
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }

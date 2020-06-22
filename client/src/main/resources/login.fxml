@@ -21,7 +21,7 @@
       </Label>
       <PasswordField fx:id="passwordField" layoutX="182.0" layoutY="168.0" prefHeight="25.0" prefWidth="325.0" promptText="type password here..." />
       <TextField fx:id="loginTextField" layoutX="182.0" layoutY="117.0" prefHeight="25.0" prefWidth="325.0" promptText="type login here..." />
-      <Button fx:id="loginButton" layoutX="124.0" layoutY="282.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Login" />
-      <Button fx:id="registrationButton" layoutX="345.0" layoutY="282.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Create Account" />
+      <Button fx:id="loginButton" layoutX="117.0" layoutY="282.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Login" />
+      <Button fx:id="registrationButton" layoutX="367.0" layoutY="282.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Create Account" />
    </children>
 </Pane>

@@ -50,6 +50,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
     private final FatherOfCommands loginCommand;
     private final FatherOfCommands logoutCommand;
     private final FatherOfCommands getIdCommand;
+    private final FatherOfCommands updateCommand;
 
     {
         dataBaseManager = new DataBaseManager();
@@ -71,6 +72,7 @@ public class ServerMain implements TbI_PROSTO_SUPER {
         loginCommand = new LoginCommand(dataBaseManager, this);
         logoutCommand = new LogoutCommand(dataBaseManager, this);
         getIdCommand = new getUserIdCommand(dataBaseManager, this);
+        updateCommand = new UpdateCommand(dataBaseManager, this);
     }
 
     public ServerMain(int port) {
@@ -226,6 +228,8 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 return exitCommand.executeCommand(command);
             case GET_USER_ID:
                 return getIdCommand.executeCommand(command);
+            case UPDATE:
+                return updateCommand.executeCommand(command);
             default:
                 System.out.print(Colors.RED_UNDERLINED);
                 System.out.println("Лол");

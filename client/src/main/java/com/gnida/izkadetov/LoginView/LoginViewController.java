@@ -6,16 +6,16 @@ import com.gnida.izkadetov.RegistrationView.RegistrationViewController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayDeque;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -42,8 +42,10 @@ public class LoginViewController {
     @FXML
     private Button registrationButton;
 
+
     @FXML
     private void initialize() {
+
 
         loginButton.setOnAction(event -> {
             try {
@@ -62,7 +64,7 @@ public class LoginViewController {
                     stage.setTitle("Connection");
                     stage.setScene(scene);
                 } catch (Exception ex) {
-                    System.out.println(e.getMessage());
+                    System.out.println(ex.getMessage());
                 }
             }
             setLoginButtonAction();
@@ -78,6 +80,7 @@ public class LoginViewController {
 
     }
 
+
     public void setSocket(Socket socket) {
         this.socket = socket;
     }
@@ -89,7 +92,6 @@ public class LoginViewController {
     }
 
     public void recieveMessage() {
-
         cachedThreadPool.execute(() -> {
             try {
                 message = fromServerMessageHandler.getMessage();
@@ -104,16 +106,13 @@ public class LoginViewController {
                             goToMainView(message.getId());
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
-                            System.out.println(e.getCause());
                         }
                     }
                 });
-
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         });
-
     }
 
     public void setRegistrationButtonAction() throws IOException {
@@ -135,7 +134,11 @@ public class LoginViewController {
         mainViewController.setUserLogin(loginTextField.getText(), passwordField.getText(), id);
         mainViewController.setSocket(socket);
         Scene scene = new Scene(root);
+        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         Stage stage = (Stage) loginButton.getScene().getWindow();
+        stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
+        stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
+
         stage.setResizable(false);
         stage.setTitle("Working area");
         stage.setScene(scene);

@@ -19,6 +19,7 @@ public enum ListOfCommands implements Serializable {
     SUM_OF_HEALTH("sum_of_health"),
     PRINT_DESCENDING("print_descending"),
     PRINT_DESCENDING_HEALTH("print_descending_health"),
+    UPDATE("update"),
     SAVE("save"),
     LOGOUT("logout"),
     EXIT("exit");

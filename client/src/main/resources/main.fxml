@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.BubbleChart?>
-<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gnida.izkadetov.MainView.MainViewController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gnida.izkadetov.MainView.MainViewController">
     <children>
-        <Separator layoutX="253.0" orientation="VERTICAL" prefHeight="720.0" prefWidth="0.0" />
-        <Pane fx:id="commandsButtonPane" prefHeight="720.0" prefWidth="256.0">
+        <Separator layoutX="252.0" orientation="VERTICAL" prefHeight="900.0" prefWidth="11.0" />
+        <Pane fx:id="commandsButtonPane" prefHeight="900.0" prefWidth="256.0">
             <children>
                 <Label alignment="CENTER" layoutX="7.0" layoutY="34.0" prefHeight="28.0" prefWidth="82.0" text="login:">
                     <font>
@@ -27,15 +25,12 @@
                 <Button fx:id="addButton" layoutX="7.0" layoutY="106.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Add" />
                 <Button fx:id="addMaxButton" layoutX="7.0" layoutY="137.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Add max" />
                 <Button fx:id="addMinButton" layoutX="7.0" layoutY="170.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Add min" />
-                <Button fx:id="removeButton" layoutX="7.0" layoutY="202.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Remove" />
-                <Button fx:id="clearButton" layoutX="7.0" layoutY="235.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Clear" />
-                <Button fx:id="infoButton" layoutX="135.0" layoutY="235.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Info" />
-                <Button fx:id="executeButton" layoutX="135.0" layoutY="106.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Execute script" />
-                <Button fx:id="sumButtton" layoutX="135.0" layoutY="137.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Sum of health" />
-                <Button fx:id="printDesButton" layoutX="135.0" layoutY="170.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Print descending" />
-                <Button fx:id="printDeshealthButton" layoutX="135.0" layoutY="202.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Print des health" />
-                <Button fx:id="exitButton" layoutX="135.0" layoutY="266.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Exit" />
-                <Button fx:id="updateButton" layoutX="7.0" layoutY="266.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="update data" />
+                <Button fx:id="removeButton" layoutX="135.0" layoutY="170.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Remove" />
+                <Button fx:id="clearButton" layoutX="7.0" layoutY="203.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Clear" />
+                <Button fx:id="infoButton" layoutX="135.0" layoutY="137.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Info" />
+                <Button fx:id="sumButtton" layoutX="135.0" layoutY="106.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Sum of health" />
+                <Button fx:id="exitButton" layoutX="135.0" layoutY="259.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Exit" />
+                <Button fx:id="updateButton" layoutX="135.0" layoutY="203.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="update data" />
             <Label alignment="CENTER" layoutX="7.0" layoutY="57.0" prefHeight="28.0" prefWidth="82.0" text="ID: ">
                <font>
                   <Font size="18.0" />
@@ -48,18 +43,8 @@
             </Label>
             </children>
         </Pane>
-        <Pane layoutX="255.0" layoutY="326.0" prefHeight="400.0" prefWidth="1022.0">
-         <children>
-            <BubbleChart prefHeight="400.0" prefWidth="1022.0">
-              <xAxis>
-                <NumberAxis side="BOTTOM" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis side="LEFT" />
-              </yAxis>
-            </BubbleChart>
-         </children></Pane>
       <Pane fx:id="tableViewPane" layoutX="253.0" prefHeight="324.0" prefWidth="1029.0" />
-      <Separator layoutX="255.0" layoutY="325.0" prefHeight="3.0" prefWidth="1022.0" />
+      <Separator layoutX="255.0" layoutY="325.0" prefHeight="3.0" prefWidth="1029.0" />
+      <Pane fx:id="graphicPane" layoutX="253.0" layoutY="327.0" prefHeight="574.0" prefWidth="1029.0" />
     </children>
 </Pane>

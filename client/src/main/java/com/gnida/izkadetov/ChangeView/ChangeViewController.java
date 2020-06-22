@@ -1,21 +1,24 @@
-package com.gnida.izkadetov.AddView;
+package com.gnida.izkadetov.ChangeView;
+
 
 import com.gnida.izkadetov.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class AddViewController {
+public class ChangeViewController {
 
     private Command command;
-    private String status;
+    private SpaceMarine spaceMarine;
     private String login;
     private String password;
     private Socket socket;
@@ -26,7 +29,7 @@ public class AddViewController {
 
 
     @FXML
-    private TextField idTextFIeld;
+    private Label idLabel;
 
     @FXML
     private TextField nameTextField;
@@ -54,7 +57,7 @@ public class AddViewController {
 
 
     @FXML
-    private Button addButton;
+    private Button updateButton;
 
     @FXML
     private Button returnButton;
@@ -62,9 +65,9 @@ public class AddViewController {
     @FXML
     private void initialize() {
 
-        addButton.setOnAction(event -> {
-            addButtonAction();
-            Stage stage = (Stage) addButton.getScene().getWindow();
+        updateButton.setOnAction(event -> {
+            updateButtonAction();
+            Stage stage = (Stage) updateButton.getScene().getWindow();
             stage.close();
         });
 
@@ -84,46 +87,40 @@ public class AddViewController {
         this.socket = socket;
     }
 
-    public void addButtonAction() {
-        SpaceMarine spaceMarine = new SpaceMarine();
+    public void updateButtonAction() {
+        SpaceMarine newSpaceMarine = new SpaceMarine();
+
         try {
             if (!nameTextField.getText().equals(null))
-                spaceMarine.setName(nameTextField.getText());
-            if (!idTextFIeld.getText().equals(null))
-                spaceMarine.setId(Integer.valueOf(idTextFIeld.getText()));
+                newSpaceMarine.setName(nameTextField.getText());
+            newSpaceMarine.setId(spaceMarine.getId());
             if (!xTextField.getText().equals(null))
-                spaceMarine.setXCoordinate(Double.valueOf(xTextField.getText()));
+                newSpaceMarine.setXCoordinate(Double.valueOf(xTextField.getText()));
             if (!yTextField.getText().equals(null))
-                spaceMarine.setYCoordinate(Float.valueOf(yTextField.getText()));
+                newSpaceMarine.setYCoordinate(Float.valueOf(yTextField.getText()));
             if (!healthTextField.getText().equals(null))
-                spaceMarine.setHealth(Integer.valueOf(healthTextField.getText()));
+                newSpaceMarine.setHealth(Integer.valueOf(healthTextField.getText()));
             if (!chapterTextField.getText().equals(null))
-                spaceMarine.setChapter(chapterTextField.getText());
+                newSpaceMarine.setChapter(chapterTextField.getText());
             if (!weaponTextField.getText().equals(null))
-                spaceMarine.setWeaponType(weaponTextField.getText());
+                newSpaceMarine.setWeaponType(weaponTextField.getText());
             if (!meleeTextField.getText().equals(null))
-                spaceMarine.setMeleeWeapon(meleeTextField.getText());
+                newSpaceMarine.setMeleeWeapon(meleeTextField.getText());
             if (!categoryTextField.getText().equals(null))
-                spaceMarine.setCategory(categoryTextField.getText());
+                newSpaceMarine.setCategory(categoryTextField.getText());
         } catch (Exception e) {
             showErrorAlert();
         }
         try {
-            socket = new Socket(socket.getInetAddress().getHostName(), socket.getPort());
-            toServerMessageHandler = new ToServerMessageHandler(socket, socket.getPort());
-            switch (status) {
-                case "max":
-                    command = new Command(ListOfCommands.ADD_IF_MAX, spaceMarine, login, password);
-                    break;
-                case "min":
-                    command = new Command(ListOfCommands.ADD_IF_MIN, spaceMarine, login, password);
-                    break;
-                default:
-                    command = new Command(ListOfCommands.ADD, spaceMarine, login, password);
-                    break;
+            if (newSpaceMarine.toString().equals(spaceMarine.toString())) {
+                showSameAlert();
+            } else {
+                socket = new Socket(socket.getInetAddress().getHostName(), socket.getPort());
+                toServerMessageHandler = new ToServerMessageHandler(socket, socket.getPort());
+                command = new Command(ListOfCommands.UPDATE, spaceMarine, login, password);
+                toServerMessageHandler.sendMessage(command);
+                recieveMessage();
             }
-            toServerMessageHandler.sendMessage(command);
-            recieveMessage();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -164,8 +161,17 @@ public class AddViewController {
         return alert;
     }
 
-    public void setAddStatus(String status) {
-        this.status = status;
+    public Alert showSameAlert() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Warning");
+        alert.setContentText("Nothing changed");
+        alert.showAndWait();
+        return alert;
+    }
+
+    public void setSpaceMarine(SpaceMarine spaceMarine) {
+        idLabel.setText(String.valueOf(spaceMarine.getId()));
+        this.spaceMarine = spaceMarine;
     }
 
 }
