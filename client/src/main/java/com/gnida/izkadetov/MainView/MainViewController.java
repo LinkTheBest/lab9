@@ -26,9 +26,7 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -73,12 +71,19 @@ public class MainViewController {
     private Pane graphicPane;
     @FXML
     private Label userIdLabel;
+    @FXML
+    private ChoiceBox<String> langChoiceBox;
 
     private TableView<SpaceMarine> tableView;
 
     @FXML
     private void initialize() {
+        langChoiceBox.setItems(initChoiceBox());
         tableViewPane.getChildren().addAll(initTableView());
+        langChoiceBox.setOnAction(event -> {
+            updateLangauge(langChoiceBox.getValue());
+        });
+
         updateButton.setOnAction(event -> {
             try {
                 socket = new Socket(socket.getInetAddress().getHostName(), socket.getPort());
@@ -106,7 +111,6 @@ public class MainViewController {
         addButton.setOnAction(event -> {
             try {
                 moveToAddElementScreen("");
-                updateButton.fire();
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -115,7 +119,6 @@ public class MainViewController {
         addMaxButton.setOnAction(event -> {
             try {
                 moveToAddElementScreen("max");
-                updateButton.fire();
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -124,7 +127,6 @@ public class MainViewController {
         addMinButton.setOnAction(event -> {
             try {
                 moveToAddElementScreen("min");
-                updateButton.fire();
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -155,7 +157,6 @@ public class MainViewController {
             } catch (IOException e) {
             }
             sendClearRequest();
-            updateButton.fire();
         });
 
         sumButtton.setOnAction(event -> {
@@ -173,6 +174,47 @@ public class MainViewController {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void updateLangauge(String lang) {
+        Locale locale;
+        switch (lang) {
+            case "Russian":
+                locale = new Locale("ru", "RU");
+                break;
+            case "Netherlands":
+                locale = new Locale("nl", "NL");
+                break;
+            case "Bulgarian":
+                locale = new Locale("bg", "BG");
+                break;
+            case "English (Hindi)":
+                locale = new Locale("en", "IN");
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + lang);
+        }
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("Locales", locale);
+        addButton.setText(resourceBundle.getString("add"));
+        addMinButton.setText(resourceBundle.getString("add.min"));
+        addMaxButton.setText(resourceBundle.getString("add.max"));
+        clearButton.setText(resourceBundle.getString("clear"));
+        sumButtton.setText(resourceBundle.getString("sum.of.health"));
+        infoButton.setText(resourceBundle.getString("info"));
+        removeButton.setText(resourceBundle.getString("remove"));
+        updateButton.setText(resourceBundle.getString("update.data"));
+        exitButton.setText(resourceBundle.getString("exit"));
+        logoutButton.setText(resourceBundle.getString("logout"));
+
+    }
+
+    public ObservableList<String> initChoiceBox() {
+        String ru = "Russian";
+        String nl = "Netherlands";
+        String bg = "Bulgarian";
+        String en = "English (Hindi)";
+        ObservableList<String> langs = FXCollections.observableArrayList(ru, nl, bg, en);
+        return langs;
     }
 
     public Alert sendingError() {
@@ -259,7 +301,7 @@ public class MainViewController {
             try {
                 messageToClient = fromServerMessageHandler.getMessage();
                 Platform.runLater(() -> {
-                    if (messageToClient.getSpaceMarines().isEmpty()) {
+                    if (messageToClient.getSpaceMarines().isEmpty() | messageToClient.getSpaceMarines().equals(null)) {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Info");
                         alert.setContentText("Пустая коллекция!");
@@ -272,14 +314,18 @@ public class MainViewController {
                 tableView = initTableView();
                 tableView.getItems().clear();
                 tableView.setItems(observableList);
+                ImageView image = new ImageView(new Image(String.valueOf(getClass().getResource("/img/dno.jpg"))));
+                image.setRotationAxis(Rotate.Z_AXIS);
+                image.setRotate(180);
+                image.setFitHeight(graphicPane.getHeight());
+                image.setFitWidth(graphicPane.getWidth());
                 Platform.runLater(() -> {
                     graphicPane.getChildren().removeAll();
                     graphicPane.getChildren().clear();
-                    ImageView image = new ImageView(new Image(String.valueOf(getClass().getResource("/img/dno.jpg"))));
-                    image.setRotationAxis(Rotate.Z_AXIS);
-                    image.setRotate(180);
-                    image.setFitHeight(graphicPane.getHeight());
-                    image.setFitWidth(graphicPane.getWidth());
+                    graphicPane.setRotationAxis(Rotate.Z_AXIS);
+                    graphicPane.setRotate(180);
+                    graphicPane.setRotationAxis(Rotate.X_AXIS);
+                    graphicPane.setRotate(180);
                     //graphicPane.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
                     graphicPane.getChildren().add(image);
                     setGraphic(messageToClient.getSpaceMarines());
@@ -313,6 +359,9 @@ public class MainViewController {
             if (canvasOne.getLayoutY() > graphicPane.getHeight()) {
                 canvasOne.setVisible(false);
             }
+            if (canvasOne.getLayoutX() > graphicPane.getWidth()) {
+                canvasOne.setVisible(false);
+            }
             Duration duration = Duration.millis(2500);
             TranslateTransition transition = new TranslateTransition(duration, canvasOne);
             transition.setByX(400);
@@ -320,10 +369,10 @@ public class MainViewController {
             transition.setAutoReverse(true);
             transition.setCycleCount(2);
             transition.play();
-            graphicPane.setRotationAxis(Rotate.Z_AXIS);
-            graphicPane.setRotate(180);
-            graphicPane.setRotationAxis(Rotate.X_AXIS);
-            graphicPane.setRotate(180);
+//            graphicPane.setRotationAxis(Rotate.Z_AXIS);
+//            graphicPane.setRotate(180);
+//            graphicPane.setRotationAxis(Rotate.X_AXIS);
+//            graphicPane.setRotate(180);
             graphicPane.getChildren().addAll(canvasOne);
             i++;
         }
