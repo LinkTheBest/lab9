@@ -100,7 +100,6 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 }
             }
         }
-
     }
 
     public void dataBaseConnect() {
@@ -117,7 +116,6 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 dataBaseInitializer = new DataBaseInitializer(host, bPort, name, user, pwd);
                 break;
             } catch (IOException e) {
-                System.out.println(e.getMessage());
             }
         }
 
@@ -158,7 +156,6 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                     clientMultiDataProccesor(clientSocket);
                 });
             } catch (IOException e) {
-                System.out.println(e.getMessage());
             }
             System.out.print(Colors.RED_BOLD);
             System.out.println("$odmen_servera: ");
@@ -177,7 +174,6 @@ public class ServerMain implements TbI_PROSTO_SUPER {
                 serverInput = serverScn.nextLine();
                 switch (serverInput) {
                     case "exit":
-                        prostoKlass(new Command(ListOfCommands.SAVE));
                         prostoKlass(new Command(ListOfCommands.EXIT));
                     default:
                         System.out.println("Неопознанная команда!");

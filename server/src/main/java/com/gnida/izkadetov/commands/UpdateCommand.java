@@ -28,7 +28,7 @@ public class UpdateCommand extends FatherOfCommands {
                 }
                 dataBaseManager.removeElement(command.getSpaceMarine());
                 dataBaseManager.addMoreThanOneElementToCollection(tempDeque);
-                System.out.println("Элемент успешно добавлен!");
+                System.out.println("Элемент успешно обновлен!");
                 dataBaseManager.uptadeDateChange();
                 return new MessageToClient("Элемент успешно добавлен! \n" + command.getSpaceMarine().toString());
             } catch (SQLException e) {
@@ -40,8 +40,10 @@ public class UpdateCommand extends FatherOfCommands {
 
     public void updateElemenInDataBase(Command command) throws SQLException {
         PreparedStatement preparedStatement = dataBaseManager.getDataBaseInitializer().getConnection().prepareStatement("" +
-                " update spacemarines set spcname = ?, x= ?,y= ?,health= ?, category= ?, weaponType= ?, meleeWeapon= ?, chapter= ?" +
-                "where userId= ?, spcid= ?");
+                " update spacemarines set (spcname, x,y,health, category, weaponType, meleeWeapon, chapter) =" +
+                "(?,?,?,?,?,?,?,?) where (userId,spcid) = (?,?)");
+        System.out.println(command.getSpaceMarine().getName());
+        System.out.println(command.getSpaceMarine().getId());
         preparedStatement.setInt(10, command.getSpaceMarine().getId());
         preparedStatement.setString(1, command.getSpaceMarine().getName());
         preparedStatement.setDouble(2, command.getSpaceMarine().getCoordinates().getX());
@@ -52,6 +54,6 @@ public class UpdateCommand extends FatherOfCommands {
         preparedStatement.setString(7, command.getSpaceMarine().getMeleeWeapon());
         preparedStatement.setString(8, command.getSpaceMarine().getChapter().getName());
         preparedStatement.setInt(9, dataBaseManager.getUserId(command.getUserLogin()));
-        preparedStatement.execute();
+        preparedStatement.executeUpdate();
     }
 }

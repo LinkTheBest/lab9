@@ -49,14 +49,14 @@ public class DataBaseManager {
     }
 
     public void removeElement(SpaceMarine spaceMarine) {
-        int i = 0;
         ArrayList<SpaceMarine> spcc = new ArrayList<>(spc);
-        while (i != spcc.size()) {
-            if (spaceMarine.getId() == spcc.get(i).getId()) {
+        for (int i = 0; i < spcc.size(); i++) {
+            if (spcc.get(i).getId() == spaceMarine.getId()) {
                 spcc.remove(i);
                 break;
             }
         }
+        spc = new ArrayDeque<>(spcc);
     }
 
     public boolean checkLogin(String login) {

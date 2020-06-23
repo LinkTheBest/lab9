@@ -54,7 +54,7 @@ public class addcommand extends FatherOfCommands {
         preparedStatement.setString(8, command.getSpaceMarine().getMeleeWeapon());
         preparedStatement.setString(9, command.getSpaceMarine().getChapter().getName());
         preparedStatement.setInt(10, dataBaseManager.getUserId(command.getUserLogin()));
-        preparedStatement.execute();
+        preparedStatement.executeUpdate();
 
     }
 }

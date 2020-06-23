@@ -117,7 +117,7 @@ public class ChangeViewController {
             } else {
                 socket = new Socket(socket.getInetAddress().getHostName(), socket.getPort());
                 toServerMessageHandler = new ToServerMessageHandler(socket, socket.getPort());
-                command = new Command(ListOfCommands.UPDATE, spaceMarine, login, password);
+                command = new Command(ListOfCommands.UPDATE, newSpaceMarine, login, password);
                 toServerMessageHandler.sendMessage(command);
                 recieveMessage();
             }
@@ -156,7 +156,7 @@ public class ChangeViewController {
     public Alert showPositiveAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Succeed!");
-        alert.setContentText("Element added!");
+        alert.setContentText("Element Updated!");
         alert.showAndWait();
         return alert;
     }

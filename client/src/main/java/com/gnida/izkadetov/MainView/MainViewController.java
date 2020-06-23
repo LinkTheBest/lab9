@@ -14,11 +14,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.chart.BubbleChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
@@ -78,9 +78,7 @@ public class MainViewController {
 
     @FXML
     private void initialize() {
-
         tableViewPane.getChildren().addAll(initTableView());
-
         updateButton.setOnAction(event -> {
             try {
                 socket = new Socket(socket.getInetAddress().getHostName(), socket.getPort());
@@ -143,6 +141,8 @@ public class MainViewController {
                 }
                 sendRemoveRequest(spaceMarine.getId());
                 tableView.getItems().remove(spaceMarine);
+            } else {
+                showAlert();
             }
 
         });
@@ -173,7 +173,6 @@ public class MainViewController {
                 e.printStackTrace();
             }
         });
-
     }
 
     public Alert sendingError() {
@@ -184,10 +183,10 @@ public class MainViewController {
         return alert;
     }
 
-    public void showAlert(String text) {
+    public void showAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Error!");
-        alert.setContentText(text);
+        alert.setContentText("Error, not your element!");
         alert.showAndWait();
     }
 
@@ -276,6 +275,13 @@ public class MainViewController {
                 Platform.runLater(() -> {
                     graphicPane.getChildren().removeAll();
                     graphicPane.getChildren().clear();
+                    ImageView image = new ImageView(new Image(String.valueOf(getClass().getResource("/img/dno.jpg"))));
+                    image.setRotationAxis(Rotate.Z_AXIS);
+                    image.setRotate(180);
+                    image.setFitHeight(graphicPane.getHeight());
+                    image.setFitWidth(graphicPane.getWidth());
+                    //graphicPane.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+                    graphicPane.getChildren().add(image);
                     setGraphic(messageToClient.getSpaceMarines());
                     tableViewPane.getChildren().addAll(tableView);
                 });
@@ -309,8 +315,8 @@ public class MainViewController {
             }
             Duration duration = Duration.millis(2500);
             TranslateTransition transition = new TranslateTransition(duration, canvasOne);
-            transition.setByX(200);
-            transition.setByY(100);
+            transition.setByX(400);
+            transition.setByY(50);
             transition.setAutoReverse(true);
             transition.setCycleCount(2);
             transition.play();
