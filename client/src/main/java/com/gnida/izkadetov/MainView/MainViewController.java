@@ -516,6 +516,10 @@ public class MainViewController {
     }
 
     public void moveToChangeView(SpaceMarine spaceMarine) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Info");
+        alert.setContentText(spaceMarine.toString());
+        alert.showAndWait();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/change.fxml"));
         Parent root = loader.load();
         ChangeViewController changeViewController = loader.getController();

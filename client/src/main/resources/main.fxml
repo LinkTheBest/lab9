@@ -31,7 +31,7 @@
                 <Button fx:id="infoButton" layoutX="135.0" layoutY="137.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Info" />
                 <Button fx:id="sumButtton" layoutX="135.0" layoutY="106.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Sum of health" />
                 <Button fx:id="exitButton" layoutX="135.0" layoutY="259.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Exit" />
-                <Button fx:id="updateButton" layoutX="135.0" layoutY="203.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="update data" />
+                <Button fx:id="updateButton" layoutX="135.0" layoutY="203.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Update data" />
             <Label alignment="CENTER" layoutX="7.0" layoutY="57.0" prefHeight="28.0" prefWidth="82.0" text="ID: ">
                <font>
                   <Font size="18.0" />

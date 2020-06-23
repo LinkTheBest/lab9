@@ -65,6 +65,7 @@ public class ChangeViewController {
     @FXML
     private void initialize() {
 
+
         updateButton.setOnAction(event -> {
             updateButtonAction();
             Stage stage = (Stage) updateButton.getScene().getWindow();
@@ -168,6 +169,7 @@ public class ChangeViewController {
         alert.showAndWait();
         return alert;
     }
+
 
     public void setSpaceMarine(SpaceMarine spaceMarine) {
         idLabel.setText(String.valueOf(spaceMarine.getId()));

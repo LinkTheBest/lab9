@@ -1,12 +1,8 @@
 package com.gnida.izkadetov;
-
-import com.sun.xml.internal.ws.api.client.WSPortInfo;
-
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-
 
 public class ToServerMessageHandler {
     private Socket clientSocket;
